@@ -1,0 +1,100 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="techkids.vn.music.fragments.MainPlayerFragment"
+    android:layout_marginTop="?attr/actionBarSize">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_song_image"
+                android:src="@drawable/genre_"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="340dp" />
+
+            <SeekBar
+                android:id="@+id/sb_transparent_progress"
+                android:thumb="@null"
+                android:scaleY="1000"
+                android:alpha="0.3"
+                android:layout_centerInParent="true"
+                android:paddingEnd="0dp"
+                android:paddingStart="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <SeekBar
+                android:id="@+id/sb_progress"
+                android:thumb="@null"
+                android:paddingEnd="0dp"
+                android:paddingStart="0dp"
+                android:layout_alignBottom="@id/iv_song_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/iv_skip_previous"
+                android:src="@drawable/ic_skip_previous_white_36px"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_action"
+                android:src="@drawable/ic_pause_white_24px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/iv_skip_next"
+                android:src="@drawable/ic_skip_next_white_36px"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

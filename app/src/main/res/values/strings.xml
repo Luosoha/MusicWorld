@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Music</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="category">Category</string>
+    <string name="search">Search</string>
+    <string name="favorite">Favorite</string>
+    <string name="share">Share</string>
+    <string name="number_of_top_songs">50 songs</string>
+</resources>
