@@ -23,7 +23,7 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import techkids.vn.music.MainActivity;
+import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.R;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;

@@ -8,17 +8,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class SongCategoryResponse {
 
-    @SerializedName("34")
-    private SongCategoryResponseBody body;
+  @SerializedName("34")
+  private SongCategoryResponseBody body;
 
-    public SongCategoryResponse() {
-    }
+  public SongCategoryResponse() {
+  }
 
-    public SongCategoryResponseBody getBody() {
-        return body;
-    }
+  public SongCategoryResponseBody getBody() {
+    return body;
+  }
 
-    public void setBody(SongCategoryResponseBody body) {
-        this.body = body;
-    }
+  public void setBody(SongCategoryResponseBody body) {
+    this.body = body;
+  }
 }

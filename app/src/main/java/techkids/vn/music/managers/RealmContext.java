@@ -13,47 +13,47 @@ import techkids.vn.music.networks.models.Subgenres;
 
 public class RealmContext {
 
-    private Realm realm;
+  private Realm realm;
 
-    private RealmContext() {
-        realm = Realm.getDefaultInstance();
-    }
+  private RealmContext() {
+    realm = Realm.getDefaultInstance();
+  }
 
-    public List<Subgenres> allSubgenres() {
-        return realm.where(Subgenres.class).findAll();
-    }
+  public List<Subgenres> allSubgenres() {
+    return realm.where(Subgenres.class).findAll();
+  }
 
-    public void insertSubgenre(Subgenres subgenres) {
-        realm.beginTransaction();
-        realm.copyToRealm(subgenres);
-        realm.commitTransaction();
-    }
+  public void insertSubgenre(Subgenres subgenres) {
+    realm.beginTransaction();
+    realm.copyToRealm(subgenres);
+    realm.commitTransaction();
+  }
 
-    public void deleteAll() {
-        realm.beginTransaction();
-        realm.deleteAll();
-        realm.commitTransaction();
-    }
+  public void deleteAll() {
+    realm.beginTransaction();
+    realm.deleteAll();
+    realm.commitTransaction();
+  }
 
-    public List<Subgenres> findGenreIsFavor(){
-        return realm.where(Subgenres.class).equalTo("isFavorite", true).findAll();
-    }
+  public List<Subgenres> findGenreIsFavor() {
+    return realm.where(Subgenres.class).equalTo("isFavorite", true).findAll();
+  }
 
-    public void update(Subgenres subgenres, boolean favorite) {
-        realm.beginTransaction();
-        subgenres.setFavorite(favorite);
-        realm.commitTransaction();
-    }
+  public void update(Subgenres subgenres, boolean favorite) {
+    realm.beginTransaction();
+    subgenres.setFavorite(favorite);
+    realm.commitTransaction();
+  }
 
-    private static RealmContext instance;
+  private static RealmContext instance;
 
-    public static RealmContext getInstance() {
-        return instance;
-    }
+  public static RealmContext getInstance() {
+    return instance;
+  }
 
-    public static void init(Context context) {
-        Realm.init(context);
-        instance = new RealmContext();
-    }
+  public static void init(Context context) {
+    Realm.init(context);
+    instance = new RealmContext();
+  }
 
 }

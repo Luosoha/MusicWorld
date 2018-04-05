@@ -23,47 +23,47 @@ import techkids.vn.music.networks.models.Subgenres;
  */
 public class PlayListFragment extends Fragment {
 
-    private ArrayList<String> favCategories = new ArrayList<>();
+  private ArrayList<String> favCategories = new ArrayList<>();
 
-    private ArrayAdapter<String> categoryArrayAdapter;
+  private ArrayAdapter<String> categoryArrayAdapter;
 
-    @BindView(R.id.lv_playlist)
-    ListView lvPlayList;
+  @BindView(R.id.lv_playlist)
+  ListView lvPlayList;
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        favCategories.clear();
-        List<Subgenres> subs = RealmContext.getInstance().findGenreIsFavor();
-        for (Subgenres s: subs) {
-            favCategories.add(s.getName());
-        }
-
-        if (categoryArrayAdapter != null) {
-            categoryArrayAdapter.notifyDataSetChanged();
-        }
+  @Override
+  public void onResume() {
+    super.onResume();
+    favCategories.clear();
+    List<Subgenres> subs = RealmContext.getInstance().findGenreIsFavor();
+    for (Subgenres s : subs) {
+      favCategories.add(s.getName());
     }
 
-    public PlayListFragment() {
-        // Required empty public constructor
+    if (categoryArrayAdapter != null) {
+      categoryArrayAdapter.notifyDataSetChanged();
     }
+  }
+
+  public PlayListFragment() {
+    // Required empty public constructor
+  }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_play_list, container, false);
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    View view = inflater.inflate(R.layout.fragment_play_list, container, false);
 
-        ButterKnife.bind(this, view);
-        setupUI();
+    ButterKnife.bind(this, view);
+    setupUI();
 
-        return view;
-    }
+    return view;
+  }
 
-    private void setupUI() {
-        categoryArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.item_play_list, favCategories);
-        lvPlayList.setAdapter(categoryArrayAdapter);
-    }
+  private void setupUI() {
+    categoryArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.item_play_list, favCategories);
+    lvPlayList.setAdapter(categoryArrayAdapter);
+  }
 
 }
