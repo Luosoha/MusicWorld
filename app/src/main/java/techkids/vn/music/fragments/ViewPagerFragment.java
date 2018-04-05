@@ -22,54 +22,47 @@ import techkids.vn.music.adapters.SlideAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewPagerFragment extends Fragment implements View.OnKeyListener {
+public class ViewPagerFragment extends BaseFragment implements View.OnKeyListener {
 
-    private static final String TAG = ViewPagerFragment.class.toString();
-    @BindView(R.id.vp_parent)
-    ViewPager vpParent;
+  @BindView(R.id.vp_parent)
+  ViewPager vpParent;
+  @BindView(R.id.tl_title)
+  TabLayout tlTitle;
 
-    @BindView(R.id.tl_title)
-    TabLayout tlTitle;
+  private PagerAdapter pagerAdapter;
 
-    private PagerAdapter pagerAdapter;
+  @Override
+  protected int getLayoutId() {
+    return R.layout.fragment_view_pager;
+  }
 
-    public ViewPagerFragment() {
-        // Required empty public constructor
+  @Override
+  protected void initLayout() {
+    setupUI();
+    this.setHasOptionsMenu(true);
+  }
+
+  private void setupUI() {
+    pagerAdapter = new SlideAdapter(getChildFragmentManager());
+    vpParent.setAdapter(pagerAdapter);
+    tlTitle.setupWithViewPager(vpParent);
+    tlTitle.setTabTextColors(Color.BLACK, Color.WHITE);
+  }
+
+  @Override
+  public boolean onKey(View v, int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+      getActivity().finish();
+      return true;
     }
+    return false;
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
-
-        ButterKnife.bind(this, view);
-        setupUI();
-        this.setHasOptionsMenu(true);
-
-        return view;
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    if (!menu.hasVisibleItems()) {
+      inflater.inflate(R.menu.menu_genres, menu);
     }
+  }
 
-    private void setupUI() {
-        pagerAdapter = new SlideAdapter(getChildFragmentManager());
-        vpParent.setAdapter(pagerAdapter);
-        tlTitle.setupWithViewPager(vpParent);
-        tlTitle.setTabTextColors(Color.BLACK, Color.WHITE);
-    }
-
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            getActivity().finish();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (!menu.hasVisibleItems()) {
-            inflater.inflate(R.menu.menu_genres, menu);
-        }
-    }
 }

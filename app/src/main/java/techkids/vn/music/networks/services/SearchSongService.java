@@ -11,5 +11,7 @@ import techkids.vn.music.networks.models.SearchSongResponseBody;
 
 public interface SearchSongService {
     @GET("search/song")
-    Call<SearchSongResponseBody> getSearchSong(@Query("requestdata") String data);
+    Call<SearchSongResponseBody> getSearchSong(@Query("term") String keyword,
+                                               @Query("media") String mediaType,
+                                               @Query("entity") String entity);
 }

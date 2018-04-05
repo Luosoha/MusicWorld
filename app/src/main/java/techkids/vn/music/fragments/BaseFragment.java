@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import techkids.vn.music.R;
+import techkids.vn.music.events.BackFromMainPlayerEvent;
 import techkids.vn.music.utils.DialogUtils;
 
 /**
@@ -16,6 +19,9 @@ import techkids.vn.music.utils.DialogUtils;
  */
 
 public abstract class BaseFragment extends Fragment {
+
+  public BaseFragment() {
+  }
 
   @Nullable
   @Override

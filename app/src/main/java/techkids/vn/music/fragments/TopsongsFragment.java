@@ -50,13 +50,8 @@ public class TopsongsFragment extends BaseFragment {
   View viewFavorite;
 
   private TopSongAdapter topSongAdapter;
-
   private Subgenres sub;
   private int position = -1;
-
-  public TopsongsFragment() {
-    // Required empty public constructor
-  }
 
   @Override
   public int getLayoutId() {

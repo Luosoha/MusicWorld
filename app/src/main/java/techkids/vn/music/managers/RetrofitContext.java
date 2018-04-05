@@ -21,31 +21,31 @@ public class RetrofitContext {
 
     private static Gson gson = new GsonBuilder().setLenient().create();
 
-    public static final Retrofit RSS_ITUNES = new Retrofit.Builder()
+    public static final Retrofit ITUNES_CATEGORY = new Retrofit.Builder()
             .baseUrl("http://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
-    public static final Retrofit ITUNES = new Retrofit.Builder()
+    public static final Retrofit ITUNES_TOP_SONG = new Retrofit.Builder()
             .baseUrl("https://itunes.apple.com/us/rss/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public static final Retrofit MP3 = new Retrofit.Builder()
-            .baseUrl("http://api.mp3.zing.vn/api/mobile/")
+    public static final Retrofit ITUNES_SEARCH = new Retrofit.Builder()
+            .baseUrl("https://itunes.apple.com/search/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
     public static Call<SongCategoryResponse> getAlbumTypes() {
-        return RSS_ITUNES.create(AlbumTypeService.class).getAlbumTypes();
+        return ITUNES_CATEGORY.create(AlbumTypeService.class).getAlbumTypes();
     }
 
     public static Call<TopSongsResponseBody> getTopSongs(String id) {
-        return ITUNES.create(TopSongsService.class).getTopSongs(id);
+        return ITUNES_TOP_SONG.create(TopSongsService.class).getTopSongs(id);
     }
 
-    public static Call<SearchSongResponseBody> getSearchSong(String data) {
-        return MP3.create(SearchSongService.class).getSearchSong(data);
+    public static Call<SearchSongResponseBody> getSearchSong(String keyword) {
+        return ITUNES_SEARCH.create(SearchSongService.class).getSearchSong(keyword, "music", "song");
     }
 
 }

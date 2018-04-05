@@ -17,7 +17,7 @@ import techkids.vn.music.adapters.CategoryAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GenresFragment extends Fragment {
+public class GenresFragment extends BaseFragment {
 
   private static final int COLUMN_NUMBERS = 2;
   private static final String TAG = GenresFragment.class.toString();
@@ -27,25 +27,14 @@ public class GenresFragment extends Fragment {
 
   private CategoryAdapter categoryAdapter;
 
-  public GenresFragment() {
-    // Required empty public constructor
+  @Override
+  protected int getLayoutId() {
+    return R.layout.fragment_genres;
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_genres, container, false);
-
-    ButterKnife.bind(this, view);
+  protected void initLayout() {
     setupUI();
-
-    return view;
   }
 
   private void setupUI() {

@@ -261,7 +261,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     exoPlayer.setPlayWhenReady(true);
 
     if (!playSongEvent.isRevealMiniPlayer()) {
-      sendedDurationToMainPlayer = false;
+      sentDurationToMainPlayer = false;
       tvSongNameInsideToolBar.setText(currentSong.getName());
       tvSongArtistInsideToolBar.setText(currentSong.getArtist());
     }
@@ -270,15 +270,15 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     mHandler.postDelayed(mRunnable, 100);
   }
 
-  private boolean sendedDurationToMainPlayer = false;
+  private boolean sentDurationToMainPlayer = false;
 
   private void startSeekbarProgress() {
     mRunnable = new Runnable() {
       @Override
       public void run() {
-        if (exoPlayer.getDuration() > 0 && exoPlayer.getCurrentPosition() > 0 && !sendedDurationToMainPlayer) {
+        if (exoPlayer.getDuration() > 0 && exoPlayer.getCurrentPosition() > 0 && !sentDurationToMainPlayer) {
           EventBus.getDefault().postSticky(new SongIsReadyEvent((int) exoPlayer.getDuration()));
-          sendedDurationToMainPlayer = true;
+          sentDurationToMainPlayer = true;
         }
         sbProgress.setMax((int) exoPlayer.getDuration());
         mHandler.postDelayed(this, 100);

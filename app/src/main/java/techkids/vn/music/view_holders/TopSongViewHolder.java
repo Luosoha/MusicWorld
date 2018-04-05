@@ -49,24 +49,19 @@ public class TopSongViewHolder extends RecyclerView.ViewHolder {
     this.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        String data = "{\"q\":\"" + song.getName() + " " + song.getArtist()
-                + "\", \"sort\":\"hot\", \"start\":\"0\", \"length\":\"10\"}";
-        Log.d("@@querydata: ", data);
-        RetrofitContext.getSearchSong(data).enqueue(new Callback<SearchSongResponseBody>() {
+        String keyword = song.getName() + " " + song.getArtist();
+        RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
           @Override
           public void onResponse(Call<SearchSongResponseBody> call, Response<SearchSongResponseBody> response) {
-            Log.d(TAG, "onResponse");
             SearchSongResponseBody songs = response.body();
-//                        Log.d(TAG, String.valueOf(songs.getSongs().length));
-
-            if (songs.getSongs().length != 0) {
-              EventBus.getDefault().post(new PlaySongEvent(song, songs.getSongs()[0].getSongSource(), true));
+            if (songs != null && !songs.getSongs().isEmpty()) {
+              EventBus.getDefault().post(new PlaySongEvent(song, songs.getSongUrl(), true));
             }
           }
 
           @Override
           public void onFailure(Call<SearchSongResponseBody> call, Throwable t) {
-            Log.d(TAG, "onFailure");
+            Log.d(TAG, "onFailure: " + t.toString());
           }
         });
       }

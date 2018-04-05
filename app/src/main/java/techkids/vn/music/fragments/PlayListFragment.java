@@ -21,10 +21,9 @@ import techkids.vn.music.networks.models.Subgenres;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayListFragment extends Fragment {
+public class PlayListFragment extends BaseFragment {
 
   private ArrayList<String> favCategories = new ArrayList<>();
-
   private ArrayAdapter<String> categoryArrayAdapter;
 
   @BindView(R.id.lv_playlist)
@@ -44,21 +43,14 @@ public class PlayListFragment extends Fragment {
     }
   }
 
-  public PlayListFragment() {
-    // Required empty public constructor
+  @Override
+  protected int getLayoutId() {
+    return R.layout.fragment_play_list;
   }
 
-
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_play_list, container, false);
-
-    ButterKnife.bind(this, view);
+  protected void initLayout() {
     setupUI();
-
-    return view;
   }
 
   private void setupUI() {

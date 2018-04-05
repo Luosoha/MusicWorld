@@ -2,28 +2,41 @@ package techkids.vn.music.networks.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lush on 1/15/2017.
  */
 
 public class SearchSongResponseBody {
 
-    @SerializedName("docs")
-    private SearchSong[] songs;
+    @SerializedName("results")
+    private ArrayList<SearchSong> songs;
 
-    public SearchSongResponseBody(SearchSong[] songs) {
+    public SearchSongResponseBody(ArrayList<SearchSong> songs) {
         this.songs = songs;
     }
 
-    public SearchSong[] getSongs() {
+    public List<SearchSong> getSongs() {
         return songs;
     }
 
-    @Override
-    public String toString() {
-        return "SearchSongResponseBody{" +
-                "songs=" + songs[0].toString() +
-                '}';
+    public String getSongUrl() {
+        return songs.get(0).getSongUrl();
+    }
+
+    class SearchSong {
+        @SerializedName("previewUrl")
+        private String songUrl;
+
+        public String getSongUrl() {
+            return songUrl;
+        }
+
+        public void setSongUrl(String songUrl) {
+            this.songUrl = songUrl;
+        }
     }
 
 }
