@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import techkids.vn.music.R;
 import techkids.vn.music.events.OpenTopsongsFragmentEvent;
 import techkids.vn.music.fragments.TopsongsFragment;
-import techkids.vn.music.networks.json_models.Subgenres;
+import techkids.vn.music.networks.models.Subgenres;
 
 /**
  * Created by Lush on 1/9/2017.
@@ -37,7 +37,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(final Subgenres subgenres) {
-        tvCategoryName.setText(subgenres.getTranslationKey());
+        tvCategoryName.setText(subgenres.getName());
         String src = "genre_" + subgenres.getId();
         int rid = this.ivCategory.getResources().getIdentifier(src,
                 "drawable", this.ivCategory.getContext().getPackageName());
@@ -48,7 +48,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         this.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, subgenres.getTranslationKey());
+                Log.d(TAG, subgenres.getName());
                 EventBus.getDefault().post(new OpenTopsongsFragmentEvent(new TopsongsFragment(), true, subgenres));
             }
         });

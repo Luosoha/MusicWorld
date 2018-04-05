@@ -33,8 +33,8 @@ import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.events.ResumeTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.SongIsReadyEvent;
 import techkids.vn.music.managers.RetrofitContext;
-import techkids.vn.music.networks.json_models.SearchSongResponseBody;
-import techkids.vn.music.networks.json_models.Song;
+import techkids.vn.music.networks.models.SearchSongResponseBody;
+import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.utils.ActionHelper;
 
 /**
@@ -46,13 +46,10 @@ public class MainPlayerFragment extends Fragment {
 
     @BindView(R.id.iv_song_image)
     ImageView ivSongImage;
-
     @BindView(R.id.sb_progress)
     SeekBar sbProgress;
-
     @BindView(R.id.sb_transparent_progress)
     SeekBar sbTransparentProgress;
-
     @BindView(R.id.fab_action)
     FloatingActionButton fabAction;
 
@@ -76,14 +73,11 @@ public class MainPlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main_player, container, false);
-
         ButterKnife.bind(this, view);
         init();
         addListener();
-
         startSeekbarProgress();
         mHandler.postDelayed(mRunnable, 100);
-
         return view;
     }
 

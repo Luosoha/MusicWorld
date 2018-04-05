@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import techkids.vn.music.R;
-import techkids.vn.music.networks.json_models.Song;
+import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.view_holders.TopSongViewHolder;
 
 /**

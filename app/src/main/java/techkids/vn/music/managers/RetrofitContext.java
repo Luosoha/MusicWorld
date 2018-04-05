@@ -1,13 +1,14 @@
 package techkids.vn.music.managers;
 
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import retrofit2.Call;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
-import techkids.vn.music.networks.json_models.SearchSongResponseBody;
-import techkids.vn.music.networks.json_models.SongCategoryResponseBody;
-import techkids.vn.music.networks.json_models.TopSongsResponseBody;
+import retrofit2.converter.gson.GsonConverterFactory;
+import techkids.vn.music.networks.models.SearchSongResponseBody;
+import techkids.vn.music.networks.models.SongCategoryResponse;
+import techkids.vn.music.networks.models.TopSongsResponseBody;
 import techkids.vn.music.networks.services.AlbumTypeService;
 import techkids.vn.music.networks.services.SearchSongService;
 import techkids.vn.music.networks.services.TopSongsService;
@@ -18,9 +19,11 @@ import techkids.vn.music.networks.services.TopSongsService;
 
 public class RetrofitContext {
 
+    private static Gson gson = new GsonBuilder().setLenient().create();
+
     public static final Retrofit RSS_ITUNES = new Retrofit.Builder()
-            .baseUrl("https://rss.itunes.apple.com")
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
     public static final Retrofit ITUNES = new Retrofit.Builder()
@@ -33,7 +36,7 @@ public class RetrofitContext {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public static Call<List<SongCategoryResponseBody>> getAlbumTypes() {
+    public static Call<SongCategoryResponse> getAlbumTypes() {
         return RSS_ITUNES.create(AlbumTypeService.class).getAlbumTypes();
     }
 

@@ -3,7 +3,6 @@ package techkids.vn.music.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +26,9 @@ import techkids.vn.music.R;
 import techkids.vn.music.adapters.TopSongAdapter;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
-import techkids.vn.music.networks.json_models.Song;
-import techkids.vn.music.networks.json_models.Subgenres;
-import techkids.vn.music.networks.json_models.TopSongsResponseBody;
+import techkids.vn.music.networks.models.Song;
+import techkids.vn.music.networks.models.Subgenres;
+import techkids.vn.music.networks.models.TopSongsResponseBody;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,16 +40,12 @@ public class TopsongsFragment extends Fragment {
 
     @BindView(R.id.view_back)
     View viewBack;
-
     @BindView(R.id.iv_category)
     ImageView ivCategory;
-
     @BindView(R.id.tv_category_name)
     TextView tvCategoryName;
-
     @BindView(R.id.rv_top_songs)
     RecyclerView rvTopSongs;
-
     @BindView(R.id.view_favorite)
     View viewFavorite;
 
@@ -122,7 +117,7 @@ public class TopsongsFragment extends Fragment {
         setFavoriteView();
 
         if (sub != null) {
-            tvCategoryName.setText(sub.getTranslationKey());
+            tvCategoryName.setText(sub.getName());
             String src = "genre_" + sub.getId();
             int rid = this.ivCategory.getResources().getIdentifier(src,
                     "drawable", this.ivCategory.getContext().getPackageName());

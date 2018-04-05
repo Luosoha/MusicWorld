@@ -3,7 +3,7 @@ package techkids.vn.music.networks.services;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import techkids.vn.music.networks.json_models.TopSongsResponseBody;
+import techkids.vn.music.networks.models.TopSongsResponseBody;
 
 /**
  * Created by Lush on 1/10/2017.

@@ -1,4 +1,4 @@
-package techkids.vn.music.networks.json_models;
+package techkids.vn.music.networks.models;
 
 import com.google.gson.annotations.SerializedName;
 

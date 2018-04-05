@@ -1,4 +1,4 @@
-package techkids.vn.music.networks.json_models;
+package techkids.vn.music.networks.models;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,26 +14,25 @@ public class Subgenres extends RealmObject {
 
     @SerializedName("id")
     private String id;
-
-    @SerializedName("translation_key")
-    private String translationKey;
+    @SerializedName("name")
+    private String name;
 
     private boolean isFavorite = false;
 
     public Subgenres() {
     }
 
-    public Subgenres(String id, String translationKey) {
+    public Subgenres(String id, String name) {
         this.id = id;
-        this.translationKey = translationKey;
+        this.name = name;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getTranslationKey() {
-        return translationKey;
+    public String getName() {
+        return name;
     }
 
     public boolean isFavorite() {
@@ -46,7 +45,7 @@ public class Subgenres extends RealmObject {
 
     @Override
     public String toString() {
-        return translationKey;
+        return name;
     }
 
     public static ArrayList<Subgenres> subgenres = new ArrayList<>();

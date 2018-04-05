@@ -2,7 +2,6 @@ package techkids.vn.music.fragments;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import techkids.vn.music.R;
 import techkids.vn.music.managers.RealmContext;
-import techkids.vn.music.networks.json_models.Subgenres;
+import techkids.vn.music.networks.models.Subgenres;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +36,7 @@ public class PlayListFragment extends Fragment {
         favCategories.clear();
         List<Subgenres> subs = RealmContext.getInstance().findGenreIsFavor();
         for (Subgenres s: subs) {
-            favCategories.add(s.getTranslationKey());
+            favCategories.add(s.getName());
         }
 
         if (categoryArrayAdapter != null) {

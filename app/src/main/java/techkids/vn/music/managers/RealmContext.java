@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import io.realm.Realm;
-import techkids.vn.music.networks.json_models.Subgenres;
+import techkids.vn.music.networks.models.Subgenres;
 
 /**
  * Created by Lush on 1/8/2017.

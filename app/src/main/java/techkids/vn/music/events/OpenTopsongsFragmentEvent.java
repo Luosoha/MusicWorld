@@ -3,7 +3,7 @@ package techkids.vn.music.events;
 import android.support.v4.app.Fragment;
 
 import techkids.vn.music.fragments.TopsongsFragment;
-import techkids.vn.music.networks.json_models.Subgenres;
+import techkids.vn.music.networks.models.Subgenres;
 
 /**
  * Created by Lush on 1/9/2017.
