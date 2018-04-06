@@ -148,7 +148,7 @@ public class TopsongsFragment extends BaseFragment {
 
   }
 
-  public void setSub(Subgenres sub) {
+  public void setSubgenres(Subgenres sub) {
     this.sub = sub;
   }
 

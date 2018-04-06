@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView;
 
 import butterknife.BindView;
 import techkids.vn.music.R;
+import techkids.vn.music.activities.BaseActivity;
+import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.adapters.CategoryAdapter;
+import techkids.vn.music.networks.models.Subgenres;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GenresFragment extends BaseFragment {
+public class GenresFragment extends BaseFragment implements CategoryAdapter.OnCategoryClickListener {
 
   private static final int COLUMN_NUMBERS = 2;
   private static final String TAG = GenresFragment.class.toString();
@@ -33,7 +36,7 @@ public class GenresFragment extends BaseFragment {
   }
 
   private void setupUI() {
-    categoryAdapter = new CategoryAdapter();
+    categoryAdapter = new CategoryAdapter(this);
     songCategoryRv.setHasFixedSize(true);
 
     GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), COLUMN_NUMBERS);
@@ -52,4 +55,10 @@ public class GenresFragment extends BaseFragment {
     songCategoryRv.setAdapter(categoryAdapter);
   }
 
+  @Override
+  public void onCategoryClick(Subgenres subgenres) {
+    TopsongsFragment fragment = new TopsongsFragment();
+    fragment.setSubgenres(subgenres);
+    ((MainActivity) getActivity()).changeFragment(R.id.fl_container, fragment, true);
+  }
 }

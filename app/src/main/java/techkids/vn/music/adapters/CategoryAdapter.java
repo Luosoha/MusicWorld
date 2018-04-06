@@ -9,13 +9,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import techkids.vn.music.R;
-import techkids.vn.music.events.OpenTopsongsFragmentEvent;
-import techkids.vn.music.fragments.TopsongsFragment;
 import techkids.vn.music.networks.models.Subgenres;
 
 /**
@@ -23,6 +19,12 @@ import techkids.vn.music.networks.models.Subgenres;
  */
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+
+  private OnCategoryClickListener onCategoryClickListener;
+
+  public CategoryAdapter(OnCategoryClickListener onCategoryClickListener) {
+    this.onCategoryClickListener = onCategoryClickListener;
+  }
 
   @Override
   public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,12 +35,33 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
   @Override
   public void onBindViewHolder(CategoryViewHolder holder, int position) {
-    holder.bind(Subgenres.subgenres.get(position));
+    final Subgenres subgenres = Subgenres.subgenres.get(position);
+    holder.categoryNameTv.setText(subgenres.getName());
+    String src = "genre_" + subgenres.getId();
+    int rid = holder.categoryIv.getResources().getIdentifier(
+            src, "drawable", holder.categoryIv.getContext().getPackageName()
+    );
+    if (rid != 0) {
+      Picasso.with(holder.itemView.getContext()).load(rid).into(holder.categoryIv);
+    }
+
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (onCategoryClickListener != null) {
+          onCategoryClickListener.onCategoryClick(subgenres);
+        }
+      }
+    });
   }
 
   @Override
   public int getItemCount() {
     return Subgenres.subgenres.size();
+  }
+
+  public interface OnCategoryClickListener {
+    void onCategoryClick(Subgenres subgenres);
   }
 
   class CategoryViewHolder extends RecyclerView.ViewHolder {
@@ -50,23 +73,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public CategoryViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-    }
-
-    public void bind(final Subgenres subgenres) {
-      categoryNameTv.setText(subgenres.getName());
-      String src = "genre_" + subgenres.getId();
-      int rid = this.categoryIv.getResources().getIdentifier(src,
-              "drawable", this.categoryIv.getContext().getPackageName());
-      if (rid != 0) {
-        Picasso.with(this.itemView.getContext()).load(rid).into(categoryIv);
-      }
-
-      this.itemView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          EventBus.getDefault().post(new OpenTopsongsFragmentEvent(new TopsongsFragment(), true, subgenres));
-        }
-      });
     }
   }
 

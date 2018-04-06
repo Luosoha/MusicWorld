@@ -38,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     EventBus.getDefault().unregister(this);
   }
 
-  protected void changeFragment(int containerId, Fragment fragment, boolean addToBackStack) {
+  public void changeFragment(int containerId, Fragment fragment, boolean addToBackStack) {
     if (addToBackStack) {
       getSupportFragmentManager().beginTransaction()
               .replace(containerId, fragment)

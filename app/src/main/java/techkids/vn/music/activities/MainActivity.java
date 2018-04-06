@@ -39,13 +39,11 @@ import techkids.vn.music.R;
 import techkids.vn.music.events.BackFromMainPlayerEvent;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;
-import techkids.vn.music.events.OpenTopsongsFragmentEvent;
 import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.events.ResumeTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.SongIsReadyEvent;
 import techkids.vn.music.fragments.MainPlayerFragment;
-import techkids.vn.music.fragments.TopsongsFragment;
 import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
@@ -207,14 +205,6 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
       getSupportActionBar().show();
       getSupportFragmentManager().popBackStack();
     }
-  }
-
-  @Subscribe
-  public void onEvent(OpenTopsongsFragmentEvent openTopsongsFragmentEvent) {
-    TopsongsFragment topsongsFragment = (TopsongsFragment) openTopsongsFragmentEvent.getFragment();
-    topsongsFragment.setSub(openTopsongsFragmentEvent.getSubgenres());
-    changeFragment(R.id.fl_container, topsongsFragment, openTopsongsFragmentEvent.isAddToBackStack());
-
   }
 
   @Subscribe
