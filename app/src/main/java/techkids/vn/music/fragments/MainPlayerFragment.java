@@ -88,8 +88,8 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
       @Override
       public void run() {
         if (songIsPlaying) {
-          progressSb.setProgress(progressSb.getProgress() + 100);
-          transparentProgressSb.setProgress(transparentProgressSb.getProgress() + 100);
+          progressSb.setProgress((int) MainActivity.exoPlayer.getCurrentPosition());
+          transparentProgressSb.setProgress((int) MainActivity.exoPlayer.getCurrentPosition());
         }
         handler.postDelayed(this, 100);
       }

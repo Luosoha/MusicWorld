@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   FloatingActionButton actionFab;
 
   private boolean songIsPlaying = false;
-  private ExoPlayer exoPlayer;
+  public static ExoPlayer exoPlayer;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private Song currentSong;
   private Handler handler = new Handler();
