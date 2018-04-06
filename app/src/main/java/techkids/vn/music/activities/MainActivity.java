@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
@@ -232,42 +233,46 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
 
   @Subscribe
   public void onEvent(PlaySongEvent playSongEvent) {
-    if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
-      exoPlayer.stop();
+    if (playSongEvent.getSong() != null) {
+      if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
+        exoPlayer.stop();
+      }
+
+      currentSong = playSongEvent.getSong();
+      songIsPlaying = true;
+      fabAction.setImageResource(R.drawable.ic_pause_white_24px);
+
+      Picasso.with(this).load(playSongEvent.getSong().getIconUrl()).into(civSongImage);
+      tvSongName.setText(playSongEvent.getSong().getName());
+      tvSongArtist.setText(playSongEvent.getSong().getArtist());
+      if (playSongEvent.isRevealMiniPlayer()) {
+        rlMiniPlayer.setVisibility(View.VISIBLE);
+      }
+
+      // Setup exo player
+      exoPlayer = ExoPlayer.Factory.newInstance(1);
+      String url = playSongEvent.getSongSource();
+      Uri radioUri = Uri.parse(url);
+      Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
+      String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
+      DataSource dataSource = new DefaultUriDataSource(this, null, userAgent);
+      ExtractorSampleSource sampleSource = new ExtractorSampleSource(
+              radioUri, dataSource, allocator, BUFFER_SEGMENT_SIZE * BUFFER_SEGMENT_COUNT);
+      audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
+      exoPlayer.prepare(audioRenderer);
+      exoPlayer.setPlayWhenReady(true);
+
+      if (!playSongEvent.isRevealMiniPlayer()) {
+        sentDurationToMainPlayer = false;
+        tvSongNameInsideToolBar.setText(currentSong.getName());
+        tvSongArtistInsideToolBar.setText(currentSong.getArtist());
+      }
+
+      startSeekbarProgress();
+      mHandler.postDelayed(mRunnable, 100);
+    } else {
+      Toast.makeText(this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
     }
-
-    currentSong = playSongEvent.getSong();
-    songIsPlaying = true;
-    fabAction.setImageResource(R.drawable.ic_pause_white_24px);
-
-    Picasso.with(this).load(playSongEvent.getSong().getIconUrl()).into(civSongImage);
-    tvSongName.setText(playSongEvent.getSong().getName());
-    tvSongArtist.setText(playSongEvent.getSong().getArtist());
-    if (playSongEvent.isRevealMiniPlayer()) {
-      rlMiniPlayer.setVisibility(View.VISIBLE);
-    }
-
-    // Setup exo player
-    exoPlayer = ExoPlayer.Factory.newInstance(1);
-    String url = playSongEvent.getSongSource();
-    Uri radioUri = Uri.parse(url);
-    Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
-    String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
-    DataSource dataSource = new DefaultUriDataSource(this, null, userAgent);
-    ExtractorSampleSource sampleSource = new ExtractorSampleSource(
-            radioUri, dataSource, allocator, BUFFER_SEGMENT_SIZE * BUFFER_SEGMENT_COUNT);
-    audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
-    exoPlayer.prepare(audioRenderer);
-    exoPlayer.setPlayWhenReady(true);
-
-    if (!playSongEvent.isRevealMiniPlayer()) {
-      sentDurationToMainPlayer = false;
-      tvSongNameInsideToolBar.setText(currentSong.getName());
-      tvSongArtistInsideToolBar.setText(currentSong.getArtist());
-    }
-
-    startSeekbarProgress();
-    mHandler.postDelayed(mRunnable, 100);
   }
 
   private boolean sentDurationToMainPlayer = false;
