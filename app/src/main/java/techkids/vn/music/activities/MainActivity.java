@@ -56,7 +56,6 @@ import techkids.vn.music.networks.models.Subgenres;
 
 public class MainActivity extends BaseActivity implements FragmentManager.OnBackStackChangedListener {
 
-  private static final String TAG = MainActivity.class.toString();
   private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
   private static final int BUFFER_SEGMENT_COUNT = 256;
 
@@ -128,7 +127,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
             RealmContext.getInstance().insertSubgenre(s);
             Subgenres.subgenres.add(s);
           }
-          changeFragment(new ViewPagerFragment(), false);
+          changeFragment(R.id.fl_container, new ViewPagerFragment(), false);
           hideProgress();
         }
 
@@ -139,20 +138,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
       });
     } else {
       getSongCategoriesFromRealm();
-      changeFragment(new ViewPagerFragment(), false);
-    }
-  }
-
-  private void changeFragment(Fragment fragment, boolean addToBackStack) {
-    if (addToBackStack) {
-      getSupportFragmentManager().beginTransaction()
-              .replace(R.id.fl_container, fragment)
-              .addToBackStack(null)
-              .commit();
-    } else {
-      getSupportFragmentManager().beginTransaction()
-              .replace(R.id.fl_container, fragment)
-              .commit();
+      changeFragment(R.id.fl_container, new ViewPagerFragment(), false);
     }
   }
 
@@ -182,7 +168,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     tvSongNameInsideToolBar.setText(currentSong.getName());
     tvSongArtistInsideToolBar.setText(currentSong.getArtist());
 
-    changeFragment(new MainPlayerFragment(), true);
+    changeFragment(R.id.fl_container, new MainPlayerFragment(), true);
     EventBus.getDefault().postSticky(
             new OpenMainPlayerEvent(currentSong, sbProgress.getProgress(), sbProgress.getMax(), songIsPlaying)
     );
@@ -228,7 +214,8 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   public void onEvent(OpenTopsongsFragmentEvent openTopsongsFragmentEvent) {
     TopsongsFragment topsongsFragment = (TopsongsFragment) openTopsongsFragmentEvent.getFragment();
     topsongsFragment.setSub(openTopsongsFragmentEvent.getSubgenres());
-    changeFragment(topsongsFragment, openTopsongsFragmentEvent.isAddToBackStack());
+    changeFragment(R.id.fl_container, topsongsFragment, openTopsongsFragmentEvent.isAddToBackStack());
+
   }
 
   @Subscribe
@@ -334,5 +321,4 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   public void onBackStackChanged() {
 
   }
-
 }
