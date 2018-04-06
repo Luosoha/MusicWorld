@@ -18,15 +18,14 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.R;
+import techkids.vn.music.activities.MainActivity;
+import techkids.vn.music.events.BackFromMainPlayerEvent;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;
-import techkids.vn.music.events.BackFromMainPlayerEvent;
 import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.events.ResumeTheMusicFromMainPlayerEvent;
-import techkids.vn.music.events.SongIsReadyEvent;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
@@ -35,7 +34,7 @@ import techkids.vn.music.utils.ActionHelper;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainPlayerFragment extends BaseFragment {
+public class MainPlayerFragment extends BaseFragment implements MainActivity.OnSongReadyListener {
 
   private static final String TAG = MainPlayerFragment.class.toString();
 
@@ -216,13 +215,10 @@ public class MainPlayerFragment extends BaseFragment {
     EventBus.getDefault().removeStickyEvent(OpenMainPlayerEvent.class);
   }
 
-  @Subscribe(sticky = true)
-  public void onEvent(SongIsReadyEvent songIsReadyEvent) {
-    Log.d(TAG, "SongIsReadyEvent received: " + songIsReadyEvent.getDuration());
-    progressSb.setMax(songIsReadyEvent.getDuration());
-    transparentProgressSb.setMax(songIsReadyEvent.getDuration());
+  @Override
+  public void onSongReady(long duration) {
+    progressSb.setMax((int) duration);
+    transparentProgressSb.setMax((int) duration);
     songIsPlaying = true;
-    EventBus.getDefault().removeStickyEvent(SongIsReadyEvent.class);
   }
-
 }

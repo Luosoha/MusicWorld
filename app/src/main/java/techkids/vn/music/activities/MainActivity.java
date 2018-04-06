@@ -42,7 +42,6 @@ import techkids.vn.music.events.OpenMainPlayerEvent;
 import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.events.ResumeTheMusicFromMainPlayerEvent;
-import techkids.vn.music.events.SongIsReadyEvent;
 import techkids.vn.music.fragments.MainPlayerFragment;
 import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.RealmContext;
@@ -87,6 +86,11 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   private Song currentSong;
   private Handler handler = new Handler();
   private Runnable runnable;
+  private OnSongReadyListener onSongReadyListener;
+
+  public interface OnSongReadyListener {
+    void onSongReady(long duration);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +143,27 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     }
   }
 
+  private void addListener() {
+    progressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+      @Override
+      public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+      }
+
+      @Override
+      public void onStartTrackingTouch(SeekBar seekBar) {
+        handler.removeCallbacks(runnable);
+      }
+
+      @Override
+      public void onStopTrackingTouch(SeekBar seekBar) {
+        int currentPosition = (int) (progressSb.getProgress() * exoPlayer.getDuration() / progressSb.getMax());
+        exoPlayer.seekTo(currentPosition);
+        handler.postDelayed(runnable, 100);
+      }
+    });
+  }
+
   @OnClick(R.id.fab_action)
   public void onFabActionClick() {
     if (songIsPlaying) {
@@ -174,27 +199,6 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   @OnClick(R.id.iv_back_from_main_player)
   public void onBackFromMainPlayerEvent() {
     onBackPressed();
-  }
-
-  private void addListener() {
-    progressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-      @Override
-      public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-      }
-
-      @Override
-      public void onStartTrackingTouch(SeekBar seekBar) {
-        handler.removeCallbacks(runnable);
-      }
-
-      @Override
-      public void onStopTrackingTouch(SeekBar seekBar) {
-        int currentPosition = (int) (progressSb.getProgress() * exoPlayer.getDuration() / progressSb.getMax());
-        exoPlayer.seekTo(currentPosition);
-        handler.postDelayed(runnable, 100);
-      }
-    });
   }
 
   @Override
@@ -258,7 +262,9 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
       @Override
       public void run() {
         if (exoPlayer.getDuration() > 0 && exoPlayer.getCurrentPosition() > 0 && !sentDurationToMainPlayer) {
-          EventBus.getDefault().postSticky(new SongIsReadyEvent((int) exoPlayer.getDuration()));
+          if (onSongReadyListener != null) {
+            onSongReadyListener.onSongReady(exoPlayer.getDuration());
+          }
           sentDurationToMainPlayer = true;
         }
         progressSb.setMax((int) exoPlayer.getDuration());
