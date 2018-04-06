@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -62,34 +61,34 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.rl_mini_player)
-  RelativeLayout rlMiniPlayer;
+  RelativeLayout miniPlayerLayout;
   @BindView(R.id.iv_back_from_main_player)
-  ImageView ivBackFromMainPlayer;
+  ImageView backFromMainPlayerIv;
   @BindView(R.id.iv_download_song)
-  ImageView ivDownloadSong;
+  ImageView downloadSongIv;
   @BindView(R.id.ll_main_player_toolbar)
-  LinearLayout llMainPlayerToolbar;
+  LinearLayout mainPlayerToolbar;
   @BindView(R.id.sb_progress)
-  SeekBar sbProgress;
+  SeekBar progressSb;
   @BindView(R.id.tv_song_name_inside_tool_bar)
-  TextView tvSongNameInsideToolBar;
+  TextView songNameInsideToolBarTv;
   @BindView(R.id.tv_song_artist_inside_tool_bar)
-  TextView tvSongArtistInsideToolBar;
+  TextView songArtistInsideToolBarTv;
   @BindView(R.id.civ_top_song)
-  CircleImageView civSongImage;
+  CircleImageView songImageCiv;
   @BindView(R.id.tv_top_song_name)
-  TextView tvSongName;
+  TextView songNameTv;
   @BindView(R.id.tv_top_song_artist)
-  TextView tvSongArtist;
+  TextView songArtistTv;
   @BindView(R.id.fab_action)
-  FloatingActionButton fabAction;
+  FloatingActionButton actionFab;
 
   private boolean songIsPlaying = false;
   private ExoPlayer exoPlayer;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private Song currentSong;
-  private Handler mHandler = new Handler();
-  private Runnable mRunnable;
+  private Handler handler = new Handler();
+  private Runnable runnable;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -145,13 +144,13 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   @OnClick(R.id.fab_action)
   public void onFabActionClick() {
     if (songIsPlaying) {
-      fabAction.setImageResource(R.drawable.ic_play_arrow_white_24px);
+      actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
       songIsPlaying = !songIsPlaying;
       if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
         exoPlayer.setPlayWhenReady(false);
       }
     } else {
-      fabAction.setImageResource(R.drawable.ic_pause_white_24px);
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
       songIsPlaying = !songIsPlaying;
       if (exoPlayer != null) {
         exoPlayer.setPlayWhenReady(true);
@@ -162,15 +161,15 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   @OnClick(R.id.rl_mini_player)
   public void onMiniPlayerClick() {
     getSupportActionBar().setDisplayShowTitleEnabled(false);
-    rlMiniPlayer.setVisibility(View.GONE);
+    miniPlayerLayout.setVisibility(View.GONE);
 
-    llMainPlayerToolbar.setVisibility(View.VISIBLE);
-    tvSongNameInsideToolBar.setText(currentSong.getName());
-    tvSongArtistInsideToolBar.setText(currentSong.getArtist());
+    mainPlayerToolbar.setVisibility(View.VISIBLE);
+    songNameInsideToolBarTv.setText(currentSong.getName());
+    songArtistInsideToolBarTv.setText(currentSong.getArtist());
 
     changeFragment(R.id.fl_container, new MainPlayerFragment(), true);
     EventBus.getDefault().postSticky(
-            new OpenMainPlayerEvent(currentSong, sbProgress.getProgress(), sbProgress.getMax(), songIsPlaying)
+            new OpenMainPlayerEvent(currentSong, progressSb.getProgress(), progressSb.getMax(), songIsPlaying)
     );
   }
 
@@ -180,7 +179,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   }
 
   private void addListener() {
-    sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    progressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -188,14 +187,14 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
 
       @Override
       public void onStartTrackingTouch(SeekBar seekBar) {
-        mHandler.removeCallbacks(mRunnable);
+        handler.removeCallbacks(runnable);
       }
 
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        int currentPosition = (int) (sbProgress.getProgress() * exoPlayer.getDuration() / sbProgress.getMax());
+        int currentPosition = (int) (progressSb.getProgress() * exoPlayer.getDuration() / progressSb.getMax());
         exoPlayer.seekTo(currentPosition);
-        mHandler.postDelayed(mRunnable, 100);
+        handler.postDelayed(runnable, 100);
       }
     });
   }
@@ -227,13 +226,13 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
 
       currentSong = playSongEvent.getSong();
       songIsPlaying = true;
-      fabAction.setImageResource(R.drawable.ic_pause_white_24px);
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
 
-      Picasso.with(this).load(playSongEvent.getSong().getIconUrl()).into(civSongImage);
-      tvSongName.setText(playSongEvent.getSong().getName());
-      tvSongArtist.setText(playSongEvent.getSong().getArtist());
+      Picasso.with(this).load(playSongEvent.getSong().getIconUrl()).into(songImageCiv);
+      songNameTv.setText(playSongEvent.getSong().getName());
+      songArtistTv.setText(playSongEvent.getSong().getArtist());
       if (playSongEvent.isRevealMiniPlayer()) {
-        rlMiniPlayer.setVisibility(View.VISIBLE);
+        miniPlayerLayout.setVisibility(View.VISIBLE);
       }
 
       // Setup exo player
@@ -251,12 +250,12 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
 
       if (!playSongEvent.isRevealMiniPlayer()) {
         sentDurationToMainPlayer = false;
-        tvSongNameInsideToolBar.setText(currentSong.getName());
-        tvSongArtistInsideToolBar.setText(currentSong.getArtist());
+        songNameInsideToolBarTv.setText(currentSong.getName());
+        songArtistInsideToolBarTv.setText(currentSong.getArtist());
       }
 
       startSeekbarProgress();
-      mHandler.postDelayed(mRunnable, 100);
+      handler.postDelayed(runnable, 100);
     } else {
       Toast.makeText(this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
     }
@@ -265,31 +264,31 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   private boolean sentDurationToMainPlayer = false;
 
   private void startSeekbarProgress() {
-    mRunnable = new Runnable() {
+    runnable = new Runnable() {
       @Override
       public void run() {
         if (exoPlayer.getDuration() > 0 && exoPlayer.getCurrentPosition() > 0 && !sentDurationToMainPlayer) {
           EventBus.getDefault().postSticky(new SongIsReadyEvent((int) exoPlayer.getDuration()));
           sentDurationToMainPlayer = true;
         }
-        sbProgress.setMax((int) exoPlayer.getDuration());
-        mHandler.postDelayed(this, 100);
-        sbProgress.setProgress((int) exoPlayer.getCurrentPosition());
+        progressSb.setMax((int) exoPlayer.getDuration());
+        handler.postDelayed(this, 100);
+        progressSb.setProgress((int) exoPlayer.getCurrentPosition());
       }
     };
   }
 
   @Subscribe
   public void onEvent(BackFromMainPlayerEvent backFromMainPlayerEvent) {
-    rlMiniPlayer.setVisibility(View.VISIBLE);
-    llMainPlayerToolbar.setVisibility(View.GONE);
+    miniPlayerLayout.setVisibility(View.VISIBLE);
+    mainPlayerToolbar.setVisibility(View.GONE);
     getSupportActionBar().setDisplayShowTitleEnabled(true);
   }
 
   @Subscribe
   public void onEvent(PauseTheMusicFromMainPlayerEvent event) {
     songIsPlaying = false;
-    fabAction.setImageResource(R.drawable.ic_play_arrow_white_24px);
+    actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
     if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
       exoPlayer.setPlayWhenReady(false);
     }
@@ -298,7 +297,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   @Subscribe
   public void onEvent(ResumeTheMusicFromMainPlayerEvent event) {
     songIsPlaying = true;
-    fabAction.setImageResource(R.drawable.ic_pause_white_24px);
+    actionFab.setImageResource(R.drawable.ic_pause_white_24px);
     if (exoPlayer != null) {
       exoPlayer.setPlayWhenReady(true);
     }

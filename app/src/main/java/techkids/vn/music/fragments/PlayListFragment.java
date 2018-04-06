@@ -1,11 +1,7 @@
 package techkids.vn.music.fragments;
 
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -13,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import techkids.vn.music.R;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.networks.models.Subgenres;
@@ -27,7 +22,7 @@ public class PlayListFragment extends BaseFragment {
   private ArrayAdapter<String> categoryArrayAdapter;
 
   @BindView(R.id.lv_playlist)
-  ListView lvPlayList;
+  ListView playListLv;
 
   @Override
   public void onResume() {
@@ -55,7 +50,7 @@ public class PlayListFragment extends BaseFragment {
 
   private void setupUI() {
     categoryArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.item_play_list, favCategories);
-    lvPlayList.setAdapter(categoryArrayAdapter);
+    playListLv.setAdapter(categoryArrayAdapter);
   }
 
 }

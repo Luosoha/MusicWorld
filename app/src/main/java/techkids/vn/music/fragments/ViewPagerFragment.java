@@ -2,20 +2,16 @@ package techkids.vn.music.fragments;
 
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import techkids.vn.music.R;
 import techkids.vn.music.adapters.SlideAdapter;
 
@@ -25,11 +21,9 @@ import techkids.vn.music.adapters.SlideAdapter;
 public class ViewPagerFragment extends BaseFragment implements View.OnKeyListener {
 
   @BindView(R.id.vp_parent)
-  ViewPager vpParent;
+  ViewPager viewPager;
   @BindView(R.id.tl_title)
-  TabLayout tlTitle;
-
-  private PagerAdapter pagerAdapter;
+  TabLayout tabLayout;
 
   @Override
   protected int getLayoutId() {
@@ -43,10 +37,10 @@ public class ViewPagerFragment extends BaseFragment implements View.OnKeyListene
   }
 
   private void setupUI() {
-    pagerAdapter = new SlideAdapter(getChildFragmentManager());
-    vpParent.setAdapter(pagerAdapter);
-    tlTitle.setupWithViewPager(vpParent);
-    tlTitle.setTabTextColors(Color.BLACK, Color.WHITE);
+    PagerAdapter pagerAdapter = new SlideAdapter(getChildFragmentManager());
+    viewPager.setAdapter(pagerAdapter);
+    tabLayout.setupWithViewPager(viewPager);
+    tabLayout.setTabTextColors(Color.BLACK, Color.WHITE);
   }
 
   @Override

@@ -13,41 +13,41 @@ import techkids.vn.music.fragments.PlayListFragment;
 
 public class SlideAdapter extends FragmentStatePagerAdapter {
 
-    private static final int PAGE_NUMBERS = 3;
+  private static final int PAGE_NUMBERS = 3;
 
-    public SlideAdapter(FragmentManager fm) {
-        super(fm);
-    }
+  public SlideAdapter(FragmentManager fm) {
+    super(fm);
+  }
 
-    @Override
-    public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return new GenresFragment();
-            case 1:
-                return new PlayListFragment();
-            case 2:
-                return new GenresFragment();
-        }
-        return null;
+  @Override
+  public Fragment getItem(int position) {
+    switch (position) {
+      case 0:
+        return new GenresFragment();
+      case 1:
+        return new PlayListFragment();
+      case 2:
+        return new GenresFragment();
     }
+    return null;
+  }
 
-    @Override
-    public int getCount() {
-        return PAGE_NUMBERS;
-    }
+  @Override
+  public int getCount() {
+    return PAGE_NUMBERS;
+  }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "GENRES";
-            case 1:
-                return "PLAYLIST";
-            case 2:
-                return "OFFLINE";
-        }
-        return null;
+  @Override
+  public CharSequence getPageTitle(int position) {
+    switch (position) {
+      case 0:
+        return "GENRES";
+      case 1:
+        return "PLAYLIST";
+      case 2:
+        return "OFFLINE";
     }
+    return null;
+  }
 
 }

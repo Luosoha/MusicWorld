@@ -7,16 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,15 +36,16 @@ public class TopsongsFragment extends BaseFragment {
   private static final int COLUMN_NUMBERS = 1;
 
   @BindView(R.id.view_back)
-  View viewBack;
+  View backView;
   @BindView(R.id.iv_category)
-  ImageView ivCategory;
+  ImageView categoryIv;
   @BindView(R.id.tv_category_name)
-  TextView tvCategoryName;
+  TextView categoryNameTv;
   @BindView(R.id.rv_top_songs)
-  RecyclerView rvTopSongs;
+  RecyclerView topSongRv;
   @BindView(R.id.view_favorite)
-  View viewFavorite;
+  View favoriteView;
+
 
   private TopSongAdapter topSongAdapter;
   private Subgenres sub;
@@ -100,7 +98,7 @@ public class TopsongsFragment extends BaseFragment {
   }
 
   private void addListeners() {
-    viewBack.setOnClickListener(new View.OnClickListener() {
+    backView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         getActivity().onBackPressed();
@@ -112,26 +110,26 @@ public class TopsongsFragment extends BaseFragment {
     setFavoriteView();
 
     if (sub != null) {
-      tvCategoryName.setText(sub.getName());
+      categoryNameTv.setText(sub.getName());
       String src = "genre_" + sub.getId();
-      int rid = this.ivCategory.getResources().getIdentifier(src,
-              "drawable", this.ivCategory.getContext().getPackageName());
+      int rid = this.categoryIv.getResources().getIdentifier(src,
+              "drawable", this.categoryIv.getContext().getPackageName());
       if (rid != 0) {
-        Picasso.with(this.getContext()).load(rid).into(ivCategory);
+        Picasso.with(this.getContext()).load(rid).into(categoryIv);
       }
     }
 
     topSongAdapter = new TopSongAdapter();
 //        rvTopSongs.setHasFixedSize(true);
-    rvTopSongs.setLayoutManager(new GridLayoutManager(getActivity(), COLUMN_NUMBERS));
-    rvTopSongs.setAdapter(topSongAdapter);
+    topSongRv.setLayoutManager(new GridLayoutManager(getActivity(), COLUMN_NUMBERS));
+    topSongRv.setAdapter(topSongAdapter);
   }
 
   private void setFavoriteView() {
     if (Subgenres.subgenres.get(position).isFavorite()) {
-      viewFavorite.setBackgroundResource(R.drawable.ic_favorite_filled_white_24px);
+      favoriteView.setBackgroundResource(R.drawable.ic_favorite_filled_white_24px);
     } else {
-      viewFavorite.setBackgroundResource(R.drawable.ic_favorite_border_white_24px);
+      favoriteView.setBackgroundResource(R.drawable.ic_favorite_border_white_24px);
     }
   }
 

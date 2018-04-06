@@ -28,8 +28,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
   public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
     View view = layoutInflater.inflate(R.layout.item_genre, parent, false);
-    CategoryViewHolder categoryViewHolder = new CategoryViewHolder(view);
-    return categoryViewHolder;
+    return new CategoryViewHolder(view);
   }
 
   @Override
@@ -44,9 +43,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
   class CategoryViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.tv_category_name)
-    TextView tvCategoryName;
+    TextView categoryNameTv;
     @BindView(R.id.iv_category)
-    ImageView ivCategory;
+    ImageView categoryIv;
 
     public CategoryViewHolder(View itemView) {
       super(itemView);
@@ -54,12 +53,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void bind(final Subgenres subgenres) {
-      tvCategoryName.setText(subgenres.getName());
+      categoryNameTv.setText(subgenres.getName());
       String src = "genre_" + subgenres.getId();
-      int rid = this.ivCategory.getResources().getIdentifier(src,
-              "drawable", this.ivCategory.getContext().getPackageName());
+      int rid = this.categoryIv.getResources().getIdentifier(src,
+              "drawable", this.categoryIv.getContext().getPackageName());
       if (rid != 0) {
-        Picasso.with(this.itemView.getContext()).load(rid).into(ivCategory);
+        Picasso.with(this.itemView.getContext()).load(rid).into(categoryIv);
       }
 
       this.itemView.setOnClickListener(new View.OnClickListener() {

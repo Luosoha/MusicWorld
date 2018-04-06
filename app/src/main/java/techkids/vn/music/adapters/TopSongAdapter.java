@@ -31,8 +31,7 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
   public TopSongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
     View view = layoutInflater.inflate(R.layout.item_top_song, parent, false);
-    TopSongViewHolder topSongViewHolder = new TopSongViewHolder(view);
-    return topSongViewHolder;
+    return new TopSongViewHolder(view);
   }
 
   @Override
@@ -47,11 +46,11 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
 
   class TopSongViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.civ_top_song)
-    CircleImageView civTopSong;
+    CircleImageView topSongCiv;
     @BindView(R.id.tv_top_song_name)
-    TextView tvTopSongName;
+    TextView topSongNameTv;
     @BindView(R.id.tv_top_song_artist)
-    TextView tvTopSongArtist;
+    TextView topSongArtistTv;
 
     public TopSongViewHolder(View itemView) {
       super(itemView);
@@ -59,9 +58,9 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
     }
 
     public void bind(final Song song) {
-      tvTopSongName.setText(song.getName());
-      tvTopSongArtist.setText(song.getArtist());
-      Picasso.with(this.itemView.getContext()).load(song.getIconUrl()).into(civTopSong);
+      topSongNameTv.setText(song.getName());
+      topSongArtistTv.setText(song.getArtist());
+      Picasso.with(this.itemView.getContext()).load(song.getIconUrl()).into(topSongCiv);
 
       this.itemView.setOnClickListener(new View.OnClickListener() {
         @Override

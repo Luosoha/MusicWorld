@@ -1,14 +1,10 @@
 package techkids.vn.music.fragments;
 
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
@@ -18,7 +14,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,16 +40,16 @@ public class MainPlayerFragment extends BaseFragment {
   private static final String TAG = MainPlayerFragment.class.toString();
 
   @BindView(R.id.iv_song_image)
-  ImageView ivSongImage;
+  ImageView songImageIv;
   @BindView(R.id.sb_progress)
-  SeekBar sbProgress;
+  SeekBar progressSb;
   @BindView(R.id.sb_transparent_progress)
-  SeekBar sbTransparentProgress;
+  SeekBar transparentProgressSb;
   @BindView(R.id.fab_action)
-  FloatingActionButton fabAction;
+  FloatingActionButton actionFab;
 
-  private Runnable mRunnable;
-  private Handler mHandler;
+  private Runnable runnable;
+  private Handler handler;
   private Song currentSong;
   private boolean songIsPlaying;
 
@@ -81,65 +76,65 @@ public class MainPlayerFragment extends BaseFragment {
     init();
     addListener();
     startSeekbarProgress();
-    mHandler.postDelayed(mRunnable, 100);
+    handler.postDelayed(runnable, 100);
   }
 
   private void init() {
     ((MainActivity) getActivity()).getSupportActionBar().show();
-    mHandler = new Handler();
+    handler = new Handler();
   }
 
   private void startSeekbarProgress() {
-    mRunnable = new Runnable() {
+    runnable = new Runnable() {
       @Override
       public void run() {
         if (songIsPlaying) {
-          sbProgress.setProgress(sbProgress.getProgress() + 100);
-          sbTransparentProgress.setProgress(sbTransparentProgress.getProgress() + 100);
+          progressSb.setProgress(progressSb.getProgress() + 100);
+          transparentProgressSb.setProgress(transparentProgressSb.getProgress() + 100);
         }
-        mHandler.postDelayed(this, 100);
+        handler.postDelayed(this, 100);
       }
     };
   }
 
   private void addListener() {
-    sbTransparentProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    transparentProgressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        sbProgress.setProgress(sbTransparentProgress.getProgress());
+        progressSb.setProgress(transparentProgressSb.getProgress());
       }
 
       @Override
       public void onStartTrackingTouch(SeekBar seekBar) {
-        mHandler.removeCallbacks(mRunnable);
-        sbProgress.setProgress(sbTransparentProgress.getProgress());
+        handler.removeCallbacks(runnable);
+        progressSb.setProgress(transparentProgressSb.getProgress());
       }
 
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        sbProgress.setProgress(sbTransparentProgress.getProgress());
-        mHandler.postDelayed(mRunnable, 100);
-        EventBus.getDefault().post(new MusicProgressChangedEvent(sbTransparentProgress.getProgress()));
+        progressSb.setProgress(transparentProgressSb.getProgress());
+        handler.postDelayed(runnable, 100);
+        EventBus.getDefault().post(new MusicProgressChangedEvent(transparentProgressSb.getProgress()));
       }
     });
 
-    sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    progressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        sbTransparentProgress.setProgress(sbProgress.getProgress());
+        transparentProgressSb.setProgress(progressSb.getProgress());
       }
 
       @Override
       public void onStartTrackingTouch(SeekBar seekBar) {
-        mHandler.removeCallbacks(mRunnable);
-        sbTransparentProgress.setProgress(sbProgress.getProgress());
+        handler.removeCallbacks(runnable);
+        transparentProgressSb.setProgress(progressSb.getProgress());
       }
 
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        sbTransparentProgress.setProgress(sbProgress.getProgress());
-        mHandler.postDelayed(mRunnable, 100);
-        EventBus.getDefault().post(new MusicProgressChangedEvent(sbProgress.getProgress()));
+        transparentProgressSb.setProgress(progressSb.getProgress());
+        handler.postDelayed(runnable, 100);
+        EventBus.getDefault().post(new MusicProgressChangedEvent(progressSb.getProgress()));
       }
     });
   }
@@ -147,16 +142,16 @@ public class MainPlayerFragment extends BaseFragment {
   @OnClick(R.id.fab_action)
   public void onFabActionClick() {
     if (songIsPlaying) {
-      fabAction.setImageResource(R.drawable.ic_play_arrow_white_24px);
+      actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
       songIsPlaying = !songIsPlaying;
-      mHandler.removeCallbacks(mRunnable);
+      handler.removeCallbacks(runnable);
       // Send event to main activity to pause the music
       EventBus.getDefault().post(new PauseTheMusicFromMainPlayerEvent());
 
     } else {
-      fabAction.setImageResource(R.drawable.ic_pause_white_24px);
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
       songIsPlaying = !songIsPlaying;
-      mHandler.postDelayed(mRunnable, 100);
+      handler.postDelayed(runnable, 100);
       // Send event to main activity to resume the music
       EventBus.getDefault().post(new ResumeTheMusicFromMainPlayerEvent());
     }
@@ -167,9 +162,9 @@ public class MainPlayerFragment extends BaseFragment {
     Song song = Song.SONGS.get(ActionHelper.findPreviousSongPositionOf(currentSong));
     currentSong = song;
     songIsPlaying = false;
-    sbProgress.setProgress(0);
-    sbTransparentProgress.setProgress(0);
-    Picasso.with(getActivity()).load(song.getImageUrl()).into(ivSongImage);
+    progressSb.setProgress(0);
+    transparentProgressSb.setProgress(0);
+    Picasso.with(getActivity()).load(song.getImageUrl()).into(songImageIv);
     getSongSourceForMainActivity(song);
   }
 
@@ -178,9 +173,9 @@ public class MainPlayerFragment extends BaseFragment {
     Song song = Song.SONGS.get(ActionHelper.findNextSongPositionOf(currentSong));
     currentSong = song;
     songIsPlaying = false;
-    sbProgress.setProgress(0);
-    sbTransparentProgress.setProgress(0);
-    Picasso.with(getActivity()).load(song.getImageUrl()).into(ivSongImage);
+    progressSb.setProgress(0);
+    transparentProgressSb.setProgress(0);
+    Picasso.with(getActivity()).load(song.getImageUrl()).into(songImageIv);
     getSongSourceForMainActivity(song);
   }
 
@@ -208,24 +203,24 @@ public class MainPlayerFragment extends BaseFragment {
     songIsPlaying = openMainPlayerEvent.isPlaying();
 
     if (songIsPlaying) {
-      fabAction.setImageResource(R.drawable.ic_pause_white_24px);
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
     } else {
-      fabAction.setImageResource(R.drawable.ic_play_arrow_white_24px);
+      actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
     }
 
-    sbProgress.setMax(openMainPlayerEvent.getDuration());
-    sbTransparentProgress.setMax(openMainPlayerEvent.getDuration());
-    sbProgress.setProgress(openMainPlayerEvent.getCurrentPosition());
-    sbTransparentProgress.setProgress(openMainPlayerEvent.getCurrentPosition());
-    Picasso.with(getActivity()).load(openMainPlayerEvent.getCurrentSong().getImageUrl()).into(ivSongImage);
+    progressSb.setMax(openMainPlayerEvent.getDuration());
+    transparentProgressSb.setMax(openMainPlayerEvent.getDuration());
+    progressSb.setProgress(openMainPlayerEvent.getCurrentPosition());
+    transparentProgressSb.setProgress(openMainPlayerEvent.getCurrentPosition());
+    Picasso.with(getActivity()).load(openMainPlayerEvent.getCurrentSong().getImageUrl()).into(songImageIv);
     EventBus.getDefault().removeStickyEvent(OpenMainPlayerEvent.class);
   }
 
   @Subscribe(sticky = true)
   public void onEvent(SongIsReadyEvent songIsReadyEvent) {
     Log.d(TAG, "SongIsReadyEvent received: " + songIsReadyEvent.getDuration());
-    sbProgress.setMax(songIsReadyEvent.getDuration());
-    sbTransparentProgress.setMax(songIsReadyEvent.getDuration());
+    progressSb.setMax(songIsReadyEvent.getDuration());
+    transparentProgressSb.setMax(songIsReadyEvent.getDuration());
     songIsPlaying = true;
     EventBus.getDefault().removeStickyEvent(SongIsReadyEvent.class);
   }
