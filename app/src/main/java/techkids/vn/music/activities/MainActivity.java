@@ -37,10 +37,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import techkids.vn.music.R;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
+import techkids.vn.music.callbacks.OnPauseListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;
-import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.events.ResumeTheMusicFromMainPlayerEvent;
 import techkids.vn.music.fragments.MainPlayerFragment;
@@ -52,7 +52,7 @@ import techkids.vn.music.networks.models.SongCategoryResponse;
 import techkids.vn.music.networks.models.Subgenres;
 
 public class MainActivity extends BaseActivity
-        implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener {
+        implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener, OnPauseListener {
 
   private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
   private static final int BUFFER_SEGMENT_COUNT = 256;
@@ -190,6 +190,7 @@ public class MainActivity extends BaseActivity
 
     MainPlayerFragment mainPlayerFragment = new MainPlayerFragment();
     mainPlayerFragment.setOnBackFromMainPlayerListener(this);
+    mainPlayerFragment.setOnPauseListener(this);
     onSongReadyListener = mainPlayerFragment;
     changeFragment(R.id.fl_container, mainPlayerFragment, true);
     EventBus.getDefault().postSticky(
@@ -276,15 +277,6 @@ public class MainActivity extends BaseActivity
   }
 
   @Subscribe
-  public void onEvent(PauseTheMusicFromMainPlayerEvent event) {
-    songIsPlaying = false;
-    actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-    if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
-      exoPlayer.setPlayWhenReady(false);
-    }
-  }
-
-  @Subscribe
   public void onEvent(ResumeTheMusicFromMainPlayerEvent event) {
     songIsPlaying = true;
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
@@ -316,5 +308,14 @@ public class MainActivity extends BaseActivity
   @Override
   public void onBackStackChanged() {
 
+  }
+
+  @Override
+  public void onPauseAction() {
+    songIsPlaying = false;
+    actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
+    if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
+      exoPlayer.setPlayWhenReady(false);
+    }
   }
 }

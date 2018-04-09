@@ -18,7 +18,6 @@ import techkids.vn.music.networks.models.Subgenres;
 public class GenresFragment extends BaseFragment implements CategoryAdapter.OnCategoryClickListener {
 
   private static final int COLUMN_NUMBERS = 2;
-  private static final String TAG = GenresFragment.class.toString();
 
   @BindView(R.id.rv_song_categories)
   RecyclerView songCategoryRv;

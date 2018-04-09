@@ -21,10 +21,10 @@ import retrofit2.Response;
 import techkids.vn.music.R;
 import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
+import techkids.vn.music.callbacks.OnPauseListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;
-import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
 import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.events.ResumeTheMusicFromMainPlayerEvent;
 import techkids.vn.music.managers.RetrofitContext;
@@ -55,6 +55,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   private Song currentSong;
   private boolean songIsPlaying;
   private OnBackFromMainPlayerListener onBackFromMainPlayerListener;
+  private OnPauseListener onPauseListener;
 
   @Override
   protected int getLayoutId() {
@@ -134,7 +135,9 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
       songIsPlaying = !songIsPlaying;
       handler.removeCallbacks(runnable);
-      EventBus.getDefault().post(new PauseTheMusicFromMainPlayerEvent());
+      if (onPauseListener != null) {
+        onPauseListener.onPauseAction();
+      }
 
     } else {
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
@@ -219,6 +222,10 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
 
   public void setOnBackFromMainPlayerListener(OnBackFromMainPlayerListener listener) {
     onBackFromMainPlayerListener = listener;
+  }
+
+  public void setOnPauseListener(OnPauseListener listener) {
+    onPauseListener = listener;
   }
 
   @Override
