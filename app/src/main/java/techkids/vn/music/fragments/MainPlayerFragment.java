@@ -20,7 +20,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import techkids.vn.music.R;
 import techkids.vn.music.activities.MainActivity;
-import techkids.vn.music.events.BackFromMainPlayerEvent;
+import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
+import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;
 import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
@@ -36,7 +37,7 @@ import static techkids.vn.music.activities.MainActivity.exoPlayer;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainPlayerFragment extends BaseFragment implements MainActivity.OnSongReadyListener {
+public class MainPlayerFragment extends BaseFragment implements OnSongReadyListener {
 
   private static final String TAG = MainPlayerFragment.class.toString();
 
@@ -46,26 +47,14 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
   SeekBar progressSb;
   @BindView(R.id.sb_transparent_progress)
   SeekBar transparentProgressSb;
-  @BindView(R.id.fab_action)
+  @BindView(R.id.main_player_action_btn)
   FloatingActionButton actionFab;
 
   private Runnable runnable;
   private Handler handler;
   private Song currentSong;
   private boolean songIsPlaying;
-
-  @Override
-  public void onStart() {
-    super.onStart();
-    EventBus.getDefault().register(this);
-  }
-
-  @Override
-  public void onStop() {
-    super.onStop();
-    EventBus.getDefault().post(new BackFromMainPlayerEvent());
-    EventBus.getDefault().unregister(this);
-  }
+  private OnBackFromMainPlayerListener onBackFromMainPlayerListener;
 
   @Override
   protected int getLayoutId() {
@@ -76,7 +65,7 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
   protected void initLayout() {
     init();
     addListener();
-    startSeekbarProgress();
+    startSeekBarsProgress();
     handler.postDelayed(runnable, 100);
   }
 
@@ -85,13 +74,12 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
     handler = new Handler();
   }
 
-  private void startSeekbarProgress() {
+  private void startSeekBarsProgress() {
     runnable = new Runnable() {
       @Override
       public void run() {
         if (songIsPlaying) {
-          progressSb.setProgress((int) exoPlayer.getCurrentPosition());
-          transparentProgressSb.setProgress((int) exoPlayer.getCurrentPosition());
+          setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
         }
         handler.postDelayed(this, 100);
       }
@@ -140,20 +128,18 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
     });
   }
 
-  @OnClick(R.id.fab_action)
+  @OnClick(R.id.main_player_action_btn)
   public void onFabActionClick() {
     if (songIsPlaying) {
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
       songIsPlaying = !songIsPlaying;
       handler.removeCallbacks(runnable);
-      // Send event to main activity to pause the music
       EventBus.getDefault().post(new PauseTheMusicFromMainPlayerEvent());
 
     } else {
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
       songIsPlaying = !songIsPlaying;
       handler.postDelayed(runnable, 100);
-      // Send event to main activity to resume the music
       EventBus.getDefault().post(new ResumeTheMusicFromMainPlayerEvent());
     }
   }
@@ -209,18 +195,45 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
     }
 
-    progressSb.setMax(openMainPlayerEvent.getDuration());
-    transparentProgressSb.setMax(openMainPlayerEvent.getDuration());
-    progressSb.setProgress(openMainPlayerEvent.getCurrentPosition());
-    transparentProgressSb.setProgress(openMainPlayerEvent.getCurrentPosition());
+    setDurationForSeekBars();
+    setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
     Picasso.with(getActivity()).load(openMainPlayerEvent.getCurrentSong().getImageUrl()).into(songImageIv);
     EventBus.getDefault().removeStickyEvent(OpenMainPlayerEvent.class);
   }
 
   @Override
   public void onSongReady() {
-    progressSb.setMax((int) exoPlayer.getDuration());
-    transparentProgressSb.setMax((int) exoPlayer.getDuration());
+    setDurationForSeekBars();
     songIsPlaying = true;
   }
+
+  private void setDurationForSeekBars() {
+    progressSb.setMax((int) exoPlayer.getDuration());
+    transparentProgressSb.setMax((int) exoPlayer.getDuration());
+  }
+
+  private void setProgressForSeekBars(int progress) {
+    progressSb.setProgress(progress);
+    transparentProgressSb.setProgress(progress);
+  }
+
+  public void setOnBackFromMainPlayerListener(OnBackFromMainPlayerListener listener) {
+    onBackFromMainPlayerListener = listener;
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    if (onBackFromMainPlayerListener != null) {
+      onBackFromMainPlayerListener.onBackFromMainPlayer();
+    }
+    EventBus.getDefault().unregister(this);
+  }
+
 }

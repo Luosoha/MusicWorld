@@ -135,14 +135,12 @@ public class TopsongsFragment extends BaseFragment {
 
   @OnClick(R.id.view_favorite)
   public void onViewFavoriteClick() {
-    Log.d(TAG, "onClick");
     RealmContext.getInstance().update(Subgenres.subgenres.get(position), !Subgenres.subgenres.get(position).isFavorite());
     setFavoriteView();
   }
 
-  @OnClick(R.id.fab_action)
+  @OnClick(R.id.top_songs_action_btn)
   public void onFabActionClick() {
-    Log.d(TAG, "fab onClick");
     // Play the first song in the list
     // ...
 

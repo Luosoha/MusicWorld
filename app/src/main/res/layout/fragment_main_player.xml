@@ -68,7 +68,7 @@
         android:layout_weight="1" />
 
       <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_action"
+        android:id="@+id/main_player_action_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

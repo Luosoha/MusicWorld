@@ -36,7 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import techkids.vn.music.R;
-import techkids.vn.music.events.BackFromMainPlayerEvent;
+import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
+import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.events.MusicProgressChangedEvent;
 import techkids.vn.music.events.OpenMainPlayerEvent;
 import techkids.vn.music.events.PauseTheMusicFromMainPlayerEvent;
@@ -50,7 +51,8 @@ import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.networks.models.SongCategoryResponse;
 import techkids.vn.music.networks.models.Subgenres;
 
-public class MainActivity extends BaseActivity implements FragmentManager.OnBackStackChangedListener {
+public class MainActivity extends BaseActivity
+        implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener {
 
   private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
   private static final int BUFFER_SEGMENT_COUNT = 256;
@@ -87,10 +89,6 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   private Handler handler = new Handler();
   private Runnable runnable;
   private OnSongReadyListener onSongReadyListener;
-
-  public interface OnSongReadyListener {
-    void onSongReady();
-  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -191,10 +189,11 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     songArtistInsideToolBarTv.setText(currentSong.getArtist());
 
     MainPlayerFragment mainPlayerFragment = new MainPlayerFragment();
+    mainPlayerFragment.setOnBackFromMainPlayerListener(this);
     onSongReadyListener = mainPlayerFragment;
     changeFragment(R.id.fl_container, mainPlayerFragment, true);
     EventBus.getDefault().postSticky(
-            new OpenMainPlayerEvent(currentSong, progressSb.getProgress(), progressSb.getMax(), songIsPlaying)
+            new OpenMainPlayerEvent(currentSong, songIsPlaying)
     );
   }
 
@@ -277,13 +276,6 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   }
 
   @Subscribe
-  public void onEvent(BackFromMainPlayerEvent backFromMainPlayerEvent) {
-    miniPlayerLayout.setVisibility(View.VISIBLE);
-    mainPlayerToolbar.setVisibility(View.GONE);
-    getSupportActionBar().setDisplayShowTitleEnabled(true);
-  }
-
-  @Subscribe
   public void onEvent(PauseTheMusicFromMainPlayerEvent event) {
     songIsPlaying = false;
     actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
@@ -304,6 +296,13 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   @Subscribe
   public void onEvent(MusicProgressChangedEvent event) {
     exoPlayer.seekTo(event.getPosition());
+  }
+
+  @Override
+  public void onBackFromMainPlayer() {
+    miniPlayerLayout.setVisibility(View.VISIBLE);
+    mainPlayerToolbar.setVisibility(View.GONE);
+    getSupportActionBar().setDisplayShowTitleEnabled(true);
   }
 
   @Override
