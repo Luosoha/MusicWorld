@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
   private OnSongReadyListener onSongReadyListener;
 
   public interface OnSongReadyListener {
-    void onSongReady(long duration);
+    void onSongReady();
   }
 
   @Override
@@ -190,7 +190,9 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
     songNameInsideToolBarTv.setText(currentSong.getName());
     songArtistInsideToolBarTv.setText(currentSong.getArtist());
 
-    changeFragment(R.id.fl_container, new MainPlayerFragment(), true);
+    MainPlayerFragment mainPlayerFragment = new MainPlayerFragment();
+    onSongReadyListener = mainPlayerFragment;
+    changeFragment(R.id.fl_container, mainPlayerFragment, true);
     EventBus.getDefault().postSticky(
             new OpenMainPlayerEvent(currentSong, progressSb.getProgress(), progressSb.getMax(), songIsPlaying)
     );
@@ -263,7 +265,7 @@ public class MainActivity extends BaseActivity implements FragmentManager.OnBack
       public void run() {
         if (exoPlayer.getDuration() > 0 && exoPlayer.getCurrentPosition() > 0 && !sentDurationToMainPlayer) {
           if (onSongReadyListener != null) {
-            onSongReadyListener.onSongReady(exoPlayer.getDuration());
+            onSongReadyListener.onSongReady();
           }
           sentDurationToMainPlayer = true;
         }

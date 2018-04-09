@@ -31,6 +31,8 @@ import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.utils.ActionHelper;
 
+import static techkids.vn.music.activities.MainActivity.exoPlayer;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -88,8 +90,8 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
       @Override
       public void run() {
         if (songIsPlaying) {
-          progressSb.setProgress((int) MainActivity.exoPlayer.getCurrentPosition());
-          transparentProgressSb.setProgress((int) MainActivity.exoPlayer.getCurrentPosition());
+          progressSb.setProgress((int) exoPlayer.getCurrentPosition());
+          transparentProgressSb.setProgress((int) exoPlayer.getCurrentPosition());
         }
         handler.postDelayed(this, 100);
       }
@@ -216,9 +218,9 @@ public class MainPlayerFragment extends BaseFragment implements MainActivity.OnS
   }
 
   @Override
-  public void onSongReady(long duration) {
-    progressSb.setMax((int) duration);
-    transparentProgressSb.setMax((int) duration);
+  public void onSongReady() {
+    progressSb.setMax((int) exoPlayer.getDuration());
+    transparentProgressSb.setMax((int) exoPlayer.getDuration());
     songIsPlaying = true;
   }
 }
