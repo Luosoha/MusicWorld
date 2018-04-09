@@ -11,7 +11,6 @@ import android.widget.SeekBar;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -23,7 +22,6 @@ import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
-import techkids.vn.music.events.OpenMainPlayerEvent;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
@@ -48,7 +46,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   FloatingActionButton actionFab;
 
   private Runnable runnable;
-  private Handler handler;
+  private Handler handler = new Handler();
   private Song currentSong;
   private boolean songIsPlaying;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
@@ -61,17 +59,25 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
 
   @Override
   protected void initLayout() {
-    init();
+    setupMainPlayer();
     addListener();
-    startSeekBarsProgress();
-    handler.postDelayed(runnable, 100);
   }
 
-  private void init() {
+  private void setupMainPlayer() {
     MainActivity activity = (MainActivity) getActivity();
     activity.getSupportActionBar().show();
     onMusicPlayerActionListener = activity;
-    handler = new Handler();
+
+    if (songIsPlaying) {
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
+    } else {
+      actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
+    }
+    Picasso.with(getActivity()).load(currentSong.getImageUrl()).into(songImageIv);
+
+    setDurationForSeekBars();
+    setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
+    startSeekBarsProgress();
   }
 
   private void startSeekBarsProgress() {
@@ -81,9 +87,10 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
         if (songIsPlaying) {
           setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
         }
-        handler.postDelayed(this, 100);
+        handler.postDelayed(runnable, 100);
       }
     };
+    handler.postDelayed(runnable, 100);
   }
 
   private void addListener() {
@@ -188,27 +195,11 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
     });
   }
 
-  @Subscribe(sticky = true)
-  public void onEvent(OpenMainPlayerEvent openMainPlayerEvent) {
-    currentSong = openMainPlayerEvent.getCurrentSong();
-    songIsPlaying = openMainPlayerEvent.isPlaying();
-
-    if (songIsPlaying) {
-      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-    } else {
-      actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-    }
-
-    setDurationForSeekBars();
-    setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
-    Picasso.with(getActivity()).load(openMainPlayerEvent.getCurrentSong().getImageUrl()).into(songImageIv);
-    EventBus.getDefault().removeStickyEvent(OpenMainPlayerEvent.class);
-  }
-
   @Override
   public void onSongReady() {
     setDurationForSeekBars();
     songIsPlaying = true;
+    handler.postDelayed(runnable, 100);
   }
 
   private void setDurationForSeekBars() {
@@ -226,13 +217,12 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   }
 
   public void setOnMusicPlayerActionListener(OnMusicPlayerActionListener listener) {
-     onMusicPlayerActionListener = listener;
+    onMusicPlayerActionListener = listener;
   }
 
-  @Override
-  public void onStart() {
-    super.onStart();
-    EventBus.getDefault().register(this);
+  public void setSongInfo(Song song, boolean isPlaying) {
+    currentSong = song;
+    songIsPlaying = isPlaying;
   }
 
   @Override
@@ -241,7 +231,6 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
     if (onBackFromMainPlayerListener != null) {
       onBackFromMainPlayerListener.onBackFromMainPlayer();
     }
-    EventBus.getDefault().unregister(this);
   }
 
 }

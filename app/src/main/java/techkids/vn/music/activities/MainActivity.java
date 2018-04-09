@@ -24,8 +24,6 @@ import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -38,7 +36,6 @@ import techkids.vn.music.R;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
-import techkids.vn.music.events.OpenMainPlayerEvent;
 import techkids.vn.music.fragments.MainPlayerFragment;
 import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.RealmContext;
@@ -187,11 +184,10 @@ public class MainActivity extends BaseActivity
     MainPlayerFragment mainPlayerFragment = new MainPlayerFragment();
     mainPlayerFragment.setOnBackFromMainPlayerListener(this);
     mainPlayerFragment.setOnMusicPlayerActionListener(this);
+    mainPlayerFragment.setSongInfo(currentSong, songIsPlaying);
     onSongReadyListener = mainPlayerFragment;
+
     changeFragment(R.id.fl_container, mainPlayerFragment, true);
-    EventBus.getDefault().postSticky(
-            new OpenMainPlayerEvent(currentSong, songIsPlaying)
-    );
   }
 
   @OnClick(R.id.iv_back_from_main_player)
