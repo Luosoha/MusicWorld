@@ -34,12 +34,4 @@ public class SongCategoryResponseBody {
     this.map = map;
   }
 
-  //    @Override
-//    public String toString() {
-//        return "SongCategoryResponseBody{" +
-//                "id='" + id + '\'' +
-//                ", subgenres=" + Arrays.toString(subgenres) +
-//                '}';
-//    }
-
 }

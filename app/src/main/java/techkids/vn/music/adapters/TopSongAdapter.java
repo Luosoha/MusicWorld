@@ -17,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import techkids.vn.music.R;
+import techkids.vn.music.callbacks.OnTopSongClickListener;
 import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
@@ -27,6 +28,13 @@ import techkids.vn.music.networks.models.Song;
  */
 
 public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {
+
+  private OnTopSongClickListener onTopSongClickListener;
+
+  public void setOnTopSongClickListener(OnTopSongClickListener onTopSongClickListener) {
+    this.onTopSongClickListener = onTopSongClickListener;
+  }
+
   @Override
   public TopSongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -65,21 +73,9 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
       this.itemView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          String keyword = song.getName() + " " + song.getArtist();
-          RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
-            @Override
-            public void onResponse(Call<SearchSongResponseBody> call, Response<SearchSongResponseBody> response) {
-              SearchSongResponseBody songs = response.body();
-              if (songs != null && !songs.getSongs().isEmpty()) {
-                EventBus.getDefault().post(new PlaySongEvent(song, songs.getSongUrl(), true));
-              }
-            }
-
-            @Override
-            public void onFailure(Call<SearchSongResponseBody> call, Throwable t) {
-
-            }
-          });
+          if (onTopSongClickListener != null) {
+            onTopSongClickListener.onSongClick(song);
+          }
         }
       });
     }

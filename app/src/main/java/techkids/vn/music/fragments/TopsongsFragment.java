@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -21,8 +25,11 @@ import retrofit2.Response;
 import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.R;
 import techkids.vn.music.adapters.TopSongAdapter;
+import techkids.vn.music.callbacks.OnTopSongClickListener;
+import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
+import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.networks.models.Subgenres;
 import techkids.vn.music.networks.models.TopSongsResponseBody;
@@ -30,9 +37,8 @@ import techkids.vn.music.networks.models.TopSongsResponseBody;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TopsongsFragment extends BaseFragment {
+public class TopsongsFragment extends BaseFragment implements OnTopSongClickListener {
 
-  private static final String TAG = TopsongsFragment.class.toString();
   private static final int COLUMN_NUMBERS = 1;
 
   @BindView(R.id.view_back)
@@ -45,7 +51,6 @@ public class TopsongsFragment extends BaseFragment {
   RecyclerView topSongRv;
   @BindView(R.id.view_favorite)
   View favoriteView;
-
 
   private TopSongAdapter topSongAdapter;
   private Subgenres sub;
@@ -80,10 +85,9 @@ public class TopsongsFragment extends BaseFragment {
     RetrofitContext.getTopSongs(sub.getId()).enqueue(new Callback<TopSongsResponseBody>() {
       @Override
       public void onResponse(Call<TopSongsResponseBody> call, Response<TopSongsResponseBody> response) {
-        Log.d(TAG, "onResponse");
         TopSongsResponseBody topSongsResponseBody = response.body();
-        for (Song song : topSongsResponseBody.getSongList().getList()) {
-          Song.SONGS.add(song);
+        if (topSongsResponseBody != null) {
+          Song.SONGS.addAll(Arrays.asList(topSongsResponseBody.getSongList().getList()));
         }
         topSongAdapter.notifyDataSetChanged();
         hideProgress();
@@ -91,7 +95,6 @@ public class TopsongsFragment extends BaseFragment {
 
       @Override
       public void onFailure(Call<TopSongsResponseBody> call, Throwable t) {
-        Log.d(TAG, "onFailure");
         hideProgress();
       }
     });
@@ -120,7 +123,7 @@ public class TopsongsFragment extends BaseFragment {
     }
 
     topSongAdapter = new TopSongAdapter();
-//        rvTopSongs.setHasFixedSize(true);
+    topSongAdapter.setOnTopSongClickListener(this);
     topSongRv.setLayoutManager(new GridLayoutManager(getActivity(), COLUMN_NUMBERS));
     topSongRv.setAdapter(topSongAdapter);
   }
@@ -150,4 +153,22 @@ public class TopsongsFragment extends BaseFragment {
     this.sub = sub;
   }
 
+  @Override
+  public void onSongClick(final Song song) {
+    String keyword = song.getName() + " " + song.getArtist();
+    RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
+      @Override
+      public void onResponse(Call<SearchSongResponseBody> call, Response<SearchSongResponseBody> response) {
+        SearchSongResponseBody songs = response.body();
+        if (songs != null && !songs.getSongs().isEmpty()) {
+          EventBus.getDefault().post(new PlaySongEvent(song, songs.getSongUrl(), true));
+        }
+      }
+
+      @Override
+      public void onFailure(Call<SearchSongResponseBody> call, Throwable t) {
+
+      }
+    });
+  }
 }
