@@ -24,7 +24,6 @@ import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.events.OpenMainPlayerEvent;
-import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
@@ -69,7 +68,9 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   }
 
   private void init() {
-    ((MainActivity) getActivity()).getSupportActionBar().show();
+    MainActivity activity = (MainActivity) getActivity();
+    activity.getSupportActionBar().show();
+    onMusicPlayerActionListener = activity;
     handler = new Handler();
   }
 
@@ -174,7 +175,9 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
       public void onResponse(Call<SearchSongResponseBody> call, Response<SearchSongResponseBody> response) {
         SearchSongResponseBody songs = response.body();
         if (songs != null && !songs.getSongs().isEmpty()) {
-          EventBus.getDefault().post(new PlaySongEvent(song, songs.getSongUrl(), false));
+          if (onMusicPlayerActionListener != null) {
+            onMusicPlayerActionListener.onPlaySong(song, songs.getSongUrl(), false);
+          }
         }
       }
 

@@ -6,14 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
 
@@ -22,11 +19,11 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.R;
+import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.adapters.TopSongAdapter;
+import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnTopSongClickListener;
-import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
@@ -55,6 +52,7 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
   private TopSongAdapter topSongAdapter;
   private Subgenres sub;
   private int position = -1;
+  private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
   @Override
   public int getLayoutId() {
@@ -74,7 +72,9 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
   @Override
   protected void initLayout() {
     getTopSongs();
-    ((MainActivity) getActivity()).getSupportActionBar().hide();
+    MainActivity activity = (MainActivity) getActivity();
+    activity.getSupportActionBar().hide();
+    onMusicPlayerActionListener = activity;
     setupUI();
     addListeners();
   }
@@ -161,7 +161,9 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
       public void onResponse(Call<SearchSongResponseBody> call, Response<SearchSongResponseBody> response) {
         SearchSongResponseBody songs = response.body();
         if (songs != null && !songs.getSongs().isEmpty()) {
-          EventBus.getDefault().post(new PlaySongEvent(song, songs.getSongUrl(), true));
+          if (onMusicPlayerActionListener != null) {
+            onMusicPlayerActionListener.onPlaySong(song, songs.getSongUrl(), true);
+          }
         }
       }
 

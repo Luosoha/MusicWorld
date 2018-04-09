@@ -25,7 +25,6 @@ import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -40,7 +39,6 @@ import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.events.OpenMainPlayerEvent;
-import techkids.vn.music.events.PlaySongEvent;
 import techkids.vn.music.fragments.MainPlayerFragment;
 import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.RealmContext;
@@ -211,50 +209,6 @@ public class MainActivity extends BaseActivity
     }
   }
 
-  @Subscribe
-  public void onEvent(PlaySongEvent playSongEvent) {
-    if (playSongEvent.getSong() != null) {
-      if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
-        exoPlayer.stop();
-      }
-
-      currentSong = playSongEvent.getSong();
-      songIsPlaying = true;
-      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-
-      Picasso.with(this).load(playSongEvent.getSong().getIconUrl()).into(songImageCiv);
-      songNameTv.setText(playSongEvent.getSong().getName());
-      songArtistTv.setText(playSongEvent.getSong().getArtist());
-      if (playSongEvent.isRevealMiniPlayer()) {
-        miniPlayerLayout.setVisibility(View.VISIBLE);
-      }
-
-      // Setup exo player
-      exoPlayer = ExoPlayer.Factory.newInstance(1);
-      String url = playSongEvent.getSongSource();
-      Uri radioUri = Uri.parse(url);
-      Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
-      String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
-      DataSource dataSource = new DefaultUriDataSource(this, null, userAgent);
-      ExtractorSampleSource sampleSource = new ExtractorSampleSource(
-              radioUri, dataSource, allocator, BUFFER_SEGMENT_SIZE * BUFFER_SEGMENT_COUNT);
-      audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
-      exoPlayer.prepare(audioRenderer);
-      exoPlayer.setPlayWhenReady(true);
-
-      if (!playSongEvent.isRevealMiniPlayer()) {
-        sentDurationToMainPlayer = false;
-        songNameInsideToolBarTv.setText(currentSong.getName());
-        songArtistInsideToolBarTv.setText(currentSong.getArtist());
-      }
-
-      startSeekbarProgress();
-      handler.postDelayed(runnable, 100);
-    } else {
-      Toast.makeText(this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
-    }
-  }
-
   private boolean sentDurationToMainPlayer = false;
 
   private void startSeekbarProgress() {
@@ -292,6 +246,49 @@ public class MainActivity extends BaseActivity
   @Override
   public void onBackStackChanged() {
 
+  }
+
+  @Override
+  public void onPlaySong(Song song, String songUrl, boolean doRevealMiniPlayer) {
+    if (song != null) {
+      if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
+        exoPlayer.stop();
+      }
+
+      currentSong = song;
+      songIsPlaying = true;
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
+
+      Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
+      songNameTv.setText(song.getName());
+      songArtistTv.setText(song.getArtist());
+      if (doRevealMiniPlayer) {
+        miniPlayerLayout.setVisibility(View.VISIBLE);
+      }
+
+      // Setup exo player
+      exoPlayer = ExoPlayer.Factory.newInstance(1);
+      Uri radioUri = Uri.parse(songUrl);
+      Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
+      String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
+      DataSource dataSource = new DefaultUriDataSource(this, null, userAgent);
+      ExtractorSampleSource sampleSource = new ExtractorSampleSource(
+              radioUri, dataSource, allocator, BUFFER_SEGMENT_SIZE * BUFFER_SEGMENT_COUNT);
+      audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
+      exoPlayer.prepare(audioRenderer);
+      exoPlayer.setPlayWhenReady(true);
+
+      if (!doRevealMiniPlayer) {
+        sentDurationToMainPlayer = false;
+        songNameInsideToolBarTv.setText(currentSong.getName());
+        songArtistInsideToolBarTv.setText(currentSong.getArtist());
+      }
+
+      startSeekbarProgress();
+      handler.postDelayed(runnable, 100);
+    } else {
+      Toast.makeText(this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
+    }
   }
 
   @Override

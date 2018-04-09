@@ -8,19 +8,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import techkids.vn.music.R;
 import techkids.vn.music.callbacks.OnTopSongClickListener;
-import techkids.vn.music.events.PlaySongEvent;
-import techkids.vn.music.managers.RetrofitContext;
-import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 
 /**
