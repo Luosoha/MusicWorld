@@ -8,9 +8,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import com.google.android.exoplayer.ExoPlayer;
 import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,12 +21,11 @@ import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
+import techkids.vn.music.managers.PlayerManager;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.utils.ActionHelper;
-
-import static techkids.vn.music.activities.MainActivity.exoPlayer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +43,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   @BindView(R.id.main_player_action_btn)
   FloatingActionButton actionFab;
 
+  private ExoPlayer exoPlayer;
   private Runnable runnable;
   private Handler handler = new Handler();
   private Song currentSong;
@@ -59,6 +58,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
 
   @Override
   protected void initLayout() {
+    exoPlayer = PlayerManager.getInstance();
     setupMainPlayer();
     addListener();
   }

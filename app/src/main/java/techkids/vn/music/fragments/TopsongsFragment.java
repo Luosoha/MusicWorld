@@ -4,11 +4,13 @@ package techkids.vn.music.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -155,6 +157,7 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
 
   @Override
   public void onSongClick(final Song song) {
+    showProgress();
     String keyword = song.getName() + " " + song.getArtist();
     RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
       @Override
@@ -164,12 +167,15 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
           if (onMusicPlayerActionListener != null) {
             onMusicPlayerActionListener.onPlaySong(song, songs.getSongUrl(), true);
           }
+        } else {
+          Toast.makeText(getContext(), getContext().getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
         }
+        hideProgress();
       }
 
       @Override
       public void onFailure(Call<SearchSongResponseBody> call, Throwable t) {
-
+        hideProgress();
       }
     });
   }

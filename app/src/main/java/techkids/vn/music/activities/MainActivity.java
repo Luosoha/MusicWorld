@@ -1,6 +1,5 @@
 package techkids.vn.music.activities;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -16,12 +15,6 @@ import android.widget.Toast;
 
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
-import com.google.android.exoplayer.extractor.ExtractorSampleSource;
-import com.google.android.exoplayer.upstream.Allocator;
-import com.google.android.exoplayer.upstream.DataSource;
-import com.google.android.exoplayer.upstream.DefaultAllocator;
-import com.google.android.exoplayer.upstream.DefaultUriDataSource;
-import com.google.android.exoplayer.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,6 +31,7 @@ import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
 import techkids.vn.music.fragments.MainPlayerFragment;
 import techkids.vn.music.fragments.ViewPagerFragment;
+import techkids.vn.music.managers.PlayerManager;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.Song;
@@ -76,7 +70,7 @@ public class MainActivity extends BaseActivity
   FloatingActionButton actionFab;
 
   private boolean songIsPlaying = false;
-  public static ExoPlayer exoPlayer;
+  private ExoPlayer exoPlayer;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private Song currentSong;
   private Handler handler = new Handler();
@@ -87,6 +81,8 @@ public class MainActivity extends BaseActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setSupportActionBar(toolbar);
+    PlayerManager.init(this);
+    exoPlayer = PlayerManager.getInstance();
   }
 
   @Override
@@ -263,16 +259,7 @@ public class MainActivity extends BaseActivity
       }
 
       // Setup exo player
-      exoPlayer = ExoPlayer.Factory.newInstance(1);
-      Uri radioUri = Uri.parse(songUrl);
-      Allocator allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
-      String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
-      DataSource dataSource = new DefaultUriDataSource(this, null, userAgent);
-      ExtractorSampleSource sampleSource = new ExtractorSampleSource(
-              radioUri, dataSource, allocator, BUFFER_SEGMENT_SIZE * BUFFER_SEGMENT_COUNT);
-      audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
-      exoPlayer.prepare(audioRenderer);
-      exoPlayer.setPlayWhenReady(true);
+      PlayerManager.playNewSong(songUrl);
 
       if (!doRevealMiniPlayer) {
         sentDurationToMainPlayer = false;
