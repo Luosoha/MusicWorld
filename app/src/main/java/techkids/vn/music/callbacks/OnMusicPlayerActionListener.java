@@ -14,4 +14,6 @@ public interface OnMusicPlayerActionListener {
   void onResumeAction();
 
   void onProgressChanged(int progress);
+
+  void onSongEnded();
 }

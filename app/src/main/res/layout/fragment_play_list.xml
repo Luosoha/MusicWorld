@@ -5,8 +5,6 @@
     tools:context="techkids.vn.music.fragments.PlayListFragment"
     android:background="@color/colorPrimaryDark">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ListView
         android:id="@+id/lv_playlist"
         android:layout_width="match_parent"

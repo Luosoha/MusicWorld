@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setSupportActionBar(toolbar);
-    PlayerManager.init(this);
+    PlayerManager.init(this, this);
     playerManager = PlayerManager.getInstance();
   }
 
@@ -290,6 +290,11 @@ public class MainActivity extends BaseActivity
   @Override
   public void onProgressChanged(int progress) {
     playerManager.seekTo(progress);
+  }
+
+  @Override
+  public void onSongEnded() {
+    Toast.makeText(this, "Song ended", Toast.LENGTH_SHORT).show();
   }
 
 }

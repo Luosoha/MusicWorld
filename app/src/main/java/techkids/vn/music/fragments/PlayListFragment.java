@@ -49,7 +49,7 @@ public class PlayListFragment extends BaseFragment {
   }
 
   private void setupUI() {
-    categoryArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.item_play_list, favCategories);
+    categoryArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.item_play_list, favCategories);
     playListLv.setAdapter(categoryArrayAdapter);
   }
 

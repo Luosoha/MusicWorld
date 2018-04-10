@@ -3,12 +3,15 @@ package techkids.vn.music.managers;
 import android.content.Context;
 import android.net.Uri;
 
+import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
 import com.google.android.exoplayer.extractor.ExtractorSampleSource;
 import com.google.android.exoplayer.upstream.DefaultAllocator;
 import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.google.android.exoplayer.util.Util;
+
+import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 
 /**
  * Created by HaiLS on 09/04/2018.
@@ -26,19 +29,57 @@ public class PlayerManager {
   private String userAgent;
   private DefaultUriDataSource dataSource;
   private MediaCodecAudioTrackRenderer audioRenderer;
+  private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
   private PlayerManager() {}
 
-  private PlayerManager(Context context) {
+  private PlayerManager(Context context, OnMusicPlayerActionListener listener) {
     exoPlayer = ExoPlayer.Factory.newInstance(1);
     allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
     userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
     dataSource = new DefaultUriDataSource(context, null, userAgent);
+    onMusicPlayerActionListener = listener;
+    addListener();
   }
 
-  public static void init(Context context) {
+  private void addListener() {
+    exoPlayer.addListener(new ExoPlayer.Listener() {
+      @Override
+      public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        switch(playbackState) {
+          case ExoPlayer.STATE_BUFFERING:
+            break;
+          case ExoPlayer.STATE_ENDED:
+            if (onMusicPlayerActionListener != null) {
+              onMusicPlayerActionListener.onSongEnded();
+            }
+            break;
+          case ExoPlayer.STATE_IDLE:
+            break;
+          case ExoPlayer.STATE_PREPARING:
+            break;
+          case ExoPlayer.STATE_READY:
+            break;
+          default:
+            break;
+        }
+      }
+
+      @Override
+      public void onPlayWhenReadyCommitted() {
+
+      }
+
+      @Override
+      public void onPlayerError(ExoPlaybackException error) {
+
+      }
+    });
+  }
+
+  public static void init(Context context, OnMusicPlayerActionListener listener) {
     if (instance == null) {
-      instance = new PlayerManager(context);
+      instance = new PlayerManager(context, listener);
     }
   }
 
