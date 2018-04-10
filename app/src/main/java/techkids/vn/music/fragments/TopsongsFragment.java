@@ -146,9 +146,9 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
 
   @OnClick(R.id.top_songs_action_btn)
   public void onFabActionClick() {
-    // Play the first song in the list
-    // ...
-
+    if (!Song.SONGS.isEmpty()) {
+      onSongClick(Song.SONGS.get(0));
+    }
   }
 
   public void setSubgenres(Subgenres sub) {

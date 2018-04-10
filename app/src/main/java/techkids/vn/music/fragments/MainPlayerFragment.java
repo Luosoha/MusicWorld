@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -175,6 +176,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   }
 
   private void getSongSourceForMainActivity(final Song song) {
+    showProgress();
     String keyword = song.getName() + " " + song.getArtist();
     RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
       @Override
@@ -184,12 +186,15 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
           if (onMusicPlayerActionListener != null) {
             onMusicPlayerActionListener.onPlaySong(song, songs.getSongUrl(), false);
           }
+        } else {
+          Toast.makeText(getContext(), getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
         }
+        hideProgress();
       }
 
       @Override
       public void onFailure(Call<SearchSongResponseBody> call, Throwable t) {
-        Log.d(TAG, "onFailure: " + t.toString());
+        hideProgress();
       }
     });
   }

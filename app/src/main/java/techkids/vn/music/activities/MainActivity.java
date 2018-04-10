@@ -40,9 +40,6 @@ import techkids.vn.music.networks.models.Subgenres;
 public class MainActivity extends BaseActivity
         implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener, OnMusicPlayerActionListener {
 
-  private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
-  private static final int BUFFER_SEGMENT_COUNT = 256;
-
   @BindView(R.id.toolbar)
   Toolbar toolbar;
   @BindView(R.id.rl_mini_player)
@@ -70,7 +67,6 @@ public class MainActivity extends BaseActivity
 
   private boolean songIsPlaying = false;
   private PlayerManager playerManager;
-  private MediaCodecAudioTrackRenderer audioRenderer;
   private Song currentSong;
   private Handler handler = new Handler();
   private Runnable runnable;
