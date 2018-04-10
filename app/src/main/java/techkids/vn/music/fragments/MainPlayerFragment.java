@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import com.google.android.exoplayer.ExoPlayer;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -43,7 +42,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   @BindView(R.id.main_player_action_btn)
   FloatingActionButton actionFab;
 
-  private ExoPlayer exoPlayer;
+  private PlayerManager playerManager;
   private Runnable runnable;
   private Handler handler = new Handler();
   private Song currentSong;
@@ -58,7 +57,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
 
   @Override
   protected void initLayout() {
-    exoPlayer = PlayerManager.getInstance();
+    playerManager = PlayerManager.getInstance();
     setupMainPlayer();
     addListener();
   }
@@ -76,7 +75,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
     Picasso.with(getActivity()).load(currentSong.getImageUrl()).into(songImageIv);
 
     setDurationForSeekBars();
-    setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
+    setProgressForSeekBars((int) playerManager.getCurrentPosition());
     startSeekBarsProgress();
   }
 
@@ -85,7 +84,7 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
       @Override
       public void run() {
         if (songIsPlaying) {
-          setProgressForSeekBars((int) exoPlayer.getCurrentPosition());
+          setProgressForSeekBars(playerManager.getCurrentPosition());
         }
         handler.postDelayed(runnable, 100);
       }
@@ -203,8 +202,8 @@ public class MainPlayerFragment extends BaseFragment implements OnSongReadyListe
   }
 
   private void setDurationForSeekBars() {
-    progressSb.setMax((int) exoPlayer.getDuration());
-    transparentProgressSb.setMax((int) exoPlayer.getDuration());
+    progressSb.setMax(playerManager.getSongDuration());
+    transparentProgressSb.setMax(playerManager.getSongDuration());
   }
 
   private void setProgressForSeekBars(int progress) {

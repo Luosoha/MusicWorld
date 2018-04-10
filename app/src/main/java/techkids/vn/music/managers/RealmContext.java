@@ -13,6 +13,7 @@ import techkids.vn.music.networks.models.Subgenres;
 
 public class RealmContext {
 
+  private static RealmContext instance;
   private Realm realm;
 
   private RealmContext() {
@@ -45,7 +46,6 @@ public class RealmContext {
     realm.commitTransaction();
   }
 
-  private static RealmContext instance;
 
   public static RealmContext getInstance() {
     return instance;

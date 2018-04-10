@@ -21,16 +21,34 @@ public class PlayerManager {
   private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
   private static final int BUFFER_SEGMENT_COUNT = 256;
 
-  private static ExoPlayer exoPlayer;
-  private static ExtractorSampleSource sampleSource;
-  private static DefaultAllocator allocator;
-  private static String userAgent;
-  private static DefaultUriDataSource dataSource;
-  private static MediaCodecAudioTrackRenderer audioRenderer;
+  private static PlayerManager instance;
+  private ExoPlayer exoPlayer;
+  private ExtractorSampleSource sampleSource;
+  private DefaultAllocator allocator;
+  private String userAgent;
+  private DefaultUriDataSource dataSource;
+  private MediaCodecAudioTrackRenderer audioRenderer;
 
-  private PlayerManager() { }
+  private PlayerManager() {}
 
-  public static void playNewSong(String songUrl) {
+  private PlayerManager(Context context) {
+    exoPlayer = ExoPlayer.Factory.newInstance(1);
+    allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
+    userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
+    dataSource = new DefaultUriDataSource(context, null, userAgent);
+  }
+
+  public static void init(Context context) {
+    if (instance == null) {
+      instance = new PlayerManager(context);
+    }
+  }
+
+  public static PlayerManager getInstance() {
+    return instance;
+  }
+
+  public void playNewSong(String songUrl) {
     if (exoPlayer != null) {
       exoPlayer.seekTo(0);
     }
@@ -43,17 +61,36 @@ public class PlayerManager {
     exoPlayer.setPlayWhenReady(true);
   }
 
-  public static ExoPlayer getInstance() {
-    return exoPlayer;
+  public boolean isNull() {
+    return exoPlayer == null;
   }
 
-  public static void init(Context context) {
-    if (exoPlayer == null) {
-      exoPlayer = ExoPlayer.Factory.newInstance(1);
-      allocator = new DefaultAllocator(BUFFER_SEGMENT_SIZE);
-      userAgent = Util.getUserAgent(context, "ExoPlayerDemo");
-      dataSource = new DefaultUriDataSource(context, null, userAgent);
-    }
+  public int getSongDuration() {
+    return (int) exoPlayer.getDuration();
+  }
+
+  public int getCurrentPosition() {
+    return (int) exoPlayer.getCurrentPosition();
+  }
+
+  public void seekTo(int progress) {
+    exoPlayer.seekTo(progress);
+  }
+
+  public boolean getPlayWhenReady() {
+    return exoPlayer != null && exoPlayer.getPlayWhenReady();
+  }
+
+  public void setPlayWhenReady(boolean playWhenReady) {
+    exoPlayer.setPlayWhenReady(playWhenReady);
+  }
+
+  public void release() {
+    exoPlayer.release();
+  }
+
+  public void stop() {
+    exoPlayer.stop();
   }
 
 }

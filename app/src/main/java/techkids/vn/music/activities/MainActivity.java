@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
 import com.squareup.picasso.Picasso;
 
@@ -70,7 +69,7 @@ public class MainActivity extends BaseActivity
   FloatingActionButton actionFab;
 
   private boolean songIsPlaying = false;
-  private ExoPlayer exoPlayer;
+  private PlayerManager playerManager;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private Song currentSong;
   private Handler handler = new Handler();
@@ -82,7 +81,7 @@ public class MainActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     setSupportActionBar(toolbar);
     PlayerManager.init(this);
-    exoPlayer = PlayerManager.getInstance();
+    playerManager = PlayerManager.getInstance();
   }
 
   @Override
@@ -144,8 +143,8 @@ public class MainActivity extends BaseActivity
 
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        int currentPosition = (int) (progressSb.getProgress() * exoPlayer.getDuration() / progressSb.getMax());
-        exoPlayer.seekTo(currentPosition);
+        int currentPosition = (int) (progressSb.getProgress() * playerManager.getSongDuration() / progressSb.getMax());
+        playerManager.seekTo(currentPosition);
         handler.postDelayed(runnable, 100);
       }
     });
@@ -156,14 +155,14 @@ public class MainActivity extends BaseActivity
     if (songIsPlaying) {
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
       songIsPlaying = !songIsPlaying;
-      if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
-        exoPlayer.setPlayWhenReady(false);
+      if (playerManager.getPlayWhenReady()) {
+        playerManager.setPlayWhenReady(false);
       }
     } else {
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
       songIsPlaying = !songIsPlaying;
-      if (exoPlayer != null) {
-        exoPlayer.setPlayWhenReady(true);
+      if (!playerManager.isNull()) {
+        playerManager.setPlayWhenReady(true);
       }
     }
   }
@@ -207,15 +206,15 @@ public class MainActivity extends BaseActivity
     runnable = new Runnable() {
       @Override
       public void run() {
-        if (exoPlayer.getDuration() > 0 && exoPlayer.getCurrentPosition() > 0 && !sentDurationToMainPlayer) {
+        if (playerManager.getSongDuration() > 0 && playerManager.getCurrentPosition() > 0 && !sentDurationToMainPlayer) {
           if (onSongReadyListener != null) {
             onSongReadyListener.onSongReady();
           }
           sentDurationToMainPlayer = true;
         }
-        progressSb.setMax((int) exoPlayer.getDuration());
+        progressSb.setMax(playerManager.getSongDuration());
         handler.postDelayed(this, 100);
-        progressSb.setProgress((int) exoPlayer.getCurrentPosition());
+        progressSb.setProgress(playerManager.getCurrentPosition());
       }
     };
   }
@@ -229,8 +228,8 @@ public class MainActivity extends BaseActivity
 
   @Override
   protected void onDestroy() {
-    if (exoPlayer != null) {
-      exoPlayer.release();
+    if (!playerManager.isNull()) {
+      playerManager.release();
     }
     super.onDestroy();
   }
@@ -243,8 +242,8 @@ public class MainActivity extends BaseActivity
   @Override
   public void onPlaySong(Song song, String songUrl, boolean doRevealMiniPlayer) {
     if (song != null) {
-      if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
-        exoPlayer.stop();
+      if (playerManager.getPlayWhenReady()) {
+        playerManager.stop();
       }
 
       currentSong = song;
@@ -259,7 +258,7 @@ public class MainActivity extends BaseActivity
       }
 
       // Setup exo player
-      PlayerManager.playNewSong(songUrl);
+      playerManager.playNewSong(songUrl);
 
       if (!doRevealMiniPlayer) {
         sentDurationToMainPlayer = false;
@@ -278,8 +277,8 @@ public class MainActivity extends BaseActivity
   public void onPauseAction() {
     songIsPlaying = false;
     actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-    if (exoPlayer != null && exoPlayer.getPlayWhenReady()) {
-      exoPlayer.setPlayWhenReady(false);
+    if (playerManager.getPlayWhenReady()) {
+      playerManager.setPlayWhenReady(false);
     }
   }
 
@@ -287,14 +286,14 @@ public class MainActivity extends BaseActivity
   public void onResumeAction() {
     songIsPlaying = true;
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-    if (exoPlayer != null) {
-      exoPlayer.setPlayWhenReady(true);
+    if (!playerManager.isNull()) {
+      playerManager.setPlayWhenReady(true);
     }
   }
 
   @Override
   public void onProgressChanged(int progress) {
-    exoPlayer.seekTo(progress);
+    playerManager.seekTo(progress);
   }
 
 }
