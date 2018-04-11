@@ -6,12 +6,10 @@ import com.google.gson.GsonBuilder;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import techkids.vn.music.networks.APIService;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.SongCategoryResponse;
 import techkids.vn.music.networks.models.TopSongsResponseBody;
-import techkids.vn.music.networks.services.AlbumTypeService;
-import techkids.vn.music.networks.services.SearchSongService;
-import techkids.vn.music.networks.services.TopSongsService;
 
 /**
  * Created by Lush on 1/8/2017.
@@ -37,15 +35,15 @@ public class RetrofitContext {
             .build();
 
     public static Call<SongCategoryResponse> getAlbumTypes() {
-        return ITUNES_CATEGORY.create(AlbumTypeService.class).getAlbumTypes();
+        return ITUNES_CATEGORY.create(APIService.class).getAlbumTypes();
     }
 
     public static Call<TopSongsResponseBody> getTopSongs(String id) {
-        return ITUNES_TOP_SONG.create(TopSongsService.class).getTopSongs(id);
+        return ITUNES_TOP_SONG.create(APIService.class).getTopSongs(id);
     }
 
     public static Call<SearchSongResponseBody> getSearchSong(String keyword) {
-        return ITUNES_SEARCH.create(SearchSongService.class).getSearchSong(keyword, "music", "song");
+        return ITUNES_SEARCH.create(APIService.class).getSearchSong(keyword, "music", "song");
     }
 
 }

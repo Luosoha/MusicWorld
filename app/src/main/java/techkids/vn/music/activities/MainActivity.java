@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
