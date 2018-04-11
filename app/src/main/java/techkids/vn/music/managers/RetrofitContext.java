@@ -19,17 +19,17 @@ public class RetrofitContext {
 
     private static Gson gson = new GsonBuilder().setLenient().create();
 
-    public static final Retrofit ITUNES_CATEGORY = new Retrofit.Builder()
+    private static final Retrofit ITUNES_CATEGORY = new Retrofit.Builder()
             .baseUrl("http://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
-    public static final Retrofit ITUNES_TOP_SONG = new Retrofit.Builder()
+    private static final Retrofit ITUNES_TOP_SONG = new Retrofit.Builder()
             .baseUrl("https://itunes.apple.com/us/rss/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public static final Retrofit ITUNES_SEARCH = new Retrofit.Builder()
+    private static final Retrofit ITUNES_SEARCH = new Retrofit.Builder()
             .baseUrl("https://itunes.apple.com/search/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();

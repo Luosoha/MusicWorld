@@ -32,9 +32,11 @@ import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.PlayerManager;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
+import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.networks.models.SongCategoryResponse;
 import techkids.vn.music.networks.models.Subgenres;
+import techkids.vn.music.utils.ActionHelper;
 
 public class MainActivity extends BaseActivity
         implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener, OnMusicPlayerActionListener {
@@ -293,7 +295,31 @@ public class MainActivity extends BaseActivity
 
   @Override
   public void onSongEnded() {
-    Toast.makeText(this, "Song ended", Toast.LENGTH_SHORT).show();
+    int position = ActionHelper.findNextSongPositionOf(currentSong);
+    searchForNextSongUrl(position);
+  }
+
+  private void searchForNextSongUrl(int position) {
+    showProgress();
+    final Song song = Song.SONGS.get(position);
+    String keyword = song.getName() + " " + song.getArtist();
+    RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
+      @Override
+      public void onResponse(Call<SearchSongResponseBody> call, Response<SearchSongResponseBody> response) {
+        SearchSongResponseBody songs = response.body();
+        if (songs != null && !songs.getSongs().isEmpty()) {
+          onPlaySong(song, songs.getSongUrl(), miniPlayerLayout.isShown());
+        } else {
+          Toast.makeText(MainActivity.this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
+        }
+        hideProgress();
+      }
+
+      @Override
+      public void onFailure(Call<SearchSongResponseBody> call, Throwable t) {
+        hideProgress();
+      }
+    });
   }
 
 }
