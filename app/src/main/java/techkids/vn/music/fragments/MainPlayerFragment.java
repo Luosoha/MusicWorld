@@ -32,8 +32,6 @@ import techkids.vn.music.utils.ActionHelper;
  */
 public class MainPlayerFragment extends BaseFragment implements OnSongReadyListener {
 
-  private static final String TAG = MainPlayerFragment.class.toString();
-
   @BindView(R.id.iv_song_image)
   ImageView songImageIv;
   @BindView(R.id.sb_progress)
