@@ -39,11 +39,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
   }
 
-  protected void showProgress() {
+  public void showProgress() {
     DialogUtils.showProgressDialog(this);
   }
 
-  protected void hideProgress() {
+  public void hideProgress() {
     DialogUtils.dismissProgressDialog();
   }
 

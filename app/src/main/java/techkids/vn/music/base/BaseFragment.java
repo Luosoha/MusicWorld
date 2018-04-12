@@ -1,4 +1,4 @@
-package techkids.vn.music.fragments;
+package techkids.vn.music.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -5,10 +5,8 @@ import android.support.v7.widget.RecyclerView;
 
 import butterknife.BindView;
 import techkids.vn.music.R;
-import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.adapters.CategoryAdapter;
 import techkids.vn.music.base.ViewFragment;
-import techkids.vn.music.fragments.TopsongsFragment;
 import techkids.vn.music.networks.models.Subgenres;
 
 /**

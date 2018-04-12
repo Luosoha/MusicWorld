@@ -14,6 +14,7 @@ import android.view.View;
 import butterknife.BindView;
 import techkids.vn.music.R;
 import techkids.vn.music.adapters.SlideAdapter;
+import techkids.vn.music.base.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.

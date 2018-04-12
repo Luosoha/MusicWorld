@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import techkids.vn.music.activities.BaseActivity;
 import techkids.vn.music.base.interfaces.IPresenter;
 import techkids.vn.music.base.interfaces.IView;
-import techkids.vn.music.fragments.BaseFragment;
 
 /**
  * Created by HaiLS on 11/04/2018.
@@ -32,6 +32,11 @@ public abstract class ViewFragment<P extends IPresenter>
 
   public void initLayout() {
 
+  }
+
+  @Override
+  public BaseActivity getBaseActivity() {
+    return (BaseActivity) getActivity();
   }
 
   @Override

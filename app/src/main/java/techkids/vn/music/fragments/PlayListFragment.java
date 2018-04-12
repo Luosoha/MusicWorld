@@ -10,6 +10,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import techkids.vn.music.R;
+import techkids.vn.music.base.BaseFragment;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.networks.models.Subgenres;
 
