@@ -1,21 +1,22 @@
-package techkids.vn.music.fragments;
+package techkids.vn.music.screens.genres;
 
-
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import butterknife.BindView;
 import techkids.vn.music.R;
-import techkids.vn.music.activities.BaseActivity;
 import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.adapters.CategoryAdapter;
+import techkids.vn.music.base.ViewFragment;
+import techkids.vn.music.fragments.TopsongsFragment;
 import techkids.vn.music.networks.models.Subgenres;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Created by HaiLS on 11/04/2018.
  */
-public class GenresFragment extends BaseFragment implements CategoryAdapter.OnCategoryClickListener {
+
+public class GenresFragment extends ViewFragment<GenresContract.Presenter>
+        implements GenresContract.View, CategoryAdapter.OnCategoryClickListener {
 
   private static final int COLUMN_NUMBERS = 2;
 
@@ -30,12 +31,14 @@ public class GenresFragment extends BaseFragment implements CategoryAdapter.OnCa
   }
 
   @Override
-  protected void initLayout() {
-    setupUI();
+  public void initLayout() {
+    setupListCategory();
   }
 
-  private void setupUI() {
-    categoryAdapter = new CategoryAdapter(this);
+  private void setupListCategory() {
+    if (categoryAdapter == null) {
+      categoryAdapter = new CategoryAdapter(this);
+    }
     songCategoryRv.setHasFixedSize(true);
 
     GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), COLUMN_NUMBERS);
@@ -56,8 +59,6 @@ public class GenresFragment extends BaseFragment implements CategoryAdapter.OnCa
 
   @Override
   public void onCategoryClick(Subgenres subgenres) {
-    TopsongsFragment fragment = new TopsongsFragment();
-    fragment.setSubgenres(subgenres);
-    ((MainActivity) getActivity()).changeFragment(R.id.fl_container, fragment, true);
+    mPresenter.goToTopSongsScreen(subgenres);
   }
 }

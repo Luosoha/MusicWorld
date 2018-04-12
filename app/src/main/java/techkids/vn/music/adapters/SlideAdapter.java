@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import techkids.vn.music.fragments.GenresFragment;
 import techkids.vn.music.fragments.PlayListFragment;
+import techkids.vn.music.screens.genres.GenresPresenter;
 
 /**
  * Created by Lush on 1/8/2017.
@@ -23,11 +23,11 @@ public class SlideAdapter extends FragmentStatePagerAdapter {
   public Fragment getItem(int position) {
     switch (position) {
       case 0:
-        return new GenresFragment();
+        return new GenresPresenter().getFragment();
       case 1:
         return new PlayListFragment();
       case 2:
-        return new GenresFragment();
+        return new GenresPresenter().getFragment();
     }
     return null;
   }

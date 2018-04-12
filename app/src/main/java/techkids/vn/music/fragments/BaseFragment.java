@@ -16,16 +16,18 @@ import techkids.vn.music.utils.DialogUtils;
 
 public abstract class BaseFragment extends Fragment {
 
+  protected View mRootView;
+
   public BaseFragment() {
   }
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(getLayoutId(), container, false);
-    ButterKnife.bind(this, view);
+    mRootView = inflater.inflate(getLayoutId(), container, false);
+    ButterKnife.bind(this, mRootView);
     initLayout();
-    return view;
+    return mRootView;
   }
 
   protected abstract int getLayoutId();

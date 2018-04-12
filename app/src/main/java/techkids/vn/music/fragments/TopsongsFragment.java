@@ -151,8 +151,9 @@ public class TopsongsFragment extends BaseFragment implements OnTopSongClickList
     }
   }
 
-  public void setSubgenres(Subgenres sub) {
+  public TopsongsFragment setSubgenres(Subgenres sub) {
     this.sub = sub;
+    return this;
   }
 
   @Override
