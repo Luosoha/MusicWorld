@@ -3,9 +3,9 @@ package techkids.vn.music.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 
-import techkids.vn.music.fragments.PlayListFragment;
+import techkids.vn.music.screens.favorite.FavoriteFragment;
+import techkids.vn.music.screens.favorite.FavoritePresenter;
 import techkids.vn.music.screens.genres.GenresPresenter;
 
 /**
@@ -26,7 +26,7 @@ public class SlideAdapter extends FragmentPagerAdapter {
       case 0:
         return new GenresPresenter().getFragment();
       case 1:
-        return new PlayListFragment();
+        return new FavoritePresenter().getFragment();
       case 2:
         return new GenresPresenter().getFragment();
     }
