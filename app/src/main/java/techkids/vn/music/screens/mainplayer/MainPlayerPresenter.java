@@ -8,7 +8,6 @@ import retrofit2.Response;
 import techkids.vn.music.R;
 import techkids.vn.music.activities.BaseActivity;
 import techkids.vn.music.base.Presenter;
-import techkids.vn.music.managers.RetrofitContext;
 import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.utils.ActionHelper;

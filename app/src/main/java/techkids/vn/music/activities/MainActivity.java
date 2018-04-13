@@ -67,7 +67,6 @@ public class MainActivity extends BaseActivity
   @BindView(R.id.fab_action)
   FloatingActionButton actionFab;
 
-  private boolean songIsPlaying = false;
   private PlayerManager playerManager;
   private Song currentSong;
   private Handler handler = new Handler();
@@ -150,15 +149,15 @@ public class MainActivity extends BaseActivity
 
   @OnClick(R.id.fab_action)
   public void onFabActionClick() {
-    if (songIsPlaying) {
+    if (playerManager.isPlaying()) {
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-      songIsPlaying = !songIsPlaying;
+      playerManager.setIsPlaying(!playerManager.isPlaying());
       if (playerManager.isPlaying()) {
         playerManager.setIsPlaying(false);
       }
     } else {
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-      songIsPlaying = !songIsPlaying;
+      playerManager.setIsPlaying(!playerManager.isPlaying());
       if (!playerManager.isNull()) {
         playerManager.setIsPlaying(true);
       }
@@ -171,8 +170,8 @@ public class MainActivity extends BaseActivity
     miniPlayerLayout.setVisibility(View.GONE);
 
     mainPlayerToolbar.setVisibility(View.VISIBLE);
-    songNameInsideToolBarTv.setText(currentSong.getName());
-    songArtistInsideToolBarTv.setText(currentSong.getArtist());
+    songNameInsideToolBarTv.setText(playerManager.getCurrentSong().getName());
+    songArtistInsideToolBarTv.setText(playerManager.getCurrentSong().getArtist());
 
     MainPlayerFragment mainPlayerFragment = (MainPlayerFragment) new MainPlayerPresenter().getFragment();
     mainPlayerFragment.setOnBackFromMainPlayerListener(this);
@@ -243,14 +242,12 @@ public class MainActivity extends BaseActivity
         playerManager.stop();
       }
       playerManager.setCurrentSong(song);
+      playerManager.setIsPlaying(!playerManager.isPlaying());
 
-      currentSong = song;
-      songIsPlaying = true;
-      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-
-      Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
       songNameTv.setText(song.getName());
       songArtistTv.setText(song.getArtist());
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
+      Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
       if (doRevealMiniPlayer) {
         miniPlayerLayout.setVisibility(View.VISIBLE);
       }
@@ -260,8 +257,8 @@ public class MainActivity extends BaseActivity
 
       if (!doRevealMiniPlayer) {
         sentDurationToMainPlayer = false;
-        songNameInsideToolBarTv.setText(currentSong.getName());
-        songArtistInsideToolBarTv.setText(currentSong.getArtist());
+        songNameInsideToolBarTv.setText(playerManager.getCurrentSong().getName());
+        songArtistInsideToolBarTv.setText(playerManager.getCurrentSong().getArtist());
       }
 
       startSeekbarProgress();
@@ -273,7 +270,7 @@ public class MainActivity extends BaseActivity
 
   @Override
   public void onPauseAction() {
-    songIsPlaying = false;
+    playerManager.setIsPlaying(false);
     actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
     if (playerManager.isPlaying()) {
       playerManager.setIsPlaying(false);
@@ -282,7 +279,7 @@ public class MainActivity extends BaseActivity
 
   @Override
   public void onResumeAction() {
-    songIsPlaying = true;
+    playerManager.setIsPlaying(true);
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
     if (!playerManager.isNull()) {
       playerManager.setIsPlaying(true);
@@ -296,7 +293,7 @@ public class MainActivity extends BaseActivity
 
   @Override
   public void onSongEnded() {
-    int position = ActionHelper.findNextSongPositionOf(currentSong);
+    int position = ActionHelper.findNextSongPositionOf(playerManager.getCurrentSong());
     searchForNextSongUrl(position);
   }
 

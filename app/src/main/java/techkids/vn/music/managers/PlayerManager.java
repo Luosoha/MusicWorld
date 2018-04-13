@@ -99,7 +99,7 @@ public class PlayerManager {
     );
     audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
     exoPlayer.prepare(audioRenderer);
-    exoPlayer.setPlayWhenReady(true);
+    setIsPlaying(true);
   }
 
   public boolean isNull() {
