@@ -29,7 +29,7 @@ public class PlayListFragment extends BaseFragment {
   public void onResume() {
     super.onResume();
     favCategories.clear();
-    List<Subgenres> subs = RealmContext.getInstance().findGenreIsFavor();
+    List<Subgenres> subs = RealmContext.getInstance().findAllFavoriteGenres();
     for (Subgenres s : subs) {
       favCategories.add(s.getName());
     }
