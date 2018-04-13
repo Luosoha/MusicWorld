@@ -2,6 +2,7 @@ package techkids.vn.music.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import techkids.vn.music.fragments.PlayListFragment;
@@ -11,7 +12,7 @@ import techkids.vn.music.screens.genres.GenresPresenter;
  * Created by Lush on 1/8/2017.
  */
 
-public class SlideAdapter extends FragmentStatePagerAdapter {
+public class SlideAdapter extends FragmentPagerAdapter {
 
   private static final int PAGE_NUMBERS = 3;
 

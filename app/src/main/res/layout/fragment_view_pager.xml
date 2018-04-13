@@ -1,12 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="techkids.vn.music.fragments.ViewPagerFragment"
-    android:layout_marginTop="?attr/actionBarSize">
-
-    <!-- TODO: Update blank fragment layout -->
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_marginTop="?attr/actionBarSize">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_parent"
@@ -17,8 +13,7 @@
             android:id="@+id/tl_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabBackground="@color/colorPrimary">
-        </android.support.design.widget.TabLayout>
+            app:tabBackground="@color/colorPrimary"/>
 
     </android.support.v4.view.ViewPager>
 

@@ -27,7 +27,6 @@ import techkids.vn.music.R;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
-import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.PlayerManager;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.managers.RetrofitContext;
@@ -37,6 +36,7 @@ import techkids.vn.music.networks.models.SongCategoryResponse;
 import techkids.vn.music.networks.models.Subgenres;
 import techkids.vn.music.screens.mainplayer.MainPlayerFragment;
 import techkids.vn.music.screens.mainplayer.MainPlayerPresenter;
+import techkids.vn.music.screens.viewpager.ViewPagerPresenter;
 import techkids.vn.music.utils.ActionHelper;
 
 public class MainActivity extends BaseActivity
@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity
             RealmContext.getInstance().insertSubgenre(s);
             Subgenres.subgenres.add(s);
           }
-          changeFragment(R.id.fl_container, new ViewPagerFragment(), false);
+          changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
           hideProgress();
         }
 
@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity
       });
     } else {
       getSongCategoriesFromRealm();
-      changeFragment(R.id.fl_container, new ViewPagerFragment(), false);
+      changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
     }
   }
 

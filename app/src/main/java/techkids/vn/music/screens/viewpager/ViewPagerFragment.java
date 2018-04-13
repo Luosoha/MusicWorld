@@ -1,9 +1,7 @@
-package techkids.vn.music.fragments;
-
+package techkids.vn.music.screens.viewpager;
 
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -14,12 +12,14 @@ import android.view.View;
 import butterknife.BindView;
 import techkids.vn.music.R;
 import techkids.vn.music.adapters.SlideAdapter;
-import techkids.vn.music.base.BaseFragment;
+import techkids.vn.music.base.ViewFragment;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Created by HaiLS on 13/04/2018.
  */
-public class ViewPagerFragment extends BaseFragment implements View.OnKeyListener {
+
+public class ViewPagerFragment extends ViewFragment<ViewPagerContract.Presenter>
+    implements ViewPagerContract.View, View.OnKeyListener {
 
   @BindView(R.id.vp_parent)
   ViewPager viewPager;
@@ -32,12 +32,12 @@ public class ViewPagerFragment extends BaseFragment implements View.OnKeyListene
   }
 
   @Override
-  protected void initLayout() {
+  public void initLayout() {
     setupUI();
-    this.setHasOptionsMenu(true);
   }
 
   private void setupUI() {
+    this.setHasOptionsMenu(true);
     PagerAdapter pagerAdapter = new SlideAdapter(getChildFragmentManager());
     viewPager.setAdapter(pagerAdapter);
     tabLayout.setupWithViewPager(viewPager);
