@@ -6,4 +6,6 @@ package techkids.vn.music.callbacks;
 
 public interface OnSongReadyListener {
   void onSongReady();
+
+  void onNextSongReady(String songImageUrl);
 }

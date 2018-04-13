@@ -158,6 +158,13 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
     handler.postDelayed(runnable, 100);
   }
 
+  @Override
+  public void onNextSongReady(String songImageUrl) {
+    showProgress();
+    Picasso.with(getContext()).load(songImageUrl).into(songImageIv);
+    hideProgress();
+  }
+
   private void setDurationForSeekBars() {
     progressSb.setMax(playerManager.getSongDuration());
     transparentProgressSb.setMax(playerManager.getSongDuration());

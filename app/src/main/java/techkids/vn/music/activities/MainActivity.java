@@ -294,6 +294,9 @@ public class MainActivity extends BaseActivity
   private void searchForNextSongUrl(int position) {
     showProgress();
     final Song song = Song.SONGS.get(position);
+    if (onSongReadyListener != null) {
+      onSongReadyListener.onNextSongReady(song.getImageUrl());
+    }
     String keyword = song.getName() + " " + song.getArtist();
     RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {
       @Override
