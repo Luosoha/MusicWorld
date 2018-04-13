@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity
   FloatingActionButton actionFab;
 
   private PlayerManager playerManager;
-  private Song currentSong;
   private Handler handler = new Handler();
   private Runnable runnable;
   private OnSongReadyListener onSongReadyListener;
@@ -151,16 +150,10 @@ public class MainActivity extends BaseActivity
   public void onFabActionClick() {
     if (playerManager.isPlaying()) {
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-      playerManager.setIsPlaying(!playerManager.isPlaying());
-      if (playerManager.isPlaying()) {
-        playerManager.setIsPlaying(false);
-      }
+      playerManager.setIsPlaying(false);
     } else {
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-      playerManager.setIsPlaying(!playerManager.isPlaying());
-      if (!playerManager.isNull()) {
-        playerManager.setIsPlaying(true);
-      }
+      playerManager.setIsPlaying(true);
     }
   }
 
@@ -242,12 +235,13 @@ public class MainActivity extends BaseActivity
         playerManager.stop();
       }
       playerManager.setCurrentSong(song);
-      playerManager.setIsPlaying(!playerManager.isPlaying());
 
+      playerManager.setIsPlaying(true);
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
+
+      Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
       songNameTv.setText(song.getName());
       songArtistTv.setText(song.getArtist());
-      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-      Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
       if (doRevealMiniPlayer) {
         miniPlayerLayout.setVisibility(View.VISIBLE);
       }
