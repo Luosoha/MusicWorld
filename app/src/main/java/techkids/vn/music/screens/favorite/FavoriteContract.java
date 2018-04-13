@@ -23,5 +23,7 @@ public interface FavoriteContract {
 
   interface Presenter extends IPresenter<View, Interactor> {
     ArrayList<String> getFavoriteGenres();
+
+    void goToTopSongScreen(String subgenresName);
   }
 }

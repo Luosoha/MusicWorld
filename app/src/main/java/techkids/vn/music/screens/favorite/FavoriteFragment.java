@@ -1,5 +1,7 @@
 package techkids.vn.music.screens.favorite;
 
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import techkids.vn.music.R;
 import techkids.vn.music.base.ViewFragment;
+import techkids.vn.music.networks.models.Subgenres;
 
 /**
  * Created by HaiLS on 13/04/2018.
@@ -23,8 +26,17 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
   private ArrayAdapter<String> genreArrayAdapter;
 
   @Override
+  protected int getLayoutId() {
+    return R.layout.fragment_favorite;
+  }
+
+  @Override
   public void onStart() {
     super.onStart();
+    getFavoriteGenres();
+  }
+
+  private void getFavoriteGenres() {
     favoriteGenres.clear();
     favoriteGenres.addAll(mPresenter.getFavoriteGenres());
     if (genreArrayAdapter != null) {
@@ -33,18 +45,23 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
   }
 
   @Override
-  protected int getLayoutId() {
-    return R.layout.fragment_play_list;
-  }
-
-  @Override
   public void initLayout() {
     setupUI();
+    addListeners();
   }
 
   private void setupUI() {
     genreArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.item_play_list, favoriteGenres);
     playListLv.setAdapter(genreArrayAdapter);
+  }
+
+  private void addListeners() {
+    playListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        mPresenter.goToTopSongScreen(favoriteGenres.get(i));
+      }
+    });
   }
 
 }
