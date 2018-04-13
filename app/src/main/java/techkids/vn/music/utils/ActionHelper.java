@@ -1,6 +1,6 @@
 package techkids.vn.music.utils;
 
-import techkids.vn.music.networks.json_models.Song;
+import techkids.vn.music.networks.models.Song;
 
 /**
  * Created by Lush on 1/21/2017.

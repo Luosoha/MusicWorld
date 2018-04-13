@@ -1,136 +1,129 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="techkids.vn.music.fragments.TopsongsFragment">
+    android:background="@color/colorPrimary">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+      android:id="@+id/iv_category"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/top_song_image_height"
+      android:scaleType="centerCrop" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:layout_alignParentTop="true"
+      android:background="@drawable/gradiant_top_bottom_rectangle"
+      android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/iv_category"
-            android:scaleType="centerCrop"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/top_song_image_height" />
+      <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:orientation="horizontal"
-            android:background="@drawable/gradiant_top_bottom_rectangle"
-            android:layout_alignParentTop="true">
+      <View
+        android:id="@+id/view_back"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/menu_item_icon_height"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/ic_arrow_back_white_24px" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"/>
+      <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8" />
 
-            <View
-                android:id="@+id/view_back"
-                android:background="@drawable/ic_arrow_back_white_24px"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/menu_item_icon_height"
-                android:layout_gravity="center"
-                android:layout_weight="1"/>
+      <View
+        android:id="@+id/view_search"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/menu_item_icon_height"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/ic_search_white_24px" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="8"/>
+      <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.1" />
 
-            <View
-                android:id="@+id/view_search"
-                android:background="@drawable/ic_search_white_24px"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/menu_item_icon_height"
-                android:layout_gravity="center"
-                android:layout_weight="1"/>
+      <View
+        android:id="@+id/view_favorite"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/menu_item_icon_height"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/ic_favorite_border_white_24px" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.1"/>
+      <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.1" />
 
-            <View
-                android:id="@+id/view_favorite"
-                android:background="@drawable/ic_favorite_border_white_24px"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/menu_item_icon_height"
-                android:layout_gravity="center"
-                android:layout_weight="1"/>
+      <View
+        android:id="@+id/view_share"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/menu_item_icon_height"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/ic_share_white_24px" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.1"/>
+      <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5" />
 
-            <View
-                android:id="@+id/view_share"
-                android:background="@drawable/ic_share_white_24px"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/menu_item_icon_height"
-                android:layout_gravity="center"
-                android:layout_weight="1" />
+    </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"/>
+    <View
+      android:id="@+id/view_temp"
+      android:layout_width="@dimen/margin_bottom_half_of_floating_button_size"
+      android:layout_height="@dimen/margin_bottom_half_of_floating_button_size"
+      android:layout_alignBottom="@id/iv_category"
+      android:layout_alignEnd="@+id/iv_category" />
 
-        </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/top_songs_action_btn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignEnd="@id/iv_category"
+      android:layout_alignTop="@id/view_temp"
+      android:layout_marginEnd="@dimen/margin_right_float_button"
+      android:src="@drawable/ic_play_arrow_white_24px" />
 
-        <View
-            android:id="@+id/view_temp"
-            android:layout_alignEnd="@+id/iv_category"
-            android:layout_alignBottom="@id/iv_category"
-            android:layout_width="@dimen/margin_bottom_half_of_floating_button_size"
-            android:layout_height="@dimen/margin_bottom_half_of_floating_button_size"
-            />
+    <TextView
+      android:id="@+id/tv_category_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/iv_category"
+      android:layout_marginStart="@dimen/margin_left_category_topsong"
+      android:layout_marginTop="@dimen/margin_top_category_topsong"
+      android:text="@string/category"
+      android:textAllCaps="true"
+      android:textColor="@color/colorWhite"
+      android:textStyle="bold" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_action"
-            android:layout_alignTop="@id/view_temp"
-            android:layout_alignEnd="@id/iv_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_play_arrow_white_24px"
-            android:layout_marginEnd="@dimen/margin_right_float_button"/>
+    <TextView
+      android:id="@+id/tv_number_of_top_songs"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/tv_category_name"
+      android:layout_marginStart="@dimen/margin_left_category_topsong"
+      android:text="@string/number_of_top_songs"
+      android:textColor="@color/colorLightGrey"
+      android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/tv_category_name"
-            android:layout_below="@+id/iv_category"
-            android:text="@string/category"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top_category_topsong"
-            android:layout_marginStart="@dimen/margin_left_category_topsong"/>
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/rv_top_songs"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@id/tv_number_of_top_songs"
+      android:layout_marginTop="@dimen/margin_top_songs_list"></android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/tv_number_of_top_songs"
-            android:layout_below="@id/tv_category_name"
-            android:text="@string/number_of_top_songs"
-            android:textSize="12sp"
-            android:textColor="@color/colorLightGrey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_left_category_topsong"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_top_songs"
-            android:layout_below="@id/tv_number_of_top_songs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_top_songs_list">
-        </android.support.v7.widget.RecyclerView>
-
-    </RelativeLayout>
+  </RelativeLayout>
 
 </FrameLayout>
