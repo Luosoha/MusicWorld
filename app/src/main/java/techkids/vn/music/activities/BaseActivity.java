@@ -5,10 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.ButterKnife;
-import techkids.vn.music.R;
 import techkids.vn.music.managers.RealmContext;
 import techkids.vn.music.utils.DialogUtils;
 

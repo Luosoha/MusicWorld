@@ -12,6 +12,7 @@ import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.google.android.exoplayer.util.Util;
 
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
+import techkids.vn.music.networks.models.Song;
 
 /**
  * Created by HaiLS on 09/04/2018.
@@ -30,6 +31,7 @@ public class PlayerManager {
   private DefaultUriDataSource dataSource;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
+  private Song currentSong;
 
   private PlayerManager() {}
 
@@ -116,12 +118,20 @@ public class PlayerManager {
     exoPlayer.seekTo(progress);
   }
 
-  public boolean getPlayWhenReady() {
+  public boolean isPlaying() {
     return exoPlayer != null && exoPlayer.getPlayWhenReady();
   }
 
-  public void setPlayWhenReady(boolean playWhenReady) {
+  public void setIsPlaying(boolean playWhenReady) {
     exoPlayer.setPlayWhenReady(playWhenReady);
+  }
+
+  public Song getCurrentSong() {
+    return currentSong;
+  }
+
+  public void setCurrentSong(Song currentSong) {
+    this.currentSong = currentSong;
   }
 
   public void release() {

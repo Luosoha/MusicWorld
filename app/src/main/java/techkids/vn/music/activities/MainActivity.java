@@ -27,7 +27,6 @@ import techkids.vn.music.R;
 import techkids.vn.music.callbacks.OnBackFromMainPlayerListener;
 import techkids.vn.music.callbacks.OnMusicPlayerActionListener;
 import techkids.vn.music.callbacks.OnSongReadyListener;
-import techkids.vn.music.fragments.MainPlayerFragment;
 import techkids.vn.music.fragments.ViewPagerFragment;
 import techkids.vn.music.managers.PlayerManager;
 import techkids.vn.music.managers.RealmContext;
@@ -36,6 +35,8 @@ import techkids.vn.music.networks.models.SearchSongResponseBody;
 import techkids.vn.music.networks.models.Song;
 import techkids.vn.music.networks.models.SongCategoryResponse;
 import techkids.vn.music.networks.models.Subgenres;
+import techkids.vn.music.screens.mainplayer.MainPlayerFragment;
+import techkids.vn.music.screens.mainplayer.MainPlayerPresenter;
 import techkids.vn.music.utils.ActionHelper;
 
 public class MainActivity extends BaseActivity
@@ -152,14 +153,14 @@ public class MainActivity extends BaseActivity
     if (songIsPlaying) {
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
       songIsPlaying = !songIsPlaying;
-      if (playerManager.getPlayWhenReady()) {
-        playerManager.setPlayWhenReady(false);
+      if (playerManager.isPlaying()) {
+        playerManager.setIsPlaying(false);
       }
     } else {
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
       songIsPlaying = !songIsPlaying;
       if (!playerManager.isNull()) {
-        playerManager.setPlayWhenReady(true);
+        playerManager.setIsPlaying(true);
       }
     }
   }
@@ -173,10 +174,9 @@ public class MainActivity extends BaseActivity
     songNameInsideToolBarTv.setText(currentSong.getName());
     songArtistInsideToolBarTv.setText(currentSong.getArtist());
 
-    MainPlayerFragment mainPlayerFragment = new MainPlayerFragment();
+    MainPlayerFragment mainPlayerFragment = (MainPlayerFragment) new MainPlayerPresenter().getFragment();
     mainPlayerFragment.setOnBackFromMainPlayerListener(this);
     mainPlayerFragment.setOnMusicPlayerActionListener(this);
-    mainPlayerFragment.setSongInfo(currentSong, songIsPlaying);
     onSongReadyListener = mainPlayerFragment;
 
     changeFragment(R.id.fl_container, mainPlayerFragment, true);
@@ -239,9 +239,10 @@ public class MainActivity extends BaseActivity
   @Override
   public void onPlaySong(Song song, String songUrl, boolean doRevealMiniPlayer) {
     if (song != null) {
-      if (playerManager.getPlayWhenReady()) {
+      if (playerManager.isPlaying()) {
         playerManager.stop();
       }
+      playerManager.setCurrentSong(song);
 
       currentSong = song;
       songIsPlaying = true;
@@ -274,8 +275,8 @@ public class MainActivity extends BaseActivity
   public void onPauseAction() {
     songIsPlaying = false;
     actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-    if (playerManager.getPlayWhenReady()) {
-      playerManager.setPlayWhenReady(false);
+    if (playerManager.isPlaying()) {
+      playerManager.setIsPlaying(false);
     }
   }
 
@@ -284,7 +285,7 @@ public class MainActivity extends BaseActivity
     songIsPlaying = true;
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
     if (!playerManager.isNull()) {
-      playerManager.setPlayWhenReady(true);
+      playerManager.setIsPlaying(true);
     }
   }
 

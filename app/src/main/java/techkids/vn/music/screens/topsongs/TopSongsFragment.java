@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import techkids.vn.music.R;
 import techkids.vn.music.activities.MainActivity;
 import techkids.vn.music.adapters.TopSongAdapter;
@@ -158,4 +157,5 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     super.onDestroy();
     activity.getSupportActionBar().show();
   }
+
 }
