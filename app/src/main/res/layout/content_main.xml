@@ -6,7 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   app:layout_behavior="@string/appbar_scrolling_view_behavior"
-  tools:context="techkids.vn.music.activities.MainActivity"
+  tools:context="my.awesome.music.activities.MainActivity"
   tools:showIn="@layout/activity_main">
 
   <android.support.design.widget.AppBarLayout
