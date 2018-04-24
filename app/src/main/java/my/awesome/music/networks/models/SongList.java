@@ -2,30 +2,24 @@ package my.awesome.music.networks.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Lush on 1/10/2017.
+ * Created by HaiLS on 12/04/2018.
  */
 
 public class SongList {
 
-    @SerializedName("entry")
-    private Song[] list;
+  @SerializedName("entry")
+  private ArrayList<Song> list;
 
-    public SongList(Song[] list) {
-        this.list = list;
-    }
+  public SongList(ArrayList<Song> list) {
+    this.list = list;
+  }
 
-    public Song[] getList() {
-        return list;
-    }
-
-    @Override
-    public String toString() {
-        return "SongList{" +
-                "list=" + Arrays.toString(list) +
-                '}';
-    }
+  public ArrayList<Song> getList() {
+    return list;
+  }
 
 }

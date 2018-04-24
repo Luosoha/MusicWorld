@@ -1,5 +1,7 @@
 package my.awesome.music.screens.mainplayer;
 
+import java.util.ArrayList;
+
 import retrofit2.Callback;
 import my.awesome.music.base.interfaces.IInteractor;
 import my.awesome.music.base.interfaces.IPresenter;
@@ -23,8 +25,8 @@ public interface MainPlayerContract {
   interface Presenter extends IPresenter<View, Interactor> {
     void searchForSong(Song song);
 
-    Song getPreviousSong(Song currentSong);
+    Song getPreviousSong(ArrayList<Song> playList, Song currentSong);
 
-    Song getNextSong(Song currentSong);
+    Song getNextSong(ArrayList<Song> playList, Song currentSong);
   }
 }

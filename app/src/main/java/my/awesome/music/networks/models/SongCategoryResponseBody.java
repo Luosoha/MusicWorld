@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map;
 
 /**
- * Created by Lush on 1/8/2017.
+ * Created by HaiLS on 12/04/2018.
  */
 
 public class SongCategoryResponseBody {

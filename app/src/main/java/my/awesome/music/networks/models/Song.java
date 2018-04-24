@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Lush on 1/10/2017.
+ * Created by HaiLS on 12/04/2018.
  */
 
 public class Song {
@@ -40,18 +40,6 @@ public class Song {
     return artist.getName();
   }
 
-
-  @Override
-  public String toString() {
-    return "Song{" +
-            "name=" + name +
-            ", images=" + Arrays.toString(images) +
-            ", artist=" + artist +
-            '}';
-  }
-
-  public static ArrayList<Song> SONGS = new ArrayList<>();
-
   class SongName {
     @SerializedName("label")
     private String name;
@@ -62,13 +50,6 @@ public class Song {
 
     public String getSongName() {
       return name;
-    }
-
-    @Override
-    public String toString() {
-      return "SongName{" +
-              "name='" + name + '\'' +
-              '}';
     }
   }
 
@@ -83,13 +64,6 @@ public class Song {
     public String getUrl() {
       return url;
     }
-
-    @Override
-    public String toString() {
-      return "SongImage{" +
-              "url='" + url + '\'' +
-              '}';
-    }
   }
 
   class SongArtist {
@@ -102,13 +76,6 @@ public class Song {
 
     public String getName() {
       return name;
-    }
-
-    @Override
-    public String toString() {
-      return "SongArtist{" +
-              "name='" + name + '\'' +
-              '}';
     }
   }
 

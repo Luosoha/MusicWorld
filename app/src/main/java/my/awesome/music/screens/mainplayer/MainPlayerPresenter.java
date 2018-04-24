@@ -2,6 +2,8 @@ package my.awesome.music.screens.mainplayer;
 
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,13 +51,13 @@ public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, Main
   }
 
   @Override
-  public Song getPreviousSong(Song currentSong) {
-    return Song.SONGS.get(ActionHelper.findPreviousSongPositionOf(currentSong));
+  public Song getPreviousSong(ArrayList<Song> playList, Song currentSong) {
+    return playList.get(ActionHelper.findPreviousSongPositionOf(playList, currentSong));
   }
 
   @Override
-  public Song getNextSong(Song currentSong) {
-    return Song.SONGS.get(ActionHelper.findNextSongPositionOf(currentSong));
+  public Song getNextSong(ArrayList<Song> playList, Song currentSong) {
+    return playList.get(ActionHelper.findNextSongPositionOf(playList, currentSong));
   }
 
   @Override

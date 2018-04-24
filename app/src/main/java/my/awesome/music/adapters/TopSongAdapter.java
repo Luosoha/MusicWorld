@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -16,12 +18,17 @@ import my.awesome.music.callbacks.OnTopSongClickListener;
 import my.awesome.music.networks.models.Song;
 
 /**
- * Created by Lush on 1/10/2017.
+ * Created by HaiLS on 05/04/2018.
  */
 
 public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {
 
+  private ArrayList<Song> playList;
   private OnTopSongClickListener onTopSongClickListener;
+
+  public TopSongAdapter(ArrayList<Song> playList) {
+    this.playList = playList;
+  }
 
   public void setOnTopSongClickListener(OnTopSongClickListener onTopSongClickListener) {
     this.onTopSongClickListener = onTopSongClickListener;
@@ -36,12 +43,12 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
 
   @Override
   public void onBindViewHolder(TopSongViewHolder holder, int position) {
-    holder.bind(Song.SONGS.get(position));
+    holder.bind(playList.get(position));
   }
 
   @Override
   public int getItemCount() {
-    return Song.SONGS.size();
+    return playList == null ? 0 : playList.size();
   }
 
   class TopSongViewHolder extends RecyclerView.ViewHolder {

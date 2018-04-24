@@ -8,7 +8,7 @@ import io.realm.Realm;
 import my.awesome.music.networks.models.Subgenres;
 
 /**
- * Created by Lush on 1/8/2017.
+ * Created by HaiLS on 05/04/2018.
  */
 
 public class RealmContext {

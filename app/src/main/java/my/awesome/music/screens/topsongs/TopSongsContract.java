@@ -1,5 +1,7 @@
 package my.awesome.music.screens.topsongs;
 
+import java.util.ArrayList;
+
 import retrofit2.Callback;
 import my.awesome.music.base.interfaces.IInteractor;
 import my.awesome.music.base.interfaces.IPresenter;
@@ -22,7 +24,7 @@ public interface TopSongsContract {
   interface View extends IView<Presenter> {
     void bindData(Subgenres subgenres);
 
-    void bindTopSongs();
+    void bindTopSongs(ArrayList<Song> playList);
 
     void onSongFound(Song song, String songUrl);
   }

@@ -2,8 +2,10 @@ package my.awesome.music.screens.topsongs;
 
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import my.awesome.music.managers.PlayerManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +26,7 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
         implements TopSongsContract.Presenter {
 
   private Subgenres subgenres;
+  private ArrayList<Song> playList = new ArrayList<>();
 
   @Override
   public void start() {
@@ -34,16 +37,17 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
 
   @Override
   public void getTopSongs(String id) {
-    Song.SONGS.clear();
+    playList.clear();
     mView.getBaseActivity().showProgress();
     mInteractor.getTopSongs(id, new Callback<TopSongsResponseBody>() {
       @Override
       public void onResponse(Call<TopSongsResponseBody> call, Response<TopSongsResponseBody> response) {
         TopSongsResponseBody topSongsResponseBody = response.body();
         if (topSongsResponseBody != null) {
-          Song.SONGS.addAll(Arrays.asList(topSongsResponseBody.getSongList().getList()));
+          playList = topSongsResponseBody.getSongList().getList();
+          PlayerManager.getInstance().setPlayList(playList);
         }
-        mView.bindTopSongs();
+        mView.bindTopSongs(playList);
         mView.getBaseActivity().hideProgress();
       }
 

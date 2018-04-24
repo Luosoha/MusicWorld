@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import my.awesome.music.R;
 import my.awesome.music.activities.MainActivity;
@@ -24,7 +26,7 @@ import my.awesome.music.networks.models.Subgenres;
  */
 
 public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
-    implements TopSongsContract.View, OnTopSongClickListener {
+        implements TopSongsContract.View, OnTopSongClickListener {
 
   private static final int COLUMN_NUMBERS = 1;
 
@@ -44,6 +46,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   private MainActivity activity;
   private TopSongAdapter topSongAdapter;
   private Subgenres subgenres;
+  private ArrayList<Song> playList = new ArrayList<>();
   private int position;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
@@ -79,8 +82,8 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     playFabBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (!Song.SONGS.isEmpty()) {
-          onSongClick(Song.SONGS.get(0));
+        if (!playList.isEmpty()) {
+          onSongClick(playList.get(0));
         }
       }
     });
@@ -106,7 +109,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       }
     }
 
-    topSongAdapter = new TopSongAdapter();
+    topSongAdapter = new TopSongAdapter(playList);
     topSongAdapter.setOnTopSongClickListener(this);
     topSongRv.setLayoutManager(new GridLayoutManager(getActivity(), COLUMN_NUMBERS));
     topSongRv.setAdapter(topSongAdapter);
@@ -127,7 +130,9 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   }
 
   @Override
-  public void bindTopSongs() {
+  public void bindTopSongs(ArrayList<Song> playList) {
+    this.playList.clear();
+    this.playList.addAll(playList);
     topSongAdapter.notifyDataSetChanged();
   }
 

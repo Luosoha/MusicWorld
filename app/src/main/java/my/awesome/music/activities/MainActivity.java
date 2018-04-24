@@ -287,13 +287,13 @@ public class MainActivity extends BaseActivity
 
   @Override
   public void onSongEnded() {
-    int position = ActionHelper.findNextSongPositionOf(playerManager.getCurrentSong());
+    int position = ActionHelper.findNextSongPositionOf(playerManager.getPlayList(), playerManager.getCurrentSong());
     searchForNextSongUrl(position);
   }
 
   private void searchForNextSongUrl(int position) {
     showProgress();
-    final Song song = Song.SONGS.get(position);
+    final Song song = playerManager.getPlayList().get(position);
     if (onSongReadyListener != null) {
       onSongReadyListener.onNextSongReady(song.getImageUrl());
     }

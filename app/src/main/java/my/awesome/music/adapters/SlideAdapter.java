@@ -8,7 +8,7 @@ import my.awesome.music.screens.favorite.FavoritePresenter;
 import my.awesome.music.screens.genres.GenresPresenter;
 
 /**
- * Created by Lush on 1/8/2017.
+ * Created by HaiLS on 05/04/2018.
  */
 
 public class SlideAdapter extends FragmentPagerAdapter {

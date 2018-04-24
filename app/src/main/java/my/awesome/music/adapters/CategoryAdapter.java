@@ -15,7 +15,7 @@ import my.awesome.music.R;
 import my.awesome.music.networks.models.Subgenres;
 
 /**
- * Created by Lush on 1/9/2017.
+ * Created by HaiLS on 05/04/2018.
  */
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {

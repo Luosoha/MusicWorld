@@ -131,13 +131,13 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
 
   @OnClick(R.id.iv_skip_previous)
   public void onPreviousSongClick() {
-    Song song = mPresenter.getPreviousSong(playerManager.getCurrentSong());
+    Song song = mPresenter.getPreviousSong(playerManager.getPlayList(), playerManager.getCurrentSong());
     setupForSong(song);
   }
 
   @OnClick(R.id.iv_skip_next)
   public void onNextSongClick() {
-    Song song = mPresenter.getNextSong(playerManager.getCurrentSong());
+    Song song = mPresenter.getNextSong(playerManager.getPlayList(), playerManager.getCurrentSong());
     setupForSong(song);
   }
 
