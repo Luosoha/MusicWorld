@@ -3,13 +3,19 @@ package hails.awesome.music.screens.topsongs;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
+import butterknife.OnTouch;
 import hails.awesome.music.R;
 import hails.awesome.music.activities.MainActivity;
 import hails.awesome.music.adapters.TopSongAdapter;
@@ -24,7 +30,7 @@ import hails.awesome.music.networks.models.Subgenres;
  */
 
 public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
-    implements TopSongsContract.View, OnTopSongClickListener {
+        implements TopSongsContract.View, OnTopSongClickListener {
 
   private static final int COLUMN_NUMBERS = 1;
 
@@ -36,8 +42,12 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   TextView categoryNameTv;
   @BindView(R.id.rv_top_songs)
   RecyclerView topSongRv;
+  @BindView(R.id.view_search)
+  View searchView;
   @BindView(R.id.view_favorite)
   View favoriteView;
+  @BindView(R.id.search_top_song_et)
+  EditText searchTopSongEt;
   @BindView(R.id.top_songs_action_btn)
   FloatingActionButton playFabBtn;
 
@@ -46,6 +56,12 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   private Subgenres subgenres;
   private int position;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
+
+  @OnTouch(R.id.top_songs_fl)
+  void onBackGroundTouch() {
+    searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_out_from_left));
+    searchTopSongEt.setVisibility(View.INVISIBLE);
+  }
 
   @Override
   protected int getLayoutId() {
@@ -81,6 +97,19 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       public void onClick(View view) {
         if (!Song.SONGS.isEmpty()) {
           onSongClick(Song.SONGS.get(0));
+        }
+      }
+    });
+
+    searchView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (searchTopSongEt.isShown()) {
+          searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_out_from_left));
+          searchTopSongEt.setVisibility(View.INVISIBLE);
+        } else {
+          searchTopSongEt.setVisibility(View.VISIBLE);
+          searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_in_from_right));
         }
       }
     });

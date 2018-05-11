@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/top_songs_fl"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
@@ -33,10 +34,18 @@
         android:layout_weight="1"
         android:background="@drawable/ic_arrow_back_white_24px" />
 
-      <View
+      <EditText
+        android:id="@+id/search_top_song_et"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="8" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:layout_weight="8"
+        android:background="@drawable/bg_round_edit_text"
+        android:imeOptions="actionSearch"
+        android:textColor="@color/colorBlack"
+        android:textCursorDrawable="@null"
+        android:visibility="invisible" />
 
       <View
         android:id="@+id/view_search"
