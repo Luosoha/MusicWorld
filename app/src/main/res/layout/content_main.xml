@@ -6,7 +6,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   app:layout_behavior="@string/appbar_scrolling_view_behavior"
-  tools:context="techkids.vn.music.activities.MainActivity"
+  tools:context="hails.awesome.music.activities.MainActivity"
   tools:showIn="@layout/activity_main">
 
   <android.support.design.widget.AppBarLayout
@@ -20,7 +20,7 @@
       android:layout_height="wrap_content"
       android:minHeight="?attr/actionBarSize"
       app:popupTheme="@style/AppTheme.PopupOverlay"
-      app:title="Music">
+      app:title="@string/app_name">
 
       <LinearLayout
         android:id="@+id/ll_main_player_toolbar"
@@ -40,7 +40,7 @@
           android:src="@drawable/ic_close_white_24px" />
 
         <LinearLayout
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:orientation="vertical">
@@ -126,7 +126,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="16dp"
-          android:text="Song name"
+          tools:text="Song name"
           android:textColor="@color/colorWhite"
           android:textStyle="bold" />
 
@@ -135,7 +135,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_below="@id/tv_top_song_name"
-          android:text="Song artist"
+          tools:text="Song artist"
           android:textColor="@color/colorLightGrey"
           android:textSize="12sp" />
 
