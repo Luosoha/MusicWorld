@@ -123,16 +123,16 @@
       android:layout_height="wrap_content"
       android:layout_below="@id/tv_category_name"
       android:layout_marginStart="@dimen/margin_left_category_topsong"
-      tools:text="@string/number_of_top_songs"
       android:textColor="@color/colorLightGrey"
-      android:textSize="12sp" />
+      android:textSize="12sp"
+      tools:text="@string/number_of_top_songs" />
 
     <android.support.v7.widget.RecyclerView
       android:id="@+id/rv_top_songs"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@id/tv_number_of_top_songs"
-      android:layout_marginTop="@dimen/margin_top_songs_list"/>
+      android:layout_marginTop="@dimen/margin_top_songs_list" />
 
   </RelativeLayout>
 

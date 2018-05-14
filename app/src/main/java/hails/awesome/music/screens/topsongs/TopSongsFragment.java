@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -34,8 +33,6 @@ import hails.awesome.music.networks.models.Subgenres;
 
 public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
         implements TopSongsContract.View, OnTopSongClickListener {
-
-  private static final int COLUMN_NUMBERS = 1;
 
   @BindView(R.id.view_back)
   View backView;
@@ -128,13 +125,14 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         ArrayList<Song> filterSongList = new ArrayList<>();
-        for(Song s : PlayerManager.getInstance().getPlayList()){
-          if(s.getName().toLowerCase().contains(searchTopSongEt.getText().toString().toLowerCase())){
+        for (Song s : PlayerManager.getInstance().getPlayList()) {
+          if (s.getName().toLowerCase().contains(searchTopSongEt.getText().toString().toLowerCase())) {
             filterSongList.add(s);
           }
         }
         topSongAdapter.filterSong(filterSongList);
-        numberOfSongTv.setText(String.format(Locale.US, "%d songs", PlayerManager.getInstance().getPlayList().size()));      }
+        numberOfSongTv.setText(String.format(Locale.US, "%d songs", filterSongList.size()));
+      }
 
       @Override
       public void afterTextChanged(Editable editable) {
