@@ -1,8 +1,10 @@
 package hails.awesome.music.screens.topsongs;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -10,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnTouch;
@@ -112,6 +118,29 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
         }
       }
     });
+
+    searchTopSongEt.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        ArrayList<Song> filterSongList = new ArrayList<>();
+        for(Song s : PlayerManager.getInstance().getPlayList()){
+          if(s.getName().toLowerCase().contains(searchTopSongEt.getText().toString().toLowerCase())){
+            filterSongList.add(s);
+          }
+        }
+        topSongAdapter.filterSong(filterSongList);
+        numberOfSongTv.setText(String.format(Locale.US, "%d songs", PlayerManager.getInstance().getPlayList().size()));      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+
+      }
+    });
   }
 
   private void showSearchBar() {
@@ -145,9 +174,8 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       }
     }
 
-    topSongAdapter = new TopSongAdapter();
-    topSongAdapter.setOnTopSongClickListener(this);
-    topSongRv.setLayoutManager(new GridLayoutManager(getActivity(), COLUMN_NUMBERS));
+    topSongAdapter = new TopSongAdapter(this, PlayerManager.getInstance().getPlayList());
+    topSongRv.setLayoutManager(new LinearLayoutManager(getActivity()));
     topSongRv.setAdapter(topSongAdapter);
   }
 
@@ -167,6 +195,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
 
   @Override
   public void bindTopSongs() {
+    numberOfSongTv.setText(String.format(Locale.US, "%d songs", PlayerManager.getInstance().getPlayList().size()));
     topSongAdapter.notifyDataSetChanged();
   }
 

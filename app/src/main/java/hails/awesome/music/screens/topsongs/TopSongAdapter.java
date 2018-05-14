@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hails.awesome.music.R;
 import hails.awesome.music.callbacks.OnTopSongClickListener;
-import hails.awesome.music.managers.PlayerManager;
 import hails.awesome.music.networks.models.Song;
 
 /**
@@ -25,9 +24,11 @@ import hails.awesome.music.networks.models.Song;
 public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {
 
   private OnTopSongClickListener onTopSongClickListener;
+  private ArrayList<Song> playList;
 
-  public void setOnTopSongClickListener(OnTopSongClickListener onTopSongClickListener) {
+  public TopSongAdapter(OnTopSongClickListener onTopSongClickListener, ArrayList<Song> playList) {
     this.onTopSongClickListener = onTopSongClickListener;
+    this.playList = playList;
   }
 
   @Override
@@ -39,12 +40,17 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
 
   @Override
   public void onBindViewHolder(TopSongViewHolder holder, int position) {
-    holder.bind(PlayerManager.getInstance().getPlayList().get(position));
+    holder.bind(playList.get(position));
   }
 
   @Override
   public int getItemCount() {
-    return PlayerManager.getInstance().getPlayList().size();
+    return playList.size();
+  }
+
+  public void filterSong(ArrayList<Song> filterSongList) {
+    playList = filterSongList;
+    notifyDataSetChanged();
   }
 
   class TopSongViewHolder extends RecyclerView.ViewHolder {
