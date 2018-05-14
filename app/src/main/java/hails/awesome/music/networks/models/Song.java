@@ -39,9 +39,7 @@ public class Song {
   public String getArtist() {
     return artist.getName();
   }
-
-  public static ArrayList<Song> SONGS = new ArrayList<>();
-
+  
   class SongName {
     @SerializedName("label")
     private String name;

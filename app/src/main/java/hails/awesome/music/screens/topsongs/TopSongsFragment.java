@@ -18,6 +18,7 @@ import hails.awesome.music.activities.MainActivity;
 import hails.awesome.music.base.ViewFragment;
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
 import hails.awesome.music.callbacks.OnTopSongClickListener;
+import hails.awesome.music.managers.PlayerManager;
 import hails.awesome.music.networks.models.Song;
 import hails.awesome.music.networks.models.Subgenres;
 
@@ -95,8 +96,8 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     playFabBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (!Song.SONGS.isEmpty()) {
-          onSongClick(Song.SONGS.get(0));
+        if (!PlayerManager.getInstance().getPlayList().isEmpty()) {
+          onSongClick(PlayerManager.getInstance().getPlayList().get(0));
         }
       }
     });

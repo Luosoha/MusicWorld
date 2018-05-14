@@ -4,6 +4,7 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 
+import hails.awesome.music.managers.PlayerManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +25,7 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
         implements TopSongsContract.Presenter {
 
   private Subgenres subgenres;
+  private PlayerManager playerManager = PlayerManager.getInstance();
 
   @Override
   public void start() {
@@ -34,14 +36,14 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
 
   @Override
   public void getTopSongs(String id) {
-    Song.SONGS.clear();
+    playerManager.getPlayList().clear();
     mView.getBaseActivity().showProgress();
     mInteractor.getTopSongs(id, new Callback<TopSongsResponseBody>() {
       @Override
       public void onResponse(Call<TopSongsResponseBody> call, Response<TopSongsResponseBody> response) {
         TopSongsResponseBody topSongsResponseBody = response.body();
         if (topSongsResponseBody != null) {
-          Song.SONGS.addAll(Arrays.asList(topSongsResponseBody.getSongList().getList()));
+          playerManager.getPlayList().addAll(Arrays.asList(topSongsResponseBody.getSongList().getList()));
         }
         mView.bindTopSongs();
         mView.getBaseActivity().hideProgress();

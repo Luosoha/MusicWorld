@@ -2,6 +2,7 @@ package hails.awesome.music.screens.mainplayer;
 
 import android.widget.Toast;
 
+import hails.awesome.music.managers.PlayerManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,6 +19,8 @@ import hails.awesome.music.utils.ActionHelper;
 
 public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, MainPlayerContract.Interactor>
     implements MainPlayerContract.Presenter {
+
+  private PlayerManager playerManager;
 
   @Override
   public void start() {
@@ -50,12 +53,12 @@ public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, Main
 
   @Override
   public Song getPreviousSong(Song currentSong) {
-    return Song.SONGS.get(ActionHelper.findPreviousSongPositionOf(currentSong));
+    return playerManager.getPlayList().get(ActionHelper.findPreviousSongPositionOf(playerManager.getPlayList(), currentSong));
   }
 
   @Override
   public Song getNextSong(Song currentSong) {
-    return Song.SONGS.get(ActionHelper.findNextSongPositionOf(currentSong));
+    return playerManager.getPlayList().get(ActionHelper.findNextSongPositionOf(playerManager.getPlayList(), currentSong));
   }
 
   @Override

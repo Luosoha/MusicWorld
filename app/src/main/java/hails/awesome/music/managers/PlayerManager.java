@@ -33,7 +33,7 @@ public class PlayerManager {
   private DefaultUriDataSource dataSource;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
-  private ArrayList<Song> playList;
+  private ArrayList<Song> playList = new ArrayList<>();
   private Song currentSong;
   private String songUrl;
 

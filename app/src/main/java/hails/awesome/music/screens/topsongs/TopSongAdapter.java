@@ -8,11 +8,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hails.awesome.music.R;
 import hails.awesome.music.callbacks.OnTopSongClickListener;
+import hails.awesome.music.managers.PlayerManager;
 import hails.awesome.music.networks.models.Song;
 
 /**
@@ -36,12 +39,12 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
 
   @Override
   public void onBindViewHolder(TopSongViewHolder holder, int position) {
-    holder.bind(Song.SONGS.get(position));
+    holder.bind(PlayerManager.getInstance().getPlayList().get(position));
   }
 
   @Override
   public int getItemCount() {
-    return Song.SONGS.size();
+    return PlayerManager.getInstance().getPlayList().size();
   }
 
   class TopSongViewHolder extends RecyclerView.ViewHolder {
