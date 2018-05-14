@@ -46,8 +46,6 @@ public class MainActivity extends BaseActivity
   Toolbar toolbar;
   @BindView(R.id.rl_mini_player)
   RelativeLayout miniPlayerLayout;
-  @BindView(R.id.iv_back_from_main_player)
-  ImageView backFromMainPlayerIv;
   @BindView(R.id.iv_download_song)
   ImageView downloadSongIv;
   @BindView(R.id.ll_main_player_toolbar)
@@ -103,8 +101,7 @@ public class MainActivity extends BaseActivity
       RetrofitContext.getAlbumTypes().enqueue(new Callback<SongCategoryResponse>() {
         @Override
         public void onResponse(Call<SongCategoryResponse> call, Response<SongCategoryResponse> response) {
-          ArrayList<Subgenres> songCategories = new ArrayList<>();
-          songCategories.addAll(response.body().getBody().getMap().values());
+          ArrayList<Subgenres> songCategories = new ArrayList<>(response.body().getBody().getMap().values());
           RealmContext.getInstance().deleteAll();
           for (Subgenres s : songCategories) {
             RealmContext.getInstance().insertSubgenre(s);
@@ -139,7 +136,7 @@ public class MainActivity extends BaseActivity
 
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        int currentPosition = (int) (progressSb.getProgress() * playerManager.getSongDuration() / progressSb.getMax());
+        int currentPosition = progressSb.getProgress() * playerManager.getSongDuration() / progressSb.getMax();
         playerManager.seekTo(currentPosition);
         handler.postDelayed(runnable, 100);
       }
@@ -177,6 +174,11 @@ public class MainActivity extends BaseActivity
   @OnClick(R.id.iv_back_from_main_player)
   public void onBackFromMainPlayerEvent() {
     onBackPressed();
+  }
+
+  @OnClick(R.id.iv_download_song)
+  public void onDownloadSong() {
+    Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show();
   }
 
   @Override
@@ -235,21 +237,17 @@ public class MainActivity extends BaseActivity
         playerManager.stop();
       }
       playerManager.setCurrentSong(song);
-
+      playerManager.setSongUrl(songUrl);
       playerManager.setIsPlaying(true);
-      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
+      playerManager.playNewSong(songUrl);
 
+      actionFab.setImageResource(R.drawable.ic_pause_white_24px);
       Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
       songNameTv.setText(song.getName());
       songArtistTv.setText(song.getArtist());
       if (doRevealMiniPlayer) {
         miniPlayerLayout.setVisibility(View.VISIBLE);
-      }
-
-      // Setup exo player
-      playerManager.playNewSong(songUrl);
-
-      if (!doRevealMiniPlayer) {
+      } else {
         sentDurationToMainPlayer = false;
         songNameInsideToolBarTv.setText(playerManager.getCurrentSong().getName());
         songArtistInsideToolBarTv.setText(playerManager.getCurrentSong().getArtist());

@@ -11,6 +11,8 @@ import com.google.android.exoplayer.upstream.DefaultAllocator;
 import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 import com.google.android.exoplayer.util.Util;
 
+import java.util.ArrayList;
+
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
 import hails.awesome.music.networks.models.Song;
 
@@ -31,7 +33,9 @@ public class PlayerManager {
   private DefaultUriDataSource dataSource;
   private MediaCodecAudioTrackRenderer audioRenderer;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
+  private ArrayList<Song> playList;
   private Song currentSong;
+  private String songUrl;
 
   private PlayerManager() {}
 
@@ -132,6 +136,22 @@ public class PlayerManager {
 
   public void setCurrentSong(Song currentSong) {
     this.currentSong = currentSong;
+  }
+
+  public ArrayList<Song> getPlayList() {
+    return playList;
+  }
+
+  public void setPlayList(ArrayList<Song> playList) {
+    this.playList = playList;
+  }
+
+  public String getSongUrl() {
+    return songUrl;
+  }
+
+  public void setSongUrl(String songUrl) {
+    this.songUrl = songUrl;
   }
 
   public void release() {

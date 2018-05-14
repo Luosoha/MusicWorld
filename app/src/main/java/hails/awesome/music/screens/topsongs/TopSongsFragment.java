@@ -46,6 +46,8 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   EditText searchTopSongEt;
   @BindView(R.id.top_songs_action_btn)
   FloatingActionButton playFabBtn;
+  @BindView(R.id.tv_number_of_top_songs)
+  TextView numberOfSongTv;
 
   private MainActivity activity;
   private TopSongAdapter topSongAdapter;
