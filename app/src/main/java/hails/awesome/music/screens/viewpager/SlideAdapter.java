@@ -9,7 +9,7 @@ import hails.awesome.music.screens.favorite.FavoritePresenter;
 import hails.awesome.music.screens.genres.GenresPresenter;
 
 /**
- * Created by Lush on 1/8/2017.
+ * The slide adapter
  */
 
 public class SlideAdapter extends FragmentPagerAdapter {

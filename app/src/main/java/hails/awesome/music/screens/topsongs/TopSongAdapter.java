@@ -16,7 +16,7 @@ import hails.awesome.music.callbacks.OnTopSongClickListener;
 import hails.awesome.music.networks.models.Song;
 
 /**
- * Created by Lush on 1/10/2017.
+ * The top song adapter
  */
 
 public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {

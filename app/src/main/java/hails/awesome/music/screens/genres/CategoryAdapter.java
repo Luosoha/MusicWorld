@@ -15,7 +15,7 @@ import hails.awesome.music.R;
 import hails.awesome.music.networks.models.Subgenres;
 
 /**
- * Created by Lush on 1/9/2017.
+ * The category adapter
  */
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
