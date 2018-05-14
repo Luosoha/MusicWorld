@@ -1,4 +1,4 @@
-package hails.awesome.music.adapters;
+package hails.awesome.music.screens.viewpager;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

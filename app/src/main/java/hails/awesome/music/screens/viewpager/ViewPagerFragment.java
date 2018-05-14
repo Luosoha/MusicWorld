@@ -5,13 +5,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 
 import butterknife.BindView;
 import hails.awesome.music.R;
-import hails.awesome.music.adapters.SlideAdapter;
 import hails.awesome.music.base.ViewFragment;
 
 /**

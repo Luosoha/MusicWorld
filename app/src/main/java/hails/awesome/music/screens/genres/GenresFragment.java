@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 
 import butterknife.BindView;
 import hails.awesome.music.R;
-import hails.awesome.music.adapters.CategoryAdapter;
 import hails.awesome.music.base.ViewFragment;
 import hails.awesome.music.networks.models.Subgenres;
 

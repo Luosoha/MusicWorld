@@ -1,4 +1,4 @@
-package hails.awesome.music.adapters;
+package hails.awesome.music.screens.topsongs;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
