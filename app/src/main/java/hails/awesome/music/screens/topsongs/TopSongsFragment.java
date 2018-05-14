@@ -58,9 +58,11 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
   @OnTouch(R.id.top_songs_fl)
-  void onBackGroundTouch() {
-    searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_out_from_left));
-    searchTopSongEt.setVisibility(View.INVISIBLE);
+  public boolean onBackGroundTouch() {
+    if (searchTopSongEt.isShown()) {
+      dismissSearchBar();
+    }
+    return true;
   }
 
   @Override
@@ -105,14 +107,23 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       @Override
       public void onClick(View view) {
         if (searchTopSongEt.isShown()) {
-          searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_out_from_left));
-          searchTopSongEt.setVisibility(View.INVISIBLE);
+          dismissSearchBar();
         } else {
-          searchTopSongEt.setVisibility(View.VISIBLE);
-          searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_in_from_right));
+          showSearchBar();
         }
       }
     });
+  }
+
+  private void showSearchBar() {
+    searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_in_from_right));
+    searchTopSongEt.setVisibility(View.VISIBLE);
+  }
+
+  private void dismissSearchBar() {
+    searchTopSongEt.setVisibility(View.INVISIBLE);
+    searchTopSongEt.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_out_from_left));
+    searchTopSongEt.setText("");
   }
 
   @Override
