@@ -3,7 +3,6 @@ package hails.awesome.music.screens.favorite;
 import android.content.Context;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import hails.awesome.music.base.interfaces.IInteractor;
 import hails.awesome.music.base.interfaces.IPresenter;
@@ -16,7 +15,7 @@ import hails.awesome.music.networks.models.Subgenres;
 
 public interface FavoriteContract {
   interface Interactor extends IInteractor<Presenter> {
-    List<Subgenres> getFavoriteGenres(Context context);
+    ArrayList<Subgenres> getFavoriteGenres(Context context);
   }
 
   interface View extends IView<Presenter> {
@@ -24,8 +23,8 @@ public interface FavoriteContract {
   }
 
   interface Presenter extends IPresenter<View, Interactor> {
-    ArrayList<String> getFavoriteGenres();
+    ArrayList<Subgenres> getFavoriteGenres();
 
-    void goToTopSongScreen(String subgenresName);
+    void goToTopSongScreen(Subgenres subgenres);
   }
 }

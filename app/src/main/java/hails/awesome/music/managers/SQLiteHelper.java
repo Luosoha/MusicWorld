@@ -58,7 +58,27 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     ArrayList<Subgenres> subgenresList = new ArrayList<>();
     Cursor cursor = db.query(
             Subgenres.TABLE_NAME,null, null, null, null, null, null);
-    cursor.moveToFirst();
+    while (cursor.moveToNext()) {
+      Subgenres sub = new Subgenres();
+      sub.setId(cursor.getString(cursor.getColumnIndex(Subgenres.COLUMN_ID)));
+      sub.setName(cursor.getString(cursor.getColumnIndex(Subgenres.COLUMN_NAME)));
+      if (cursor.getInt(cursor.getColumnIndex(Subgenres.COLUMN_IS_FAVORITE)) == 0) {
+        sub.setFavorite(false);
+      } else {
+        sub.setFavorite(true);
+      }
+      subgenresList.add(sub);
+    }
+    return subgenresList;
+  }
+
+  public ArrayList<Subgenres> getFavoriteSubgenres() {
+    SQLiteDatabase db = this.getReadableDatabase();
+    ArrayList<Subgenres> subgenresList = new ArrayList<>();
+    Cursor cursor = db.query(
+            Subgenres.TABLE_NAME, null,
+            Subgenres.COLUMN_IS_FAVORITE + " = 1",
+            null, null, null, null);
     while (cursor.moveToNext()) {
       Subgenres sub = new Subgenres();
       sub.setId(cursor.getString(cursor.getColumnIndex(Subgenres.COLUMN_ID)));

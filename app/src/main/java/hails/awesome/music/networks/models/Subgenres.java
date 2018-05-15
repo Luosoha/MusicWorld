@@ -2,15 +2,11 @@ package hails.awesome.music.networks.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
-import io.realm.RealmObject;
-
 /**
  * Created by Lush on 1/8/2017.
  */
 
-public class Subgenres extends RealmObject {
+public class Subgenres {
 
   @SerializedName("id")
   private String id;
@@ -42,8 +38,6 @@ public class Subgenres extends RealmObject {
     isFavorite = favorite;
   }
 
-  public static ArrayList<Subgenres> subgenres = new ArrayList<>();
-
   public static String TABLE_NAME = "Subgenres";
   public static String COLUMN_ID = "id";
   public static String COLUMN_NAME = "name";
@@ -53,6 +47,5 @@ public class Subgenres extends RealmObject {
           COLUMN_ID + " TEXT PRIMARY KEY," +
           COLUMN_NAME + " TEXT," +
           COLUMN_IS_FAVORITE + " INTEGER)";
-
 
 }

@@ -1,5 +1,6 @@
 package hails.awesome.music.screens.genres;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hails.awesome.music.R;
+import hails.awesome.music.managers.SQLiteHelper;
 import hails.awesome.music.networks.models.Subgenres;
 
 /**
@@ -21,8 +25,10 @@ import hails.awesome.music.networks.models.Subgenres;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
   private OnCategoryClickListener onCategoryClickListener;
+  private ArrayList<Subgenres> subgenresList;
 
-  public CategoryAdapter(OnCategoryClickListener onCategoryClickListener) {
+  public CategoryAdapter(Context context, OnCategoryClickListener onCategoryClickListener) {
+    subgenresList = new SQLiteHelper(context).getAllSubgenres();
     this.onCategoryClickListener = onCategoryClickListener;
   }
 
@@ -35,7 +41,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
   @Override
   public void onBindViewHolder(CategoryViewHolder holder, int position) {
-    final Subgenres subgenres = Subgenres.subgenres.get(position);
+    final Subgenres subgenres = subgenresList.get(position);
     holder.categoryNameTv.setText(subgenres.getName());
     String src = "genre_" + subgenres.getId();
     int rid = holder.categoryIv.getResources().getIdentifier(
@@ -57,7 +63,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
   @Override
   public int getItemCount() {
-    return Subgenres.subgenres.size();
+    return subgenresList.size();
   }
 
   public interface OnCategoryClickListener {

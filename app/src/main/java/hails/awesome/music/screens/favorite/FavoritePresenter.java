@@ -1,7 +1,6 @@
 package hails.awesome.music.screens.favorite;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import hails.awesome.music.R;
 import hails.awesome.music.base.Presenter;
@@ -21,24 +20,12 @@ public class FavoritePresenter extends Presenter<FavoriteContract.View, Favorite
   }
 
   @Override
-  public ArrayList<String> getFavoriteGenres() {
-    ArrayList<String> genreNameList = new ArrayList<>();
-    List<Subgenres> subs = mInteractor.getFavoriteGenres(mView.getBaseActivity());
-    for (Subgenres s : subs) {
-      genreNameList.add(s.getName());
-    }
-    return genreNameList;
+  public ArrayList<Subgenres> getFavoriteGenres() {
+    return mInteractor.getFavoriteGenres(mView.getBaseActivity());
   }
 
   @Override
-  public void goToTopSongScreen(String subgenresName) {
-    Subgenres subgenres = new Subgenres();
-    for (Subgenres sub : Subgenres.subgenres) {
-      if (sub.getName().equalsIgnoreCase(subgenresName)) {
-        subgenres = sub;
-        break;
-      }
-    }
+  public void goToTopSongScreen(Subgenres subgenres) {
     mView.getBaseActivity().changeFragment(
             R.id.fl_container, new TopSongsPresenter().setSubgenres(subgenres).getFragment(), true
     );

@@ -93,11 +93,6 @@ public class MainActivity extends BaseActivity
     return R.layout.activity_main;
   }
 
-  private void getSongCategoriesFromDatabase() {
-    Subgenres.subgenres.addAll(sqLiteHelper.getAllSubgenres());
-    hideProgress();
-  }
-
   private void getSongCategories() {
     showProgress();
     subgenresList = sqLiteHelper.getAllSubgenres();
@@ -105,14 +100,13 @@ public class MainActivity extends BaseActivity
       RetrofitContext.getAlbumTypes().enqueue(new Callback<SongCategoryResponse>() {
         @Override
         public void onResponse(Call<SongCategoryResponse> call, Response<SongCategoryResponse> response) {
+          hideProgress();
           ArrayList<Subgenres> songCategories = new ArrayList<>(response.body().getBody().getMap().values());
           for (Subgenres s : songCategories) {
             sqLiteHelper.insertSubgenres(s);
-            Subgenres.subgenres.add(s);
             subgenresList.add(s);
           }
           changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
-          hideProgress();
         }
 
         @Override
@@ -121,7 +115,7 @@ public class MainActivity extends BaseActivity
         }
       });
     } else {
-      getSongCategoriesFromDatabase();
+      hideProgress();
       changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
     }
   }

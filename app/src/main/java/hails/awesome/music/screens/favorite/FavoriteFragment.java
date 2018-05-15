@@ -22,7 +22,8 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
   @BindView(R.id.lv_playlist)
   ListView playListLv;
 
-  private ArrayList<String> favoriteGenres = new ArrayList<>();
+  private ArrayList<Subgenres> favoriteSubgenres = new ArrayList<>();
+  private ArrayList<String> favoriteSubgenresName = new ArrayList<>();
   private ArrayAdapter<String> genreArrayAdapter;
 
   @Override
@@ -37,8 +38,11 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
   }
 
   private void getFavoriteGenres() {
-    favoriteGenres.clear();
-    favoriteGenres.addAll(mPresenter.getFavoriteGenres());
+    favoriteSubgenres.clear();
+    favoriteSubgenres.addAll(mPresenter.getFavoriteGenres());
+    if (!favoriteSubgenres.isEmpty()) {
+      convertSubgenresToString();
+    }
     if (genreArrayAdapter != null) {
       genreArrayAdapter.notifyDataSetChanged();
     }
@@ -51,15 +55,23 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
   }
 
   private void setupUI() {
-    genreArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.item_play_list, favoriteGenres);
+    convertSubgenresToString();
+    genreArrayAdapter = new ArrayAdapter<>(getContext(), R.layout.item_play_list, favoriteSubgenresName);
     playListLv.setAdapter(genreArrayAdapter);
+  }
+
+  private void convertSubgenresToString() {
+    favoriteSubgenresName.clear();
+    for (Subgenres sub : favoriteSubgenres) {
+      favoriteSubgenresName.add(sub.getName());
+    }
   }
 
   private void addListeners() {
     playListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        mPresenter.goToTopSongScreen(favoriteGenres.get(i));
+        mPresenter.goToTopSongScreen(favoriteSubgenres.get(i));
       }
     });
   }

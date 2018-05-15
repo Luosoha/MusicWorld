@@ -56,7 +56,6 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   private MainActivity activity;
   private TopSongAdapter topSongAdapter;
   private Subgenres subgenres;
-  private int position;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
   @OnTouch(R.id.top_songs_fl)
@@ -91,6 +90,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     favoriteView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
+        subgenres.setFavorite(!subgenres.isFavorite());
         mPresenter.saveFavoriteSubgenres(subgenres);
         setFavoriteView();
       }
@@ -155,7 +155,6 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   @Override
   public void bindData(Subgenres subgenres) {
     this.subgenres = subgenres;
-    position = getSubgenresPosition();
     mPresenter.getTopSongs(subgenres.getId());
     setupUI();
   }
@@ -178,7 +177,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   }
 
   private void setFavoriteView() {
-    if (Subgenres.subgenres.get(position).isFavorite()) {
+    if (subgenres.isFavorite()) {
       favoriteView.setBackgroundResource(R.drawable.ic_favorite_filled_white_24px);
     } else {
       favoriteView.setBackgroundResource(R.drawable.ic_favorite_border_white_24px);
@@ -202,15 +201,6 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     if (onMusicPlayerActionListener != null) {
       onMusicPlayerActionListener.onPlaySong(song, songUrl, true);
     }
-  }
-
-  public int getSubgenresPosition() {
-    for (int i = 0; i < Subgenres.subgenres.size(); i++) {
-      if (subgenres.getId().equals(Subgenres.subgenres.get(i).getId())) {
-        return i;
-      }
-    }
-    return -1;
   }
 
   public TopSongsFragment setSubgenres(Subgenres sub) {

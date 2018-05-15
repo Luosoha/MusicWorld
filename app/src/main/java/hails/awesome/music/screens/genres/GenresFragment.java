@@ -34,7 +34,7 @@ public class GenresFragment extends ViewFragment<GenresContract.Presenter>
 
   private void setupListCategory() {
     if (categoryAdapter == null) {
-      categoryAdapter = new CategoryAdapter(this);
+      categoryAdapter = new CategoryAdapter(getContext(), this);
     }
     songCategoryRv.setHasFixedSize(true);
 
