@@ -20,16 +20,13 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import hails.awesome.music.R;
 import hails.awesome.music.callbacks.OnBackFromMainPlayerListener;
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
 import hails.awesome.music.callbacks.OnSongReadyListener;
 import hails.awesome.music.managers.PlayerManager;
-import hails.awesome.music.managers.RealmContext;
 import hails.awesome.music.managers.RetrofitContext;
+import hails.awesome.music.managers.SQLiteHelper;
 import hails.awesome.music.networks.models.SearchSongResponseBody;
 import hails.awesome.music.networks.models.Song;
 import hails.awesome.music.networks.models.SongCategoryResponse;
@@ -38,6 +35,9 @@ import hails.awesome.music.screens.mainplayer.MainPlayerFragment;
 import hails.awesome.music.screens.mainplayer.MainPlayerPresenter;
 import hails.awesome.music.screens.viewpager.ViewPagerPresenter;
 import hails.awesome.music.utils.ActionHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity
         implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener, OnMusicPlayerActionListener {
@@ -65,10 +65,12 @@ public class MainActivity extends BaseActivity
   @BindView(R.id.fab_action)
   FloatingActionButton actionFab;
 
+  private SQLiteHelper sqLiteHelper;
   private PlayerManager playerManager;
   private Handler handler = new Handler();
   private Runnable runnable;
   private OnSongReadyListener onSongReadyListener;
+  private ArrayList<Subgenres> subgenresList = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class MainActivity extends BaseActivity
   @Override
   protected void onStart() {
     super.onStart();
+    sqLiteHelper = new SQLiteHelper(this);
     getSongCategories();
     addListener();
   }
@@ -90,22 +93,23 @@ public class MainActivity extends BaseActivity
     return R.layout.activity_main;
   }
 
-  private void getSongCategoriesFromRealm() {
-    Subgenres.subgenres.addAll(RealmContext.getInstance().allSubgenres());
+  private void getSongCategoriesFromDatabase() {
+    Subgenres.subgenres.addAll(sqLiteHelper.getAllSubgenres());
     hideProgress();
   }
 
   private void getSongCategories() {
     showProgress();
-    if (RealmContext.getInstance().allSubgenres().isEmpty()) {
+    subgenresList = sqLiteHelper.getAllSubgenres();
+    if (subgenresList.isEmpty()) {
       RetrofitContext.getAlbumTypes().enqueue(new Callback<SongCategoryResponse>() {
         @Override
         public void onResponse(Call<SongCategoryResponse> call, Response<SongCategoryResponse> response) {
           ArrayList<Subgenres> songCategories = new ArrayList<>(response.body().getBody().getMap().values());
-          RealmContext.getInstance().deleteAll();
           for (Subgenres s : songCategories) {
-            RealmContext.getInstance().insertSubgenre(s);
+            sqLiteHelper.insertSubgenres(s);
             Subgenres.subgenres.add(s);
+            subgenresList.add(s);
           }
           changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
           hideProgress();
@@ -117,7 +121,7 @@ public class MainActivity extends BaseActivity
         }
       });
     } else {
-      getSongCategoriesFromRealm();
+      getSongCategoriesFromDatabase();
       changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
     }
   }

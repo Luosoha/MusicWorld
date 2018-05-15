@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
-import hails.awesome.music.managers.RealmContext;
 import hails.awesome.music.utils.DialogUtils;
 
 /**
@@ -20,7 +19,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(getLayoutId());
     ButterKnife.bind(this);
-    RealmContext.init(this);
   }
 
   public void changeFragment(int containerId, Fragment fragment, boolean addToBackStack) {

@@ -12,42 +12,47 @@ import io.realm.RealmObject;
 
 public class Subgenres extends RealmObject {
 
-    @SerializedName("id")
-    private String id;
-    @SerializedName("name")
-    private String name;
+  @SerializedName("id")
+  private String id;
+  @SerializedName("name")
+  private String name;
+  private boolean isFavorite = false;
 
-    private boolean isFavorite = false;
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public Subgenres() {
-    }
+  public String getId() {
+    return id;
+  }
 
-    public Subgenres(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public boolean isFavorite() {
+    return isFavorite;
+  }
 
-    public boolean isFavorite() {
-        return isFavorite;
-    }
+  public void setFavorite(boolean favorite) {
+    isFavorite = favorite;
+  }
 
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
+  public static ArrayList<Subgenres> subgenres = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return name;
-    }
+  public static String TABLE_NAME = "Subgenres";
+  public static String COLUMN_ID = "id";
+  public static String COLUMN_NAME = "name";
+  public static String COLUMN_IS_FAVORITE = "is_favorite";
 
-    public static ArrayList<Subgenres> subgenres = new ArrayList<>();
+  public static String SQL_CREATE_SUBGENRES_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
+          COLUMN_ID + " TEXT PRIMARY KEY," +
+          COLUMN_NAME + " TEXT," +
+          COLUMN_IS_FAVORITE + " INTEGER)";
+
 
 }

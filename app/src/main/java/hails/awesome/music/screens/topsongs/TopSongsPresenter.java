@@ -57,8 +57,8 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
   }
 
   @Override
-  public void saveFavoriteSubgenres(int position) {
-    mInteractor.saveFavoriteSubgenres(position);
+  public void saveFavoriteSubgenres(Subgenres subgenres) {
+    mInteractor.saveFavoriteSubgenres(mView.getBaseActivity(), subgenres);
   }
 
   @Override

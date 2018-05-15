@@ -91,7 +91,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     favoriteView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        mPresenter.saveFavoriteSubgenres(position);
+        mPresenter.saveFavoriteSubgenres(subgenres);
         setFavoriteView();
       }
     });

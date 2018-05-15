@@ -1,11 +1,13 @@
 package hails.awesome.music.screens.topsongs;
 
-import retrofit2.Callback;
+import android.content.Context;
+
 import hails.awesome.music.base.Interactor;
-import hails.awesome.music.managers.RealmContext;
 import hails.awesome.music.managers.RetrofitContext;
+import hails.awesome.music.managers.SQLiteHelper;
 import hails.awesome.music.networks.models.Subgenres;
 import hails.awesome.music.networks.models.TopSongsResponseBody;
+import retrofit2.Callback;
 
 /**
  * Created by HaiLS on 12/04/2018.
@@ -24,8 +26,8 @@ public class TopSongsInteractor extends Interactor<TopSongsContract.Presenter>
   }
 
   @Override
-  public void saveFavoriteSubgenres(int position) {
-    RealmContext.getInstance().update(Subgenres.subgenres.get(position), !Subgenres.subgenres.get(position).isFavorite());
+  public void saveFavoriteSubgenres(Context context, Subgenres subgenres) {
+    new SQLiteHelper(context).updateSubgenres(subgenres);
   }
 
 }

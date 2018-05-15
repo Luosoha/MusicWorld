@@ -1,5 +1,7 @@
 package hails.awesome.music.screens.topsongs;
 
+import android.content.Context;
+
 import retrofit2.Callback;
 import hails.awesome.music.base.interfaces.IInteractor;
 import hails.awesome.music.base.interfaces.IPresenter;
@@ -16,7 +18,7 @@ public interface TopSongsContract {
   interface Interactor extends IInteractor<Presenter> {
     void getTopSongs(String id, Callback<TopSongsResponseBody> callback);
 
-    void saveFavoriteSubgenres(int position);
+    void saveFavoriteSubgenres(Context context, Subgenres subgenres);
   }
 
   interface View extends IView<Presenter> {
@@ -30,7 +32,7 @@ public interface TopSongsContract {
   interface Presenter extends IPresenter<View, Interactor> {
     void getTopSongs(String id);
 
-    void saveFavoriteSubgenres(int position);
+    void saveFavoriteSubgenres(Subgenres subgenres);
 
     void getSearchSong(Song song, String keyword);
   }

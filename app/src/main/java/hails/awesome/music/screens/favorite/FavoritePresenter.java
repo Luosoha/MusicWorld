@@ -23,7 +23,7 @@ public class FavoritePresenter extends Presenter<FavoriteContract.View, Favorite
   @Override
   public ArrayList<String> getFavoriteGenres() {
     ArrayList<String> genreNameList = new ArrayList<>();
-    List<Subgenres> subs = mInteractor.getFavoriteGenres();
+    List<Subgenres> subs = mInteractor.getFavoriteGenres(mView.getBaseActivity());
     for (Subgenres s : subs) {
       genreNameList.add(s.getName());
     }

@@ -1,5 +1,7 @@
 package hails.awesome.music.screens.favorite;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import hails.awesome.music.networks.models.Subgenres;
 
 public interface FavoriteContract {
   interface Interactor extends IInteractor<Presenter> {
-    List<Subgenres> getFavoriteGenres();
+    List<Subgenres> getFavoriteGenres(Context context);
   }
 
   interface View extends IView<Presenter> {
