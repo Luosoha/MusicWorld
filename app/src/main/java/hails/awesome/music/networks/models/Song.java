@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Lush on 1/10/2017.
+ * Object song
  */
 
 public class Song {

@@ -3,7 +3,7 @@ package hails.awesome.music.networks.models;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Lush on 1/8/2017.
+ * Category Response
  */
 
 public class SongCategoryResponse {

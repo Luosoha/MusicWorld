@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 
 /**
- * Created by Lush on 1/10/2017.
+ * Song list
  */
 
 public class SongList {
@@ -19,13 +19,6 @@ public class SongList {
 
     public Song[] getList() {
         return list;
-    }
-
-    @Override
-    public String toString() {
-        return "SongList{" +
-                "list=" + Arrays.toString(list) +
-                '}';
     }
 
 }

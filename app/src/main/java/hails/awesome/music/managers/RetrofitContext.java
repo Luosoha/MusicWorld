@@ -12,7 +12,7 @@ import hails.awesome.music.networks.models.SongCategoryResponse;
 import hails.awesome.music.networks.models.TopSongsResponseBody;
 
 /**
- * Created by Lush on 1/8/2017.
+ * Retrofit manager
  */
 
 public class RetrofitContext {

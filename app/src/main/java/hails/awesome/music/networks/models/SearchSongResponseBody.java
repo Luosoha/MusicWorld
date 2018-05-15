@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Lush on 1/15/2017.
+ * Search song response
  */
 
 public class SearchSongResponseBody {

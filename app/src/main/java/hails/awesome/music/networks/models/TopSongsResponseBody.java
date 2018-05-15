@@ -3,7 +3,7 @@ package hails.awesome.music.networks.models;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Lush on 1/10/2017.
+ * Top songs
  */
 
 public class TopSongsResponseBody {
@@ -17,13 +17,6 @@ public class TopSongsResponseBody {
 
     public SongList getSongList() {
         return songList;
-    }
-
-    @Override
-    public String toString() {
-        return "TopSongsResponseBody{" +
-                "songList=" + songList +
-                '}';
     }
 
 }
