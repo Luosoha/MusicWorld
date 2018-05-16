@@ -1,5 +1,6 @@
 package hails.awesome.music.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -179,6 +180,15 @@ public class MainActivity extends BaseActivity
   @OnClick(R.id.iv_download_song)
   public void onDownloadSong() {
     Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show();
+  }
+
+  @OnClick(R.id.iv_share_song)
+  public void onShareSong() {
+    Intent sendIntent = new Intent();
+    sendIntent.setAction(Intent.ACTION_SEND);
+    sendIntent.putExtra(Intent.EXTRA_TEXT, playerManager.getSongUrl());
+    sendIntent.setType("text/plain");
+    startActivity(sendIntent);
   }
 
   @Override

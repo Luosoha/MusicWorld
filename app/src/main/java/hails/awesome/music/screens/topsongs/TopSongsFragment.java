@@ -1,5 +1,6 @@
 package hails.awesome.music.screens.topsongs;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,14 +59,6 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   private Subgenres subgenres;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
-  @OnTouch(R.id.top_songs_fl)
-  public boolean onBackGroundTouch() {
-    if (searchTopSongEt.isShown()) {
-      dismissSearchBar();
-    }
-    return true;
-  }
-
   @Override
   protected int getLayoutId() {
     return R.layout.fragment_topsongs;
@@ -77,6 +70,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     activity.getSupportActionBar().hide();
     onMusicPlayerActionListener = activity;
     addListeners();
+    topSongRv.setNestedScrollingEnabled(false);
   }
 
   private void addListeners() {

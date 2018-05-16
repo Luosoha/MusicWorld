@@ -73,6 +73,14 @@
           android:layout_marginStart="@dimen/margin_tool_bar_item"
           android:src="@drawable/ic_file_download_white_24px" />
 
+        <ImageView
+          android:id="@+id/iv_share_song"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginEnd="@dimen/margin_tool_bar_item"
+          android:background="@drawable/ic_share_white_24px" />
+
       </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -126,18 +134,18 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="16dp"
-          tools:text="Song name"
           android:textColor="@color/colorWhite"
-          android:textStyle="bold" />
+          android:textStyle="bold"
+          tools:text="Song name" />
 
         <TextView
           android:id="@+id/tv_top_song_artist"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_below="@id/tv_top_song_name"
-          tools:text="Song artist"
           android:textColor="@color/colorLightGrey"
-          android:textSize="12sp" />
+          android:textSize="12sp"
+          tools:text="Song artist" />
 
       </RelativeLayout>
 
