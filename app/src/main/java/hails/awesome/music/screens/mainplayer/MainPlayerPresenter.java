@@ -24,7 +24,7 @@ public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, Main
 
   @Override
   public void start() {
-
+    playerManager = PlayerManager.getInstance();
   }
 
   @Override
