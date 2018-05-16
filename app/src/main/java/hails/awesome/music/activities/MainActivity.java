@@ -1,12 +1,14 @@
 package hails.awesome.music.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.thin.downloadmanager.DefaultRetryPolicy;
+import com.thin.downloadmanager.DownloadRequest;
+import com.thin.downloadmanager.DownloadStatusListenerV1;
+import com.thin.downloadmanager.ThinDownloadManager;
 
 import java.util.ArrayList;
 
@@ -73,6 +79,7 @@ public class MainActivity extends BaseActivity
   private Runnable runnable;
   private OnSongReadyListener onSongReadyListener;
   private ArrayList<Subgenres> subgenresList = new ArrayList<>();
+  private ThinDownloadManager downloadManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +92,7 @@ public class MainActivity extends BaseActivity
   @Override
   protected void onStart() {
     super.onStart();
+    downloadManager = new ThinDownloadManager();
     sqLiteHelper = new SQLiteHelper(this);
     getSongCategories();
     addListener();
@@ -179,7 +187,30 @@ public class MainActivity extends BaseActivity
 
   @OnClick(R.id.iv_download_song)
   public void onDownloadSong() {
-    Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, "Downloading" + playerManager.getCurrentSong().getName(), Toast.LENGTH_SHORT).show();
+    Uri downloadUri = Uri.parse(playerManager.getSongUrl());
+    String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
+    Uri destinationUri = Uri.parse(getFilesDir().toString() + "/" + fileName);
+    DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
+            .setRetryPolicy(new DefaultRetryPolicy())
+            .setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.HIGH)
+            .setStatusListener(new DownloadStatusListenerV1() {
+              @Override
+              public void onDownloadComplete(DownloadRequest downloadRequest) {
+                Log.d("@@Download: ", "onDownloadComplete");
+              }
+
+              @Override
+              public void onDownloadFailed(DownloadRequest downloadRequest, int i, String s) {
+                Log.d("@@Download: ", "onDownloadFailed");
+              }
+
+              @Override
+              public void onProgress(DownloadRequest downloadRequest, long totalBytes, long downloadedBytes, int progress) {
+                Log.d("@@Download: ", "onProgress = " + progress);
+              }
+            });
+    downloadManager.add(downloadRequest);
   }
 
   @OnClick(R.id.iv_share_song)
@@ -216,8 +247,8 @@ public class MainActivity extends BaseActivity
             onSongReadyListener.onSongReady();
           }
           sentDurationToMainPlayer = true;
+          progressSb.setMax(playerManager.getSongDuration());
         }
-        progressSb.setMax(playerManager.getSongDuration());
         handler.postDelayed(this, 100);
         progressSb.setProgress(playerManager.getCurrentPosition());
       }
@@ -278,18 +309,12 @@ public class MainActivity extends BaseActivity
   public void onPauseAction() {
     playerManager.setIsPlaying(false);
     actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
-    if (playerManager.isPlaying()) {
-      playerManager.setIsPlaying(false);
-    }
   }
 
   @Override
   public void onResumeAction() {
     playerManager.setIsPlaying(true);
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-    if (!playerManager.isNull()) {
-      playerManager.setIsPlaying(true);
-    }
   }
 
   @Override

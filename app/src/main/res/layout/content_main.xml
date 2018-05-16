@@ -98,7 +98,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:background="@color/colorPrimaryLight"
-    android:visibility="gone">
+    android:visibility="invisible">
 
     <SeekBar
       android:id="@+id/sb_progress"
