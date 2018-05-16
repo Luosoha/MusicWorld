@@ -3,6 +3,7 @@ package hails.awesome.music.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -106,7 +107,7 @@ public class MainActivity extends BaseActivity
             sqLiteHelper.insertSubgenres(s);
             subgenresList.add(s);
           }
-          changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
+          pushView(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
         }
 
         @Override
@@ -116,7 +117,7 @@ public class MainActivity extends BaseActivity
       });
     } else {
       hideProgress();
-      changeFragment(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
+      pushView(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
     }
   }
 
@@ -166,11 +167,12 @@ public class MainActivity extends BaseActivity
     mainPlayerFragment.setOnMusicPlayerActionListener(this);
     onSongReadyListener = mainPlayerFragment;
 
-    changeFragment(R.id.fl_container, mainPlayerFragment, true);
+    pushView(R.id.fl_container, mainPlayerFragment, true);
   }
 
   @OnClick(R.id.iv_back_from_main_player)
   public void onBackFromMainPlayerEvent() {
+    getSupportActionBar().hide();
     onBackPressed();
   }
 
@@ -181,11 +183,15 @@ public class MainActivity extends BaseActivity
 
   @Override
   public void onBackPressed() {
-    if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    if (fragmentManager.getBackStackEntryCount() == 0) {
       finish();
-    } else {
+    } else if (fragmentManager.getBackStackEntryCount() == 1) { // back to main screen
       getSupportActionBar().show();
       getSupportFragmentManager().popBackStack();
+    } else {
+      getSupportActionBar().hide();
+      fragmentManager.popBackStack();
     }
   }
 

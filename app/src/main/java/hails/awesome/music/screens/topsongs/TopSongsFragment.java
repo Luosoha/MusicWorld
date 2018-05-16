@@ -92,7 +92,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       public void onClick(View view) {
         subgenres.setFavorite(!subgenres.isFavorite());
         mPresenter.saveFavoriteSubgenres(subgenres);
-        setFavoriteView();
+        updateFavoriteView();
       }
     });
 
@@ -160,7 +160,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   }
 
   private void setupUI() {
-    setFavoriteView();
+    updateFavoriteView();
     if (subgenres != null) {
       categoryNameTv.setText(subgenres.getName());
       String src = "genre_" + subgenres.getId();
@@ -176,7 +176,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     topSongRv.setAdapter(topSongAdapter);
   }
 
-  private void setFavoriteView() {
+  private void updateFavoriteView() {
     if (subgenres.isFavorite()) {
       favoriteView.setBackgroundResource(R.drawable.ic_favorite_filled_white_24px);
     } else {

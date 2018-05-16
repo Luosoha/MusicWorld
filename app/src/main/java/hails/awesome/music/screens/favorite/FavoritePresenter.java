@@ -26,7 +26,7 @@ public class FavoritePresenter extends Presenter<FavoriteContract.View, Favorite
 
   @Override
   public void goToTopSongScreen(Subgenres subgenres) {
-    mView.getBaseActivity().changeFragment(
+    mView.getBaseActivity().pushView(
             R.id.fl_container, new TopSongsPresenter().setSubgenres(subgenres).getFragment(), true
     );
   }

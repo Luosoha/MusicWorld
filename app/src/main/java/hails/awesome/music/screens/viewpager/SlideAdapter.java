@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import hails.awesome.music.screens.favorite.FavoriteFragment;
 import hails.awesome.music.screens.favorite.FavoritePresenter;
+import hails.awesome.music.screens.genres.GenresFragment;
 import hails.awesome.music.screens.genres.GenresPresenter;
 
 /**
@@ -15,22 +16,32 @@ import hails.awesome.music.screens.genres.GenresPresenter;
 public class SlideAdapter extends FragmentPagerAdapter {
 
   private static final int PAGE_NUMBERS = 3;
+  private GenresFragment genresFragment;
+  private FavoriteFragment favoriteFragment;
+  private GenresFragment offlineFragment;
 
   public SlideAdapter(FragmentManager fm) {
     super(fm);
+    genresFragment = (GenresFragment) new GenresPresenter().getFragment();
+    favoriteFragment = (FavoriteFragment) new FavoritePresenter().getFragment();
+    offlineFragment = (GenresFragment) new GenresPresenter().getFragment();
   }
 
   @Override
   public Fragment getItem(int position) {
     switch (position) {
       case 0:
-        return new GenresPresenter().getFragment();
+        return genresFragment;
       case 1:
-        return new FavoritePresenter().getFragment();
+        return favoriteFragment;
       case 2:
-        return new GenresPresenter().getFragment();
+        return offlineFragment;
     }
     return null;
+  }
+
+  public FavoriteFragment getFavoriteFragment() {
+    return favoriteFragment;
   }
 
   @Override
@@ -44,7 +55,7 @@ public class SlideAdapter extends FragmentPagerAdapter {
       case 0:
         return "GENRES";
       case 1:
-        return "PLAYLIST";
+        return "FAVORITE";
       case 2:
         return "OFFLINE";
     }

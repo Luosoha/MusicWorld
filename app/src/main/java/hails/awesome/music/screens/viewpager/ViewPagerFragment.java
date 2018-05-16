@@ -23,6 +23,8 @@ public class ViewPagerFragment extends ViewFragment<ViewPagerContract.Presenter>
   @BindView(R.id.tl_title)
   TabLayout tabLayout;
 
+  private SlideAdapter slideAdapter;
+
   @Override
   protected int getLayoutId() {
     return R.layout.fragment_view_pager;
@@ -31,13 +33,35 @@ public class ViewPagerFragment extends ViewFragment<ViewPagerContract.Presenter>
   @Override
   public void initLayout() {
     setupUI();
+    addListeners();
   }
 
   private void setupUI() {
-    PagerAdapter pagerAdapter = new SlideAdapter(getChildFragmentManager());
-    viewPager.setAdapter(pagerAdapter);
+    slideAdapter = new SlideAdapter(getChildFragmentManager());
+    viewPager.setAdapter(slideAdapter);
     tabLayout.setupWithViewPager(viewPager);
     tabLayout.setTabTextColors(Color.BLACK, Color.WHITE);
+  }
+
+  private void addListeners() {
+    tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+      @Override
+      public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getPosition() == 1) { // Favorite tab
+          slideAdapter.getFavoriteFragment().getFavoriteGenres();
+        }
+      }
+
+      @Override
+      public void onTabUnselected(TabLayout.Tab tab) {
+
+      }
+
+      @Override
+      public void onTabReselected(TabLayout.Tab tab) {
+
+      }
+    });
   }
 
   @Override

@@ -29,7 +29,7 @@ public class GenresPresenter extends Presenter<GenresContract.View, GenresContra
 
   @Override
   public void goToTopSongsScreen(Subgenres subgenres) {
-    mView.getBaseActivity().changeFragment(
+    mView.getBaseActivity().pushView(
             R.id.fl_container, new TopSongsPresenter().setSubgenres(subgenres).getFragment(), true
     );
   }

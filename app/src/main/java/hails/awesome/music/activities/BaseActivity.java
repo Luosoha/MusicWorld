@@ -21,15 +21,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     ButterKnife.bind(this);
   }
 
-  public void changeFragment(int containerId, Fragment fragment, boolean addToBackStack) {
+  public void pushView(int containerId, Fragment fragment, boolean addToBackStack) {
     if (addToBackStack) {
       getSupportFragmentManager().beginTransaction()
-              .replace(containerId, fragment)
+              .add(containerId, fragment)
               .addToBackStack(null)
               .commit();
     } else {
       getSupportFragmentManager().beginTransaction()
-              .replace(containerId, fragment)
+              .add(containerId, fragment)
               .commit();
     }
   }
