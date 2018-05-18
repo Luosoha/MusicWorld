@@ -203,7 +203,7 @@ public class MainActivity extends BaseActivity
 
     final NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
     builder.setContentText(playerManager.getCurrentSong().getName());
-    managerCompat.notify(123123, builder.build());
+    managerCompat.notify(12222, builder.build());
 
     DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
             .setRetryPolicy(new DefaultRetryPolicy())
@@ -214,6 +214,8 @@ public class MainActivity extends BaseActivity
                 Toast.makeText(MainActivity.this, "Download completed", Toast.LENGTH_LONG).show();
                 builder.setProgress(0, 0, false);
                 managerCompat.notify(123123, builder.build());
+                playerManager.getCurrentSong().setSubgenres(playerManager.getSubgenres());
+                sqLiteHelper.insertSong(playerManager.getCurrentSong());
               }
 
               @Override

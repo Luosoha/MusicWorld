@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
 import hails.awesome.music.networks.models.Song;
+import hails.awesome.music.networks.models.Subgenres;
 
 /**
  * Created by HaiLS on 09/04/2018.
@@ -36,6 +37,7 @@ public class PlayerManager {
   private ArrayList<Song> playList = new ArrayList<>();
   private Song currentSong;
   private String songUrl;
+  private Subgenres subgenres;
 
   private PlayerManager() {}
 
@@ -152,6 +154,14 @@ public class PlayerManager {
 
   public void setSongUrl(String songUrl) {
     this.songUrl = songUrl;
+  }
+
+  public Subgenres getSubgenres() {
+    return subgenres;
+  }
+
+  public void setSubgenres(Subgenres subgenres) {
+    this.subgenres = subgenres;
   }
 
   public void release() {

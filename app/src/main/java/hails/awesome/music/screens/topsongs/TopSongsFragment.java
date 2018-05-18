@@ -1,6 +1,5 @@
 package hails.awesome.music.screens.topsongs;
 
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +17,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.OnTouch;
 import hails.awesome.music.R;
 import hails.awesome.music.activities.MainActivity;
 import hails.awesome.music.base.ViewFragment;
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
-import hails.awesome.music.callbacks.OnTopSongClickListener;
+import hails.awesome.music.callbacks.OnSongClickListener;
 import hails.awesome.music.managers.PlayerManager;
 import hails.awesome.music.networks.models.Song;
 import hails.awesome.music.networks.models.Subgenres;
@@ -33,7 +31,7 @@ import hails.awesome.music.networks.models.Subgenres;
  */
 
 public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
-        implements TopSongsContract.View, OnTopSongClickListener {
+        implements TopSongsContract.View, OnSongClickListener {
 
   @BindView(R.id.view_back)
   View backView;
@@ -55,7 +53,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   TextView numberOfSongTv;
 
   private MainActivity activity;
-  private TopSongAdapter topSongAdapter;
+  private ListSongAdapter listSongAdapter;
   private Subgenres subgenres;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
 
@@ -124,7 +122,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
             filterSongList.add(s);
           }
         }
-        topSongAdapter.filterSong(filterSongList);
+        listSongAdapter.filterSong(filterSongList);
         numberOfSongTv.setText(String.format(Locale.US, "%d songs", filterSongList.size()));
       }
 
@@ -165,9 +163,9 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
       }
     }
 
-    topSongAdapter = new TopSongAdapter(this, PlayerManager.getInstance().getPlayList());
+    listSongAdapter = new ListSongAdapter(this, PlayerManager.getInstance().getPlayList());
     topSongRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-    topSongRv.setAdapter(topSongAdapter);
+    topSongRv.setAdapter(listSongAdapter);
   }
 
   private void updateFavoriteView() {
@@ -187,7 +185,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   @Override
   public void bindTopSongs() {
     numberOfSongTv.setText(String.format(Locale.US, "%d songs", PlayerManager.getInstance().getPlayList().size()));
-    topSongAdapter.notifyDataSetChanged();
+    listSongAdapter.notifyDataSetChanged();
   }
 
   @Override

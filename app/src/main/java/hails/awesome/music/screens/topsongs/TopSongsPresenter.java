@@ -31,6 +31,7 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
   public void start() {
     if (subgenres != null) {
       mView.bindData(subgenres);
+      PlayerManager.getInstance().setSubgenres(subgenres);
     }
   }
 

@@ -17,6 +17,10 @@ public class Song {
   private SongImage[] images;
   @SerializedName("im:artist")
   private SongArtist artist;
+  private Subgenres subgenres;
+
+  public Song() {
+  }
 
   public Song(SongName name, SongImage[] images, SongArtist artist) {
     this.name = name;
@@ -24,8 +28,17 @@ public class Song {
     this.artist = artist;
   }
 
+  public void setName(String name) {
+    this.name = new SongName();
+    this.name.setName(name);
+  }
+
   public String getName() {
     return name.getSongName();
+  }
+
+  public SongImage[] getImages() {
+    return images;
   }
 
   public String getIconUrl() {
@@ -36,15 +49,28 @@ public class Song {
     return images[2].getUrl();
   }
 
+  public void setArtist(String artist) {
+    this.artist = new SongArtist();
+    this.artist.setName(artist);
+  }
+
   public String getArtist() {
     return artist.getName();
   }
-  
+
+  public Subgenres getSubgenres() {
+    return subgenres;
+  }
+
+  public void setSubgenres(Subgenres subgenres) {
+    this.subgenres = subgenres;
+  }
+
   class SongName {
     @SerializedName("label")
     private String name;
 
-    public SongName(String name) {
+    public void setName(String name) {
       this.name = name;
     }
 
@@ -70,7 +96,7 @@ public class Song {
     @SerializedName("label")
     private String name;
 
-    public SongArtist(String name) {
+    public void setName(String name) {
       this.name = name;
     }
 
@@ -78,5 +104,16 @@ public class Song {
       return name;
     }
   }
+
+  public static String TABLE_NAME = "Song";
+  public static String COLUMN_NAME = "name";
+  public static String COLUMN_ARTIST = "artist";
+  public static String COLUMN_ID_SUBGENRES = "id_subgenres";
+
+  public static String SQL_CREATE_SONG_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
+          COLUMN_NAME + " TEXT," +
+          COLUMN_ARTIST + " TEXT," +
+          COLUMN_ID_SUBGENRES + " TEXT, FOREIGN KEY (" + COLUMN_ID_SUBGENRES + ") REFERENCES " +
+          Subgenres.TABLE_NAME + "(" + Subgenres.COLUMN_ID + "))";
 
 }

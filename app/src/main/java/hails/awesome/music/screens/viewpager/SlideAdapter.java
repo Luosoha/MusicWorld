@@ -8,6 +8,8 @@ import hails.awesome.music.screens.favorite.FavoriteFragment;
 import hails.awesome.music.screens.favorite.FavoritePresenter;
 import hails.awesome.music.screens.genres.GenresFragment;
 import hails.awesome.music.screens.genres.GenresPresenter;
+import hails.awesome.music.screens.offline.OfflineFragment;
+import hails.awesome.music.screens.offline.OfflinePresenter;
 
 /**
  * The slide adapter
@@ -18,13 +20,13 @@ public class SlideAdapter extends FragmentPagerAdapter {
   private static final int PAGE_NUMBERS = 3;
   private GenresFragment genresFragment;
   private FavoriteFragment favoriteFragment;
-  private GenresFragment offlineFragment;
+  private OfflineFragment offlineFragment;
 
   public SlideAdapter(FragmentManager fm) {
     super(fm);
     genresFragment = (GenresFragment) new GenresPresenter().getFragment();
     favoriteFragment = (FavoriteFragment) new FavoritePresenter().getFragment();
-    offlineFragment = (GenresFragment) new GenresPresenter().getFragment();
+    offlineFragment = (OfflineFragment) new OfflinePresenter().getFragment();
   }
 
   @Override

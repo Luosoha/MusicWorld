@@ -1,5 +1,8 @@
 package hails.awesome.music.screens.topsongs;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,25 +17,27 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hails.awesome.music.R;
-import hails.awesome.music.callbacks.OnTopSongClickListener;
+import hails.awesome.music.callbacks.OnSongClickListener;
 import hails.awesome.music.networks.models.Song;
 
 /**
  * The top song adapter
  */
 
-public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongViewHolder> {
+public class ListSongAdapter extends RecyclerView.Adapter<ListSongAdapter.TopSongViewHolder> {
 
-  private OnTopSongClickListener onTopSongClickListener;
+  private OnSongClickListener onSongClickListener;
   private ArrayList<Song> playList;
+  private Context context;
 
-  public TopSongAdapter(OnTopSongClickListener onTopSongClickListener, ArrayList<Song> playList) {
-    this.onTopSongClickListener = onTopSongClickListener;
+  public ListSongAdapter(OnSongClickListener onSongClickListener, ArrayList<Song> playList) {
+    this.onSongClickListener = onSongClickListener;
     this.playList = playList;
   }
 
   @Override
   public TopSongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    context = parent.getContext();
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
     View view = layoutInflater.inflate(R.layout.item_top_song, parent, false);
     return new TopSongViewHolder(view);
@@ -60,6 +65,8 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
     TextView topSongNameTv;
     @BindView(R.id.tv_top_song_artist)
     TextView topSongArtistTv;
+    @BindView(R.id.horizontal_line)
+    View line;
 
     public TopSongViewHolder(View itemView) {
       super(itemView);
@@ -69,13 +76,23 @@ public class TopSongAdapter extends RecyclerView.Adapter<TopSongAdapter.TopSongV
     public void bind(final Song song) {
       topSongNameTv.setText(song.getName());
       topSongArtistTv.setText(song.getArtist());
-      Picasso.with(this.itemView.getContext()).load(song.getIconUrl()).into(topSongCiv);
+      if (song.getImages() != null) {
+        Picasso.with(this.itemView.getContext()).load(song.getIconUrl()).into(topSongCiv);
+      } else {
+        Picasso.with(this.itemView.getContext()).load(R.mipmap.ic_app).into(topSongCiv);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+          itemView.setBackgroundColor(context.getColor(R.color.colorPrimaryLight));
+        } else {
+          itemView.setBackgroundColor(Color.parseColor("#60496e"));
+        }
+        line.setVisibility(View.VISIBLE);
+      }
 
       this.itemView.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          if (onTopSongClickListener != null) {
-            onTopSongClickListener.onSongClick(song);
+          if (onSongClickListener != null) {
+            onSongClickListener.onSongClick(song);
           }
         }
       });

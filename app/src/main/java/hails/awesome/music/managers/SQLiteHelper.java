@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import hails.awesome.music.networks.models.Song;
 import hails.awesome.music.networks.models.Subgenres;
 
 /**
@@ -28,6 +29,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
   @Override
   public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(Subgenres.SQL_CREATE_SUBGENRES_TABLE);
+    sqLiteDatabase.execSQL(Song.SQL_CREATE_SONG_TABLE);
   }
 
   @Override
@@ -96,6 +98,29 @@ public class SQLiteHelper extends SQLiteOpenHelper {
   public int deleteAllSubgenres() {
     SQLiteDatabase db = this.getWritableDatabase();
     return db.delete(Subgenres.TABLE_NAME, null, null);
+  }
+
+  public long insertSong(Song song) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues values = new ContentValues();
+    values.put(Song.COLUMN_NAME, song.getName());
+    values.put(Song.COLUMN_ARTIST, song.getArtist());
+    values.put(Song.COLUMN_ID_SUBGENRES, song.getSubgenres().getId());
+    return db.insert(Song.TABLE_NAME, null, values);
+  }
+
+  public ArrayList<Song> getDownloadedSong() {
+    SQLiteDatabase db = this.getReadableDatabase();
+    ArrayList<Song> downloadedSongList = new ArrayList<>();
+    Cursor cursor = db.query(
+            Song.TABLE_NAME,null, null, null, null, null, null);
+    while (cursor.moveToNext()) {
+      Song song = new Song();
+      song.setName(cursor.getString(cursor.getColumnIndex(Song.COLUMN_NAME)));
+      song.setArtist(cursor.getString(cursor.getColumnIndex(Song.COLUMN_ARTIST)));
+      downloadedSongList.add(song);
+    }
+    return downloadedSongList;
   }
 
 }

@@ -39,6 +39,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <View
+          android:id="@+id/horizontal_line"
+          android:layout_below="@id/civ_top_song"
+          android:background="@color/colorWhite"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
