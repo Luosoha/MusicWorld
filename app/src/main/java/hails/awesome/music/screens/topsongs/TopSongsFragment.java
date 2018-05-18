@@ -191,6 +191,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   @Override
   public void onSongFound(Song song, String songUrl) {
     if (onMusicPlayerActionListener != null) {
+      PlayerManager.getInstance().setOfflineMode(false);
       onMusicPlayerActionListener.onPlaySong(song, songUrl, true);
     }
   }

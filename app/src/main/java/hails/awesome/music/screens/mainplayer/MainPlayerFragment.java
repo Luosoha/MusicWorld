@@ -84,7 +84,11 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
     } else {
       actionFab.setImageResource(R.drawable.ic_play_arrow_white_24px);
     }
-    Picasso.with(getActivity()).load(playerManager.getCurrentSong().getImageUrl()).into(songImageIv);
+    if (playerManager.getCurrentSong().getImages() != null) {
+      Picasso.with(getActivity()).load(playerManager.getCurrentSong().getImageUrl()).into(songImageIv);
+    } else {
+      Picasso.with(getActivity()).load(R.mipmap.ic_app).into(songImageIv);
+    }
 
     setDurationForSeekBars();
     setProgressForSeekBars(playerManager.getCurrentPosition());
@@ -146,7 +150,11 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
     playerManager.setIsPlaying(false);
     progressSb.setProgress(0);
     transparentProgressSb.setProgress(0);
-    Picasso.with(getActivity()).load(song.getImageUrl()).into(songImageIv);
+    if (song.getImages() != null) {
+      Picasso.with(getActivity()).load(song.getImageUrl()).into(songImageIv);
+    } else {
+      Picasso.with(getActivity()).load(R.mipmap.ic_app).into(songImageIv);
+    }
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
     mPresenter.searchForSong(song);
   }
@@ -161,7 +169,11 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
   @Override
   public void onNextSongReady(String songImageUrl) {
     showProgress();
-    Picasso.with(getContext()).load(songImageUrl).into(songImageIv);
+    if (songImageUrl != null) {
+      Picasso.with(getContext()).load(songImageUrl).into(songImageIv);
+    } else {
+      Picasso.with(getContext()).load(R.mipmap.ic_app).into(songImageIv);
+    }
     hideProgress();
   }
 

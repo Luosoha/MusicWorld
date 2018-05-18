@@ -1,17 +1,14 @@
 package hails.awesome.music.activities;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,6 +56,8 @@ public class MainActivity extends BaseActivity
   RelativeLayout miniPlayerLayout;
   @BindView(R.id.iv_download_song)
   ImageView downloadSongIv;
+  @BindView(R.id.iv_share_song)
+  ImageView shareSongIv;
   @BindView(R.id.ll_main_player_toolbar)
   LinearLayout mainPlayerToolbar;
   @BindView(R.id.sb_progress)
@@ -307,7 +306,11 @@ public class MainActivity extends BaseActivity
       playerManager.playNewSong(songUrl);
 
       actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-      Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
+      if (song.getImages() != null) {
+        Picasso.with(this).load(song.getIconUrl()).into(songImageCiv);
+      } else {
+        Picasso.with(this).load(R.mipmap.ic_app).into(songImageCiv);
+      }
       songNameTv.setText(song.getName());
       songArtistTv.setText(song.getArtist());
       if (doRevealMiniPlayer) {
@@ -316,6 +319,13 @@ public class MainActivity extends BaseActivity
         sentDurationToMainPlayer = false;
         songNameInsideToolBarTv.setText(playerManager.getCurrentSong().getName());
         songArtistInsideToolBarTv.setText(playerManager.getCurrentSong().getArtist());
+      }
+      if (playerManager.isOfflineMode()) {
+        downloadSongIv.setVisibility(View.INVISIBLE);
+        shareSongIv.setVisibility(View.INVISIBLE);
+      } else {
+        downloadSongIv.setVisibility(View.VISIBLE);
+        shareSongIv.setVisibility(View.VISIBLE);
       }
 
       startSeekbarProgress();
@@ -345,14 +355,18 @@ public class MainActivity extends BaseActivity
   @Override
   public void onSongEnded() {
     int position = ActionHelper.findNextSongPositionOf(playerManager.getPlayList(), playerManager.getCurrentSong());
-    searchForNextSongUrl(position);
+    searchForNextSong(position);
   }
 
-  private void searchForNextSongUrl(int position) {
+  private void searchForNextSong(int position) {
     showProgress();
     final Song song = playerManager.getPlayList().get(position);
     if (onSongReadyListener != null) {
-      onSongReadyListener.onNextSongReady(song.getImageUrl());
+      if (song.getImages() != null) {
+        onSongReadyListener.onNextSongReady(song.getImageUrl());
+      } else {
+        onSongReadyListener.onNextSongReady(null);
+      }
     }
     String keyword = song.getName() + " " + song.getArtist();
     RetrofitContext.getSearchSong(keyword).enqueue(new Callback<SearchSongResponseBody>() {

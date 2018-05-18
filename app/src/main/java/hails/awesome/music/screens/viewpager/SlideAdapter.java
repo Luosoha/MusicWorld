@@ -46,6 +46,10 @@ public class SlideAdapter extends FragmentPagerAdapter {
     return favoriteFragment;
   }
 
+  public OfflineFragment getOfflineFragment() {
+    return offlineFragment;
+  }
+
   @Override
   public int getCount() {
     return PAGE_NUMBERS;

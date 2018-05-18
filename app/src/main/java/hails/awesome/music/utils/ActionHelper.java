@@ -22,7 +22,7 @@ public class ActionHelper {
   public static int findPreviousSongPositionOf(ArrayList<Song> playList, Song song) {
     int currentPosition = findCurrentSongPositionOf(playList, song);
     if (currentPosition == 0) {
-      return 49;
+      return playList.size() - 1;
     }
     return (currentPosition - 1);
   }

@@ -38,6 +38,7 @@ public class PlayerManager {
   private Song currentSong;
   private String songUrl;
   private Subgenres subgenres;
+  private boolean isOfflineMode = false;
 
   private PlayerManager() {}
 
@@ -162,6 +163,14 @@ public class PlayerManager {
 
   public void setSubgenres(Subgenres subgenres) {
     this.subgenres = subgenres;
+  }
+
+  public boolean isOfflineMode() {
+    return isOfflineMode;
+  }
+
+  public void setOfflineMode(boolean offlineMode) {
+    isOfflineMode = offlineMode;
   }
 
   public void release() {

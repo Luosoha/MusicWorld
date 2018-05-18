@@ -19,7 +19,5 @@ public interface OfflineContract {
 
   interface Presenter extends IPresenter<View, Interactor> {
     ArrayList<Song> getDownloadedSong(Context context);
-
-    void playSong(Song song);
   }
 }

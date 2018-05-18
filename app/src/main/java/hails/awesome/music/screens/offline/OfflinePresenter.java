@@ -12,11 +12,9 @@ import hails.awesome.music.networks.models.Song;
 public class OfflinePresenter extends Presenter<OfflineContract.View, OfflineContract.Interactor>
         implements OfflineContract.Presenter {
 
-  private PlayerManager playerManager;
 
   @Override
   public void start() {
-    playerManager = PlayerManager.getInstance();
   }
 
   @Override
@@ -32,13 +30,6 @@ public class OfflinePresenter extends Presenter<OfflineContract.View, OfflineCon
   @Override
   public ArrayList<Song> getDownloadedSong(Context context) {
     return mInteractor.getDownloadedSong(context);
-  }
-
-  @Override
-  public void playSong(Song song) {
-    String fileName = song.getName() + "_" + song.getArtist() + ".mp3";
-    File musicFile = new File(mView.getBaseActivity().getFilesDir(), fileName);
-    playerManager.playNewSong(musicFile.toURI().toString());
   }
 
 }

@@ -49,6 +49,8 @@ public class ViewPagerFragment extends ViewFragment<ViewPagerContract.Presenter>
       public void onTabSelected(TabLayout.Tab tab) {
         if (tab.getPosition() == 1) { // Favorite tab
           slideAdapter.getFavoriteFragment().getFavoriteGenres();
+        } else if (tab.getPosition() == 2) { // Offline tab
+          slideAdapter.getOfflineFragment().getDownloadedSong();
         }
       }
 

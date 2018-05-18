@@ -3,11 +3,13 @@ package hails.awesome.music.screens.offline;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import hails.awesome.music.R;
 import hails.awesome.music.base.ViewFragment;
+import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
 import hails.awesome.music.callbacks.OnSongClickListener;
 import hails.awesome.music.managers.PlayerManager;
 import hails.awesome.music.networks.models.Song;
@@ -21,11 +23,24 @@ public class OfflineFragment extends ViewFragment<OfflineContract.Presenter>
 
   private ListSongAdapter offlineSongAdapter;
   private ArrayList<Song> offlineSongList;
+  private OnMusicPlayerActionListener onMusicPlayerActionListener;
+  private PlayerManager playerManager;
 
   @Override
   public void initLayout() {
     super.initLayout();
-    offlineSongList = mPresenter.getDownloadedSong(getContext());
+    playerManager = PlayerManager.getInstance();
+    onMusicPlayerActionListener = (OnMusicPlayerActionListener) getActivity();
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    getDownloadedSong();
+  }
+
+  public void getDownloadedSong() {
+    offlineSongList = mPresenter.getDownloadedSong(getBaseActivity());
     if (!offlineSongList.isEmpty()) {
       setupSongRecyclerView();
       PlayerManager.getInstance().setPlayList(offlineSongList);
@@ -45,7 +60,13 @@ public class OfflineFragment extends ViewFragment<OfflineContract.Presenter>
 
   @Override
   public void onSongClick(Song song) {
-    mPresenter.playSong(song);
+    String fileName = song.getName() + "_" + song.getArtist() + ".mp3";
+    File musicFile = new File(getBaseActivity().getFilesDir(), fileName);
+    playerManager.setCurrentSong(song);
+    playerManager.setOfflineMode(true);
+    if (onMusicPlayerActionListener != null) {
+      onMusicPlayerActionListener.onPlaySong(song, musicFile.toURI().toString(), true);
+    }
   }
 
 }
