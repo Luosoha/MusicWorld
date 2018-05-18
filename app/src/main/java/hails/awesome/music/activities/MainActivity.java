@@ -1,5 +1,6 @@
 package hails.awesome.music.activities;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -80,6 +83,7 @@ public class MainActivity extends BaseActivity
   private OnSongReadyListener onSongReadyListener;
   private ArrayList<Subgenres> subgenresList = new ArrayList<>();
   private ThinDownloadManager downloadManager;
+  private NotificationCompat.Builder builder;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,11 @@ public class MainActivity extends BaseActivity
     setSupportActionBar(toolbar);
     PlayerManager.init(this, this);
     playerManager = PlayerManager.getInstance();
+    builder = new NotificationCompat.Builder(this)
+            .setSmallIcon(R.mipmap.ic_app)
+            .setContentTitle(getString(R.string.app_name))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true);
   }
 
   @Override
@@ -187,27 +196,36 @@ public class MainActivity extends BaseActivity
 
   @OnClick(R.id.iv_download_song)
   public void onDownloadSong() {
-    Toast.makeText(this, "Downloading" + playerManager.getCurrentSong().getName(), Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, "Downloading " + playerManager.getCurrentSong().getName(), Toast.LENGTH_SHORT).show();
     Uri downloadUri = Uri.parse(playerManager.getSongUrl());
     String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
     Uri destinationUri = Uri.parse(getFilesDir().toString() + "/" + fileName);
+
+    final NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+    builder.setContentText(playerManager.getCurrentSong().getName());
+    managerCompat.notify(123123, builder.build());
+
     DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
             .setRetryPolicy(new DefaultRetryPolicy())
             .setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.HIGH)
             .setStatusListener(new DownloadStatusListenerV1() {
               @Override
               public void onDownloadComplete(DownloadRequest downloadRequest) {
-                Log.d("@@Download: ", "onDownloadComplete");
+                Toast.makeText(MainActivity.this, "Download completed", Toast.LENGTH_LONG).show();
+                builder.setProgress(0, 0, false);
+                managerCompat.notify(123123, builder.build());
               }
 
               @Override
               public void onDownloadFailed(DownloadRequest downloadRequest, int i, String s) {
-                Log.d("@@Download: ", "onDownloadFailed");
+                Toast.makeText(MainActivity.this, "Download failed", Toast.LENGTH_LONG).show();
+                managerCompat.cancel(123123);
               }
 
               @Override
               public void onProgress(DownloadRequest downloadRequest, long totalBytes, long downloadedBytes, int progress) {
-                Log.d("@@Download: ", "onProgress = " + progress);
+                builder.setProgress((int) totalBytes, progress, false);
+                managerCompat.notify(123123, builder.build());
               }
             });
     downloadManager.add(downloadRequest);
