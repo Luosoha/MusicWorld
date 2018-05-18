@@ -1,5 +1,7 @@
 package hails.awesome.music.screens.offline;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -7,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import hails.awesome.music.MusicApplication;
 import hails.awesome.music.R;
 import hails.awesome.music.base.ViewFragment;
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
@@ -34,16 +37,18 @@ public class OfflineFragment extends ViewFragment<OfflineContract.Presenter>
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
     getDownloadedSong();
   }
 
   public void getDownloadedSong() {
-    offlineSongList = mPresenter.getDownloadedSong(getBaseActivity());
-    if (!offlineSongList.isEmpty()) {
-      setupSongRecyclerView();
-      PlayerManager.getInstance().setPlayList(offlineSongList);
+    if (isAdded()) {
+      offlineSongList = mPresenter.getDownloadedSong(getContext());
+      if (!offlineSongList.isEmpty()) {
+        setupSongRecyclerView();
+        PlayerManager.getInstance().setPlayList(offlineSongList);
+      }
     }
   }
 
