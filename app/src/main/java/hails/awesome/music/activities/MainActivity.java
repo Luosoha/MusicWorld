@@ -1,5 +1,7 @@
 package hails.awesome.music.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -171,10 +173,10 @@ public class MainActivity extends BaseActivity
     Uri destinationUri = Uri.parse(getFilesDir().toString() + "/" + fileName);
     final int notifId = new Random().nextInt(10000000);
 
-    final NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     builder.setContentText(playerManager.getCurrentSong().getName())
             .setProgress(100, 0, false);
-    managerCompat.notify(notifId, builder.build());
+    manager.notify(notifId, builder.build());
 
     DownloadRequest downloadRequest = new DownloadRequest(downloadUri)
             .setRetryPolicy(new DefaultRetryPolicy())
@@ -185,7 +187,7 @@ public class MainActivity extends BaseActivity
                 Toast.makeText(MainActivity.this, "Download completed", Toast.LENGTH_LONG).show();
                 builder.setProgress(0, 0, false);
                 builder.setContentText("Download " + playerManager.getCurrentSong().getName() + " completed");
-                managerCompat.notify(notifId, builder.build());
+                manager.notify(notifId, builder.build());
                 playerManager.getCurrentSong().setSubgenres(playerManager.getSubgenres());
                 sqLiteHelper.insertSong(playerManager.getCurrentSong());
               }
@@ -193,13 +195,13 @@ public class MainActivity extends BaseActivity
               @Override
               public void onDownloadFailed(DownloadRequest downloadRequest, int i, String s) {
                 Toast.makeText(MainActivity.this, "Download failed", Toast.LENGTH_LONG).show();
-                managerCompat.cancel(notifId);
+                manager.cancel(notifId);
               }
 
               @Override
               public void onProgress(DownloadRequest downloadRequest, long totalBytes, long downloadedBytes, int progress) {
                 builder.setProgress(100, progress, false);
-                managerCompat.notify(notifId, builder.build());
+                manager.notify(notifId, builder.build());
               }
             });
     downloadManager.add(downloadRequest);
