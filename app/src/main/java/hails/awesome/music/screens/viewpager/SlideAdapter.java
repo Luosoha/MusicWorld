@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import hails.awesome.music.managers.SQLiteHelper;
 import hails.awesome.music.screens.favorite.FavoriteFragment;
 import hails.awesome.music.screens.favorite.FavoritePresenter;
 import hails.awesome.music.screens.genres.GenresFragment;

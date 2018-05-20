@@ -1,6 +1,5 @@
 package hails.awesome.music.activities;
 
-import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListenerV1;
 import com.thin.downloadmanager.ThinDownloadManager;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -39,8 +37,6 @@ import hails.awesome.music.managers.RetrofitContext;
 import hails.awesome.music.managers.SQLiteHelper;
 import hails.awesome.music.networks.models.SearchSongResponseBody;
 import hails.awesome.music.networks.models.Song;
-import hails.awesome.music.networks.models.SongCategoryResponse;
-import hails.awesome.music.networks.models.Subgenres;
 import hails.awesome.music.screens.mainplayer.MainPlayerFragment;
 import hails.awesome.music.screens.mainplayer.MainPlayerPresenter;
 import hails.awesome.music.screens.viewpager.ViewPagerPresenter;
@@ -82,7 +78,6 @@ public class MainActivity extends BaseActivity
   private Handler handler = new Handler();
   private Runnable runnable;
   private OnSongReadyListener onSongReadyListener;
-  private ArrayList<Subgenres> subgenresList = new ArrayList<>();
   private ThinDownloadManager downloadManager;
   private NotificationCompat.Builder builder;
 
@@ -104,8 +99,8 @@ public class MainActivity extends BaseActivity
     super.onStart();
     downloadManager = new ThinDownloadManager();
     sqLiteHelper = new SQLiteHelper(this);
-    getSongCategories();
-    addListener();
+    pushView(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
+    setupSeekBarListener();
   }
 
   @Override
@@ -113,34 +108,7 @@ public class MainActivity extends BaseActivity
     return R.layout.activity_main;
   }
 
-  private void getSongCategories() {
-    showProgress();
-    subgenresList = sqLiteHelper.getAllSubgenres();
-    if (subgenresList.isEmpty()) {
-      RetrofitContext.getAlbumTypes().enqueue(new Callback<SongCategoryResponse>() {
-        @Override
-        public void onResponse(Call<SongCategoryResponse> call, Response<SongCategoryResponse> response) {
-          hideProgress();
-          ArrayList<Subgenres> songCategories = new ArrayList<>(response.body().getBody().getMap().values());
-          for (Subgenres s : songCategories) {
-            sqLiteHelper.insertSubgenres(s);
-            subgenresList.add(s);
-          }
-          pushView(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
-        }
-
-        @Override
-        public void onFailure(Call<SongCategoryResponse> call, Throwable t) {
-          hideProgress();
-        }
-      });
-    } else {
-      hideProgress();
-      pushView(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
-    }
-  }
-
-  private void addListener() {
+  private void setupSeekBarListener() {
     progressSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

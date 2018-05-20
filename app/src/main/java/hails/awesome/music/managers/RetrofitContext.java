@@ -34,7 +34,7 @@ public class RetrofitContext {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public static Call<SongCategoryResponse> getAlbumTypes() {
+    public static Call<SongCategoryResponse> getCategoryList() {
         return ITUNES_CATEGORY.create(APIService.class).getAlbumTypes();
     }
 

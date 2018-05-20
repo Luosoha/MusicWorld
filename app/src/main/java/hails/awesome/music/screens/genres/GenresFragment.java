@@ -3,6 +3,8 @@ package hails.awesome.music.screens.genres;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import hails.awesome.music.R;
 import hails.awesome.music.base.ViewFragment;
@@ -28,13 +30,13 @@ public class GenresFragment extends ViewFragment<GenresContract.Presenter>
   }
 
   @Override
-  public void initLayout() {
-    setupListCategory();
-  }
+  public void initLayout() { }
 
-  private void setupListCategory() {
+  @Override
+  public void setupListCategory(ArrayList<Subgenres> subgenresList) {
+    hideProgress();
     if (categoryAdapter == null) {
-      categoryAdapter = new CategoryAdapter(getContext(), this);
+      categoryAdapter = new CategoryAdapter(subgenresList, this);
     }
     songCategoryRv.setHasFixedSize(true);
 

@@ -27,8 +27,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
   private OnCategoryClickListener onCategoryClickListener;
   private ArrayList<Subgenres> subgenresList;
 
-  public CategoryAdapter(Context context, OnCategoryClickListener onCategoryClickListener) {
-    subgenresList = new SQLiteHelper(context).getAllSubgenres();
+  public CategoryAdapter(ArrayList<Subgenres> subgenresList, OnCategoryClickListener onCategoryClickListener) {
+    this.subgenresList = subgenresList;
     this.onCategoryClickListener = onCategoryClickListener;
   }
 
