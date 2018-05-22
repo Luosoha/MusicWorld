@@ -21,7 +21,9 @@ public interface MainPlayerContract {
   }
 
   interface Presenter extends IPresenter<View, Interactor> {
-    void searchForSong(Song song);
+    void searchForOnlineSong(Song song);
+
+    void searchForOfflineSong(Song song);
 
     Song getPreviousSong(Song currentSong);
 

@@ -2,6 +2,8 @@ package hails.awesome.music.screens.mainplayer;
 
 import android.widget.Toast;
 
+import java.io.File;
+
 import hails.awesome.music.managers.PlayerManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,7 +20,7 @@ import hails.awesome.music.utils.ActionHelper;
  */
 
 public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, MainPlayerContract.Interactor>
-    implements MainPlayerContract.Presenter {
+        implements MainPlayerContract.Presenter {
 
   private PlayerManager playerManager;
 
@@ -28,7 +30,7 @@ public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, Main
   }
 
   @Override
-  public void searchForSong(final Song song) {
+  public void searchForOnlineSong(final Song song) {
     final BaseActivity activity = mView.getBaseActivity();
     String keyword = song.getName() + " " + song.getArtist();
     activity.showProgress();
@@ -49,6 +51,13 @@ public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, Main
         activity.hideProgress();
       }
     });
+  }
+
+  @Override
+  public void searchForOfflineSong(Song song) {
+    String fileName = song.getName() + "_" + song.getArtist() + ".mp3";
+    File musicFile = new File(mView.getBaseActivity().getFilesDir(), fileName);
+    mView.onSongFound(song, musicFile.toURI().toString());
   }
 
   @Override

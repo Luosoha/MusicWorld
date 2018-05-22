@@ -156,7 +156,11 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
       Picasso.with(getActivity()).load(R.mipmap.ic_app).into(songImageIv);
     }
     actionFab.setImageResource(R.drawable.ic_pause_white_24px);
-    mPresenter.searchForSong(song);
+    if (playerManager.isOfflineMode()){
+      mPresenter.searchForOfflineSong(song);
+    } else {
+      mPresenter.searchForOnlineSong(song);
+    }
   }
 
   @Override
