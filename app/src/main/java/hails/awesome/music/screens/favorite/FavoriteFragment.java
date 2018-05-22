@@ -39,6 +39,7 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
 
   public void getFavoriteGenres() {
     favoriteSubgenres.clear();
+    favoriteSubgenresName.clear();
     favoriteSubgenres.addAll(mPresenter.getFavoriteGenres());
     if (!favoriteSubgenres.isEmpty()) {
       convertSubgenresToString();
@@ -61,7 +62,6 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
   }
 
   private void convertSubgenresToString() {
-    favoriteSubgenresName.clear();
     for (Subgenres sub : favoriteSubgenres) {
       favoriteSubgenresName.add(sub.getName());
     }
