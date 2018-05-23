@@ -123,5 +123,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     return downloadedSongList;
   }
 
+  public boolean isDownloaded(Song song) {
+    SQLiteDatabase db = this.getReadableDatabase();
+    Cursor cursor = db.query(
+            Song.TABLE_NAME,
+            null,
+            Song.COLUMN_NAME + " = ? AND " + Song.COLUMN_ARTIST + " = ?",
+            new String[] {song.getName(), song.getArtist()},
+            null, null, null);
+    return cursor.moveToFirst();
+  }
 }
 

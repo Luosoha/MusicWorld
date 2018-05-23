@@ -167,6 +167,11 @@ public class MainActivity extends BaseActivity
 
   @OnClick(R.id.iv_download_song)
   public void onDownloadSong() {
+    if (sqLiteHelper.isDownloaded(playerManager.getCurrentSong())) {
+      Toast.makeText(this, "You've already downloaded this song!", Toast.LENGTH_SHORT).show();
+      return;
+    }
+
     Toast.makeText(this, "Downloading " + playerManager.getCurrentSong().getName(), Toast.LENGTH_SHORT).show();
     Uri downloadUri = Uri.parse(playerManager.getSongUrl());
     String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
