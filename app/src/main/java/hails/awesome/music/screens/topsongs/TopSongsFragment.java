@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import hails.awesome.music.R;
-import hails.awesome.music.activities.MainActivity;
+import hails.awesome.music.activities.HomeActivity;
 import hails.awesome.music.base.ViewFragment;
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
 import hails.awesome.music.callbacks.OnSongClickListener;
@@ -52,7 +52,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
   @BindView(R.id.tv_number_of_top_songs)
   TextView numberOfSongTv;
 
-  private MainActivity activity;
+  private HomeActivity activity;
   private ListSongAdapter listSongAdapter;
   private Subgenres subgenres;
   private OnMusicPlayerActionListener onMusicPlayerActionListener;
@@ -64,7 +64,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
 
   @Override
   public void initLayout() {
-    activity = (MainActivity) getActivity();
+    activity = (HomeActivity) getActivity();
     activity.getSupportActionBar().hide();
     onMusicPlayerActionListener = activity;
     addListeners();
@@ -75,7 +75,7 @@ public class TopSongsFragment extends ViewFragment<TopSongsContract.Presenter>
     backView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        mPresenter.back();
+        mPresenter.onBackPressed();
       }
     });
 

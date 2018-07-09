@@ -3,6 +3,7 @@ package hails.awesome.music.base;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import hails.awesome.music.activities.BaseActivity;
 import hails.awesome.music.base.interfaces.IInteractor;
 import hails.awesome.music.base.interfaces.IPresenter;
 import hails.awesome.music.base.interfaces.IView;
@@ -12,12 +13,14 @@ import hails.awesome.music.base.interfaces.IView;
  */
 
 public abstract class Presenter<V extends IView, I extends IInteractor>
-    implements IPresenter<V, I> {
+        implements IPresenter<V, I> {
 
+  protected BaseActivity mBaseActivity;
   protected V mView;
   protected I mInteractor;
 
-  public Presenter() {
+  public Presenter(BaseActivity baseActivity) {
+    mBaseActivity = baseActivity;
     mInteractor = onCreateInteractor();
     mView = onCreateView();
     mView.setPresenter(this);
@@ -41,6 +44,11 @@ public abstract class Presenter<V extends IView, I extends IInteractor>
     } else {
       getFragment().getActivity().finish();
     }
+  }
+
+  @Override
+  public void pushView(int containerId, boolean addToBackStack) {
+    mBaseActivity.pushView(containerId, getFragment(), addToBackStack);
   }
 
 }

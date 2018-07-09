@@ -24,6 +24,10 @@ public class MainPlayerPresenter extends Presenter<MainPlayerContract.View, Main
 
   private PlayerManager playerManager;
 
+  public MainPlayerPresenter(BaseActivity baseActivity) {
+    super(baseActivity);
+  }
+
   @Override
   public void start() {
     playerManager = PlayerManager.getInstance();

@@ -19,5 +19,8 @@ public interface IPresenter<V extends IView, I extends IInteractor> {
   Fragment getFragment();
 
   void back();
+
+  void pushView(int containerId, boolean addToBackStack);
+
 }
 

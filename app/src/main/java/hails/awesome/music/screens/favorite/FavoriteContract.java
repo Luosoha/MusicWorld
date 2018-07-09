@@ -19,7 +19,7 @@ public interface FavoriteContract {
   }
 
   interface View extends IView<Presenter> {
-
+    void getFavoriteGenres();
   }
 
   interface Presenter extends IPresenter<View, Interactor> {

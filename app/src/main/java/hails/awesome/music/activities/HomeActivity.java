@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,13 +40,14 @@ import hails.awesome.music.networks.models.SearchSongResponseBody;
 import hails.awesome.music.networks.models.Song;
 import hails.awesome.music.screens.mainplayer.MainPlayerFragment;
 import hails.awesome.music.screens.mainplayer.MainPlayerPresenter;
+import hails.awesome.music.screens.viewpager.ViewPagerFragment;
 import hails.awesome.music.screens.viewpager.ViewPagerPresenter;
 import hails.awesome.music.utils.ActionHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity
+public class HomeActivity extends BaseActivity
         implements FragmentManager.OnBackStackChangedListener, OnBackFromMainPlayerListener, OnMusicPlayerActionListener {
 
   @BindView(R.id.toolbar)
@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity
     super.onStart();
     downloadManager = new ThinDownloadManager();
     sqLiteHelper = new SQLiteHelper(this);
-    pushView(R.id.fl_container, new ViewPagerPresenter().getFragment(), false);
+    new ViewPagerPresenter(this).pushView(R.id.fl_container, false);
     setupSeekBarListener();
   }
 
@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity
     songNameInsideToolBarTv.setText(playerManager.getCurrentSong().getName());
     songArtistInsideToolBarTv.setText(playerManager.getCurrentSong().getArtist());
 
-    MainPlayerFragment mainPlayerFragment = (MainPlayerFragment) new MainPlayerPresenter().getFragment();
+    MainPlayerFragment mainPlayerFragment = (MainPlayerFragment) new MainPlayerPresenter(this).getFragment();
     mainPlayerFragment.setOnBackFromMainPlayerListener(this);
     mainPlayerFragment.setOnMusicPlayerActionListener(this);
     onSongReadyListener = mainPlayerFragment;
@@ -189,7 +189,7 @@ public class MainActivity extends BaseActivity
             .setStatusListener(new DownloadStatusListenerV1() {
               @Override
               public void onDownloadComplete(DownloadRequest downloadRequest) {
-                Toast.makeText(MainActivity.this, "Download completed", Toast.LENGTH_LONG).show();
+                Toast.makeText(HomeActivity.this, "Download completed", Toast.LENGTH_LONG).show();
                 builder.setProgress(0, 0, false);
                 builder.setContentText("Download " + playerManager.getCurrentSong().getName() + " completed");
                 manager.notify(notifId, builder.build());
@@ -199,7 +199,7 @@ public class MainActivity extends BaseActivity
 
               @Override
               public void onDownloadFailed(DownloadRequest downloadRequest, int i, String s) {
-                Toast.makeText(MainActivity.this, "Download failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(HomeActivity.this, "Download failed", Toast.LENGTH_LONG).show();
                 manager.cancel(notifId);
               }
 
@@ -224,9 +224,10 @@ public class MainActivity extends BaseActivity
   @Override
   public void onBackPressed() {
     FragmentManager fragmentManager = getSupportFragmentManager();
-    if (fragmentManager.getBackStackEntryCount() == 0) {
+    int entryCount = fragmentManager.getBackStackEntryCount();
+    if (entryCount == 0) {
       finish();
-    } else if (fragmentManager.getBackStackEntryCount() == 1) { // back to main screen
+    } else if (entryCount == 1) { // back to main screen
       getSupportActionBar().show();
       getSupportFragmentManager().popBackStack();
     } else {
@@ -356,7 +357,7 @@ public class MainActivity extends BaseActivity
         if (songs != null && !songs.getSongs().isEmpty()) {
           onPlaySong(song, songs.getSongUrl(), miniPlayerLayout.isShown());
         } else {
-          Toast.makeText(MainActivity.this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
+          Toast.makeText(HomeActivity.this, getString(R.string.song_not_found_message), Toast.LENGTH_SHORT).show();
         }
         hideProgress();
       }

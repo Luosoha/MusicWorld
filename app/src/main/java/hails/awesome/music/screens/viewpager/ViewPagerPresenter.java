@@ -1,5 +1,6 @@
 package hails.awesome.music.screens.viewpager;
 
+import hails.awesome.music.activities.BaseActivity;
 import hails.awesome.music.base.Presenter;
 
 /**
@@ -8,6 +9,10 @@ import hails.awesome.music.base.Presenter;
 
 public class ViewPagerPresenter extends Presenter<ViewPagerContract.View, ViewPagerContract.Interactor>
     implements ViewPagerContract.Presenter {
+
+  public ViewPagerPresenter(BaseActivity baseActivity) {
+    super(baseActivity);
+  }
 
   @Override
   public void start() {

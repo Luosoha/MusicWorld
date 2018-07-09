@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import hails.awesome.music.managers.SQLiteHelper;
+import hails.awesome.music.activities.BaseActivity;
 import hails.awesome.music.screens.favorite.FavoriteFragment;
 import hails.awesome.music.screens.favorite.FavoritePresenter;
 import hails.awesome.music.screens.genres.GenresFragment;
@@ -23,11 +23,11 @@ public class SlideAdapter extends FragmentPagerAdapter {
   private FavoriteFragment favoriteFragment;
   private OfflineFragment offlineFragment;
 
-  public SlideAdapter(FragmentManager fm) {
+  public SlideAdapter(FragmentManager fm, BaseActivity baseActivity) {
     super(fm);
-    genresFragment = (GenresFragment) new GenresPresenter().getFragment();
-    favoriteFragment = (FavoriteFragment) new FavoritePresenter().getFragment();
-    offlineFragment = (OfflineFragment) new OfflinePresenter().getFragment();
+    genresFragment = (GenresFragment) new GenresPresenter(baseActivity).getFragment();
+    favoriteFragment = (FavoriteFragment) new FavoritePresenter(baseActivity).getFragment();
+    offlineFragment = (OfflineFragment) new OfflinePresenter(baseActivity).getFragment();
   }
 
   @Override

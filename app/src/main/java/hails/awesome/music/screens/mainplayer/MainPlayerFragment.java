@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.OnClick;
 import hails.awesome.music.R;
-import hails.awesome.music.activities.MainActivity;
+import hails.awesome.music.activities.HomeActivity;
 import hails.awesome.music.base.ViewFragment;
 import hails.awesome.music.callbacks.OnBackFromMainPlayerListener;
 import hails.awesome.music.callbacks.OnMusicPlayerActionListener;
@@ -75,7 +75,7 @@ public class MainPlayerFragment extends ViewFragment<MainPlayerContract.Presente
   }
 
   private void setupMainPlayer() {
-    MainActivity activity = (MainActivity) getActivity();
+    HomeActivity activity = (HomeActivity) getActivity();
     activity.getSupportActionBar().show();
     onMusicPlayerActionListener = activity;
 

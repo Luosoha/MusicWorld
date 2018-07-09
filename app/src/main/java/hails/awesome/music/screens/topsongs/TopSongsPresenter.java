@@ -1,5 +1,6 @@
 package hails.awesome.music.screens.topsongs;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -26,6 +27,11 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
 
   private Subgenres subgenres;
   private PlayerManager playerManager = PlayerManager.getInstance();
+  private OnBackPressedListener onBackPressedListener;
+
+  public TopSongsPresenter(BaseActivity baseActivity) {
+    super(baseActivity);
+  }
 
   @Override
   public void start() {
@@ -85,8 +91,21 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
     });
   }
 
+  @Override
+  public void onBackPressed() {
+    if (onBackPressedListener != null) {
+      onBackPressedListener.onBack();
+    }
+    back();
+  }
+
   public TopSongsPresenter setSubgenres(Subgenres subgenres) {
     this.subgenres = subgenres;
+    return this;
+  }
+
+  public TopSongsPresenter setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    this.onBackPressedListener = onBackPressedListener;
     return this;
   }
 
@@ -98,6 +117,10 @@ public class TopSongsPresenter extends Presenter<TopSongsContract.View, TopSongs
   @Override
   public TopSongsContract.View onCreateView() {
     return new TopSongsFragment();
+  }
+
+  public interface OnBackPressedListener {
+    void onBack();
   }
 
 }

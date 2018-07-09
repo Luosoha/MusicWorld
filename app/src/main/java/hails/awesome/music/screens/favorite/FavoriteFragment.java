@@ -37,6 +37,7 @@ public class FavoriteFragment extends ViewFragment<FavoriteContract.Presenter>
     getFavoriteGenres();
   }
 
+  @Override
   public void getFavoriteGenres() {
     favoriteSubgenres.clear();
     favoriteSubgenresName.clear();

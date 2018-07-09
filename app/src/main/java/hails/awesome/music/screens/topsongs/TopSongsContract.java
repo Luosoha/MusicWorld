@@ -35,6 +35,8 @@ public interface TopSongsContract {
     void saveFavoriteSubgenres(Subgenres subgenres);
 
     void getSearchSong(Song song, String keyword);
+
+    void onBackPressed();
   }
 
 }

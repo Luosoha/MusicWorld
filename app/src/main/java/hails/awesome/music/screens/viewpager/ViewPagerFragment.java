@@ -2,7 +2,6 @@ package hails.awesome.music.screens.viewpager;
 
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,7 +36,7 @@ public class ViewPagerFragment extends ViewFragment<ViewPagerContract.Presenter>
   }
 
   private void setupUI() {
-    slideAdapter = new SlideAdapter(getChildFragmentManager());
+    slideAdapter = new SlideAdapter(getChildFragmentManager(), getBaseActivity());
     viewPager.setAdapter(slideAdapter);
     tabLayout.setupWithViewPager(viewPager);
     tabLayout.setTabTextColors(Color.BLACK, Color.WHITE);

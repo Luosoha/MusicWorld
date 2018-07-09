@@ -3,6 +3,7 @@ package hails.awesome.music.screens.genres;
 import java.util.ArrayList;
 
 import hails.awesome.music.R;
+import hails.awesome.music.activities.BaseActivity;
 import hails.awesome.music.base.Presenter;
 import hails.awesome.music.managers.RetrofitContext;
 import hails.awesome.music.networks.models.SongCategoryResponse;
@@ -20,6 +21,10 @@ public class GenresPresenter extends Presenter<GenresContract.View, GenresContra
         implements GenresContract.Presenter {
 
   private ArrayList<Subgenres> subgenresList = new ArrayList<>();
+
+  public GenresPresenter(BaseActivity baseActivity) {
+    super(baseActivity);
+  }
 
   @Override
   public void start() {
@@ -63,9 +68,9 @@ public class GenresPresenter extends Presenter<GenresContract.View, GenresContra
 
   @Override
   public void goToTopSongsScreen(Subgenres subgenres) {
-    mView.getBaseActivity().pushView(
-            R.id.fl_container, new TopSongsPresenter().setSubgenres(subgenres).getFragment(), true
-    );
+    new TopSongsPresenter(mView.getBaseActivity())
+            .setSubgenres(subgenres)
+            .pushView(R.id.fl_container, true);
   }
 
 }
