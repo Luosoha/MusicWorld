@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +25,10 @@ import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListenerV1;
 import com.thin.downloadmanager.ThinDownloadManager;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -58,6 +63,8 @@ public class HomeActivity extends BaseActivity
   ImageView downloadSongIv;
   @BindView(R.id.iv_share_song)
   ImageView shareSongIv;
+  @BindView(R.id.iv_ringtone)
+  ImageView ringtoneIv;
   @BindView(R.id.ll_main_player_toolbar)
   LinearLayout mainPlayerToolbar;
   @BindView(R.id.sb_progress)
@@ -221,6 +228,28 @@ public class HomeActivity extends BaseActivity
     startActivity(sendIntent);
   }
 
+  @OnClick(R.id.iv_ringtone)
+  public void onRingtoneClick() {
+    if (copySongToRingtoneDir()) {
+
+    }
+  }
+
+  private boolean copySongToRingtoneDir() {
+    String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
+    String sourcePath = getFilesDir().toString() + "/" + fileName;
+    File source = new File(sourcePath);
+    String destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).toString();
+    File destination = new File(destinationPath);
+    try {
+      FileUtils.copyFile(source, destination);
+      return true;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   @Override
   public void onBackPressed() {
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -302,8 +331,9 @@ public class HomeActivity extends BaseActivity
         songArtistInsideToolBarTv.setText(playerManager.getCurrentSong().getArtist());
       }
       if (playerManager.isOfflineMode()) {
-        downloadSongIv.setVisibility(View.INVISIBLE);
-        shareSongIv.setVisibility(View.INVISIBLE);
+        downloadSongIv.setVisibility(View.GONE);
+        shareSongIv.setVisibility(View.GONE);
+        ringtoneIv.setVisibility(View.VISIBLE);
       } else {
         downloadSongIv.setVisibility(View.VISIBLE);
         shareSongIv.setVisibility(View.VISIBLE);
