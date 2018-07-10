@@ -1,13 +1,22 @@
 package hails.awesome.music.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
@@ -82,6 +91,8 @@ public class HomeActivity extends BaseActivity
   @BindView(R.id.fab_action)
   FloatingActionButton actionFab;
 
+  private static final int WRITE_SETTINGS_REQUEST_CODE = 2009;
+
   private SQLiteHelper sqLiteHelper;
   private PlayerManager playerManager;
   private Handler handler = new Handler();
@@ -89,6 +100,7 @@ public class HomeActivity extends BaseActivity
   private OnSongReadyListener onSongReadyListener;
   private ThinDownloadManager downloadManager;
   private NotificationCompat.Builder builder;
+  private Uri newRingtoneUri;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -228,26 +240,64 @@ public class HomeActivity extends BaseActivity
     startActivity(sendIntent);
   }
 
+  @SuppressLint("NewApi")
   @OnClick(R.id.iv_ringtone)
   public void onRingtoneClick() {
-    if (copySongToRingtoneDir()) {
+    String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
+    File k = new File(getFilesDir(), fileName);
 
+    ContentValues values = new ContentValues();
+    values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());
+    values.put(MediaStore.MediaColumns.TITLE, playerManager.getCurrentSong().getName());
+    values.put(MediaStore.MediaColumns.SIZE, 215454);
+    values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
+    values.put(MediaStore.Audio.Media.ARTIST, playerManager.getCurrentSong().getArtist());
+    values.put(MediaStore.Audio.Media.DURATION, playerManager.getSongDuration());
+    values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
+    values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
+    values.put(MediaStore.Audio.Media.IS_ALARM, false);
+    values.put(MediaStore.Audio.Media.IS_MUSIC, false);
+
+    Uri uri = MediaStore.Audio.Media.getContentUriForPath(k.getAbsolutePath());
+    newRingtoneUri = this.getContentResolver().insert(uri, values);
+
+    if (Settings.System.canWrite(this)) {
+      RingtoneManager.setActualDefaultRingtoneUri(
+              this,
+              RingtoneManager.TYPE_RINGTONE,
+              newRingtoneUri);
+    } else {
+      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_SETTINGS}, WRITE_SETTINGS_REQUEST_CODE);
+    }
+  }
+
+  @SuppressLint("NewApi")
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    switch (requestCode) {
+      case WRITE_SETTINGS_REQUEST_CODE:
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          RingtoneManager.setActualDefaultRingtoneUri(
+                  this,
+                  RingtoneManager.TYPE_RINGTONE,
+                  newRingtoneUri);
+          break;
+        }
     }
   }
 
   private boolean copySongToRingtoneDir() {
-    String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
-    String sourcePath = getFilesDir().toString() + "/" + fileName;
-    File source = new File(sourcePath);
-    String destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).toString();
-    File destination = new File(destinationPath);
-    try {
-      FileUtils.copyFile(source, destination);
-      return true;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return false;
-    }
+//    String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
+//    String sourcePath = getFilesDir().toString() + "/" + fileName;
+//    File source = new File(sourcePath);
+//    String destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).toString();
+//    try {
+//      FileUtils.copyFile(source, destination);
+//      return true;
+//    } catch (IOException e) {
+//      e.printStackTrace();
+    return false;
+//    }
   }
 
   @Override
