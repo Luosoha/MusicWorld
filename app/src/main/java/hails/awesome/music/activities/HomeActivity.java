@@ -2,11 +2,14 @@ package hails.awesome.music.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -100,7 +104,6 @@ public class HomeActivity extends BaseActivity
   private OnSongReadyListener onSongReadyListener;
   private ThinDownloadManager downloadManager;
   private NotificationCompat.Builder builder;
-  private Uri newRingtoneUri;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -243,13 +246,50 @@ public class HomeActivity extends BaseActivity
   @SuppressLint("NewApi")
   @OnClick(R.id.iv_ringtone)
   public void onRingtoneClick() {
+//    Cursor cursor = null;
+//    try {
+//      String[] proj = { MediaStore.Images.Media.DATA };
+//      cursor = getContentResolver().query(Uri.parse("content://media/internal/audio/media/465"), proj, null, null, null);
+//      int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//      cursor.moveToFirst();
+//      cursor.getString(column_index);
+//    } finally {
+//      if (cursor != null) {
+//        cursor.close();
+//      }
+//    }
+
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+      final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setTitle(getString(R.string.setting_ringtone_title));
+      builder.setMessage(getString(R.string.setting_ringtone_message));
+      builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+          settingNewRingtone();
+        }
+      });
+      builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+
+        }
+      });
+      builder.show();
+
+    } else {
+      requestPermissions(new String[] {Manifest.permission.WRITE_SETTINGS}, WRITE_SETTINGS_REQUEST_CODE);
+    }
+  }
+
+  private void settingNewRingtone() {
     String fileName = playerManager.getCurrentSong().getName() + "_" + playerManager.getCurrentSong().getArtist() + ".mp3";
     File k = new File(getFilesDir(), fileName);
 
     ContentValues values = new ContentValues();
     values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());
     values.put(MediaStore.MediaColumns.TITLE, playerManager.getCurrentSong().getName());
-    values.put(MediaStore.MediaColumns.SIZE, 215454);
+    values.put(MediaStore.MediaColumns.SIZE, k.length());
     values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
     values.put(MediaStore.Audio.Media.ARTIST, playerManager.getCurrentSong().getArtist());
     values.put(MediaStore.Audio.Media.DURATION, playerManager.getSongDuration());
@@ -259,28 +299,22 @@ public class HomeActivity extends BaseActivity
     values.put(MediaStore.Audio.Media.IS_MUSIC, false);
 
     Uri uri = MediaStore.Audio.Media.getContentUriForPath(k.getAbsolutePath());
-    newRingtoneUri = this.getContentResolver().insert(uri, values);
-
-    if (Settings.System.canWrite(this)) {
-      RingtoneManager.setActualDefaultRingtoneUri(
-              this,
-              RingtoneManager.TYPE_RINGTONE,
-              newRingtoneUri);
-    } else {
-      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_SETTINGS}, WRITE_SETTINGS_REQUEST_CODE);
-    }
+    getContentResolver().delete(
+            uri, MediaStore.MediaColumns.DATA + "=\"" + k.getAbsolutePath() + "\"", null);
+    Uri newUri = getContentResolver().insert(uri, values);
+    RingtoneManager.setActualDefaultRingtoneUri(
+            this,
+            RingtoneManager.TYPE_RINGTONE,
+            newUri);
+    Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show();
   }
 
-  @SuppressLint("NewApi")
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     switch (requestCode) {
       case WRITE_SETTINGS_REQUEST_CODE:
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          RingtoneManager.setActualDefaultRingtoneUri(
-                  this,
-                  RingtoneManager.TYPE_RINGTONE,
-                  newRingtoneUri);
+          settingNewRingtone();
           break;
         }
     }

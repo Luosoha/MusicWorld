@@ -11,4 +11,9 @@
   <string name="number_of_top_songs">50 songs</string>
   <string name="loading">Loading</string>
   <string name="song_not_found_message">The song is currently not available.</string>
+  <string name="setting_ringtone_title">Setting ringtone</string>
+  <string name="setting_ringtone_message">Are you sure you want to set this song as your phone\'s ringtone?</string>
+  <string name="success">Success</string>
+  <string name="yes">Yes</string>
+  <string name="no">No</string>
 </resources>
