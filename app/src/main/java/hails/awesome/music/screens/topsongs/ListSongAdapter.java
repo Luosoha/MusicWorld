@@ -65,8 +65,6 @@ public class ListSongAdapter extends RecyclerView.Adapter<ListSongAdapter.TopSon
     TextView topSongNameTv;
     @BindView(R.id.tv_top_song_artist)
     TextView topSongArtistTv;
-    @BindView(R.id.horizontal_line)
-    View line;
 
     public TopSongViewHolder(View itemView) {
       super(itemView);
@@ -81,11 +79,10 @@ public class ListSongAdapter extends RecyclerView.Adapter<ListSongAdapter.TopSon
       } else {
         Picasso.with(this.itemView.getContext()).load(R.mipmap.ic_app).into(topSongCiv);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          itemView.setBackgroundColor(context.getColor(R.color.colorPrimaryLight));
+          itemView.setBackgroundColor(context.getColor(R.color.colorPrimaryDark));
         } else {
-          itemView.setBackgroundColor(Color.parseColor("#60496e"));
+          itemView.setBackgroundColor(Color.parseColor("#321f3d"));
         }
-        line.setVisibility(View.VISIBLE);
       }
 
       this.itemView.setOnClickListener(new View.OnClickListener() {
